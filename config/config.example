@@ -1,0 +1,11 @@
+[bd];
+st_name: PRIMARIO;
+st_user: ;
+st_password: ;
+st_dbname: ;
+st_host: ;
+
+[config];
+st_operacao: DEV;
+nu_minutossessao: 60;
+st_senhacapcha: ;

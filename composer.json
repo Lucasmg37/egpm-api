@@ -1,0 +1,15 @@
+{
+    "name": "lucas/pesquisa_de_satisfacao_back",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Lucas",
+            "email": "lucas.dias@unyleya.com.br"
+        }
+    ],
+    "require": {
+        "mpdf/mpdf": "^8.0",
+        "ext-pdo": "*",
+        "ext-json": "*"
+    }
+}
