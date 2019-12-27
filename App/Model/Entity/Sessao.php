@@ -35,10 +35,15 @@ class Sessao extends BdAction
     /**
      * @var $id_usuario
      * @required
-     * @foreign_key_table tb_usuario
-     * @foreign_key_column id_usuario
      */
     public $id_usuario;
+
+
+    /**
+     * @var $st_token
+     * @required
+     */
+    public $st_token;
 
 
     /**
@@ -50,10 +55,10 @@ class Sessao extends BdAction
 
 
     /**
-     * @var $st_token
+     * @var $id_tipousuario
      * @required
      */
-    public $st_token;
+    public $id_tipousuario;
 
 
 
@@ -67,11 +72,20 @@ class Sessao extends BdAction
 
 
     /**
-     * @return int|Usuario
+     * @return int
      */
     public function getIdUsuario()
     {
         return $this->id_usuario;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getStToken()
+    {
+        return $this->st_token;
     }
 
 
@@ -85,11 +99,11 @@ class Sessao extends BdAction
 
 
     /**
-     * @return string
+     * @return int
      */
-    public function getStToken()
+    public function getIdTipousuario()
     {
-        return $this->st_token;
+        return $this->id_tipousuario;
     }
 
 
@@ -115,6 +129,16 @@ class Sessao extends BdAction
 
 
     /**
+     * @param string $st_token
+     */
+    public function setStToken($st_token)
+    {
+        $this->st_token = $st_token;
+        $this->atualizaAtributos($this);
+    }
+
+
+    /**
      * @param string $dt_sessao
      */
     public function setDtSessao($dt_sessao)
@@ -125,11 +149,11 @@ class Sessao extends BdAction
 
 
     /**
-     * @param string $st_token
+     * @param int $id_tipousuario
      */
-    public function setStToken($st_token)
+    public function setIdTipousuario($id_tipousuario)
     {
-        $this->st_token = $st_token;
+        $this->id_tipousuario = $id_tipousuario;
         $this->atualizaAtributos($this);
     }
 

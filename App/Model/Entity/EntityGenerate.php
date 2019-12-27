@@ -336,6 +336,7 @@ class EntityGenerate
 
         switch ($typeBanco) {
             case "varchar":
+            case "text":
                 $typePhp = "string";
                 break;
             case "tinyint":
