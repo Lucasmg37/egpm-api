@@ -2,58 +2,115 @@
 
 namespace App\Business;
 
-use App\Model\Autentication;
-use App\Model\Espelhos\tb_usuarioDAO;
 use App\Model\Model;
-use App\Model\Response;
-use App\Util\HeaderTools;
+use App\Model\Request;
 use App\Util\Token;
+use Exception;
 
-class Usuario extends tb_usuarioDAO
+class Usuario
 {
 
-    /**
-     * Insere um novo usuário
-     * @return mixed
-     */
-    public function insert()
+    private $usuarioEnt;
+    private $request;
+
+    public function __construct()
     {
-        $this->mount($this->request->getAllParameters());
-        $this->bl_ativo = "0";
-        $this->dt_criacao = self::nowTime();
-        return parent::insert();
+        $this->usuarioEnt = new \App\Model\Entity\Usuario();
+        $this->request = new Request();
+    }
+
+    /**
+     * @param $id_usuario
+     * @return \App\Model\Entity\Usuario
+     * @throws Exception
+     */
+    public function getUser($id_usuario)
+    {
+        $this->usuarioEnt->clearObject();
+        $this->usuarioEnt->findOne($id_usuario);
+        $this->usuarioEnt->setStSenha("");
+        return $this->usuarioEnt;
+    }
+
+    /**
+     * @param $st_nome
+     * @param $st_email
+     * @param $st_senha
+     * @param $id_entidade
+     * @param bool $bl_ativo
+     * @return \App\Model\Entity\Usuario
+     * @throws Exception
+     */
+    public function insert($st_nome, $st_email, $st_senha, $id_entidade, $bl_ativo = false)
+    {
+        $this->usuarioEnt->clearObject();
+        $this->usuarioEnt->setStNome($st_nome);
+        $this->usuarioEnt->setStSenha($st_senha);
+        $this->usuarioEnt->setStEmail($st_email);
+        $this->usuarioEnt->setIdEntidade($id_entidade);
+        $this->usuarioEnt->setBlAtivo($bl_ativo);
+        $this->usuarioEnt->setDtCriacao(Model::nowTime());
+
+        if (empty($this->usuarioEnt->getStNome())) {
+            throw new Exception("Nome não foi informado!");
+        }
+
+        if (empty($this->usuarioEnt->getStEmail())) {
+            throw new Exception("Email não foi informado!");
+        }
+
+        if (empty($this->usuarioEnt->getStSenha())) {
+            throw new Exception("Senha não foi informada!");
+        }
+
+        //Verificar se email já foi cadastrado
+        $usuarioCheckEmail = new \App\Model\Entity\Usuario();
+        $usuarioCheckEmail->setStEmail($this->usuarioEnt->getStEmail());
+        $usuarios = $usuarioCheckEmail->find();
+
+        if (sizeof($usuarios) > 0) {
+            throw new Exception("E-mail já está cadastrado!", 1002);
+        }
+
+        return $this->usuarioEnt->insert();
     }
 
     /**
      * Verifica parâmetros de login e retorna o usuário
      * @param $st_email
      * @param $st_senha
-     * @return $this
-     * @throws \Exception
+     * @return \App\Model\Entity\Usuario
+     * @throws Exception
      */
     public function login($st_email, $st_senha)
     {
-        $this->st_email = $st_email;
-        if (!self::exists($this->find(null, true))) {
-            throw new \Exception("Usuário não encontrado!");
+
+        $this->usuarioEnt->setStEmail($st_email);
+        $retorno = $this->usuarioEnt->find();
+
+        if (!sizeof($retorno) > 0) {
+            throw new Exception("Usuário não encontrado!");
         }
 
-        $this->st_senha = $st_senha;
-        $retorno = $this->find(null, true);
+        $this->usuarioEnt->setStSenha($st_senha);
+        $this->usuarioEnt->mount($this->usuarioEnt->getFirst($this->usuarioEnt->find()));
 
-        if (!self::exists($retorno)) {
-            throw new \Exception("Senha incorreta!");
+        if (!$this->usuarioEnt->getIdUsuario()) {
+            throw new Exception("Senha incorreta!");
         }
 
-        $this->mount($this->getFirstData($retorno));
-
-        if (!$this->bl_ativo) {
-            throw new \Exception("Usuário não está ativado no sistema!", 1001);
+        if (!$this->usuarioEnt->getBlAtivo()) {
+            throw new Exception("Usuário não está ativado no sistema!", 1001);
         }
 
-        return $this;
+        $this->usuarioEnt->setStSenha("");
+        return $this->usuarioEnt;
     }
 
+    /**
+     * @return bool|mixed
+     * @throws Exception
+     */
     public function logout()
     {
         $sessao = new Sessao();
@@ -61,7 +118,8 @@ class Usuario extends tb_usuarioDAO
     }
 
     /**
-     * @return Usuario
+     * @return Usuario|\App\Model\Entity\Usuario
+     * @throws Exception
      */
     public static function getLoggedUser()
     {
@@ -69,28 +127,9 @@ class Usuario extends tb_usuarioDAO
         $sessao = $sessao->getSessaoByToken();
 
         $usuario = new Usuario();
-        $usuario->id_usuario = $sessao->id_usuario;
-        $usuario->findOne();
+        $usuario = $usuario->getUser($sessao->getIdUsuario());
         return $usuario;
     }
-    /**
-     * @return Usuario
-     */
-//    public static function getLoggedUserStToken()
-//    {
-//        $st_token = Autentication::getBearerToken();
-//
-//        $sessao = new Sessao(null);
-//
-//        $usuario = new Usuario(null);
-//        $usuario->setPrimary($sessao->getUserStTokenSession($st_token));
-//        $usuario->findOne();
-//
-//        if (empty($usuario->id_usuario)){
-//            Response::failResponse("Usuário não se encontra logado!");
-//        }
-//
-//        return $usuario;
-//    }
+
 
 }
