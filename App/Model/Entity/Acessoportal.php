@@ -146,7 +146,7 @@ class Acessoportal extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStMessagewelcome()
     {
@@ -226,7 +226,7 @@ class Acessoportal extends BdAction
 
 
     /**
-     * @param text $st_messagewelcome
+     * @param string $st_messagewelcome
      */
     public function setStMessagewelcome($st_messagewelcome)
     {

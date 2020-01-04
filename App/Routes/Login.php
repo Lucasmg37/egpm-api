@@ -11,6 +11,7 @@ class Login extends Route
     {
         parent::__construct();
         $this->router->setAutenticated(false);
+        $this->setNewRoute("GET", "Login", "getStatusSessao");
     }
 
 }

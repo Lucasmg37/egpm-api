@@ -81,7 +81,7 @@ class Comentario extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStComentario()
     {
@@ -121,7 +121,7 @@ class Comentario extends BdAction
 
 
     /**
-     * @param text $st_comentario
+     * @param string $st_comentario
      */
     public function setStComentario($st_comentario)
     {

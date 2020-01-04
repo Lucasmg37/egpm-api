@@ -13,13 +13,16 @@ class Validate
 //        "id_entidade" => "Identificador de entidade é obrigatório!"
     ];
 
-    const PERGUNTA = [
+    const JOGO = [
         "GLOBAL" => [
+            "st_nome" => "O nome do jogo deve ser preenchido!",
+            "st_descricao" => "A descrição do jogo eve ser preenchida!",
         ],
 //        "CREATE" => [
 //        ],
-//        "UPDATE" => [
-//        ]
+        "UPDATE" => [
+            "id_jogo" => "O identificador do jogo deve ser enviado para realização da operação!"
+        ]
     ];
 
 

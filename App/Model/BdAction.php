@@ -166,12 +166,8 @@ class BdAction
             return $this->insert();
         }
 
-        $retorno = $this->findOne();
-        if (is_array($retorno)) {
-            return $this->update();
-        }
+        return $this->update();
 
-        return $this->insert();
     }
 
 

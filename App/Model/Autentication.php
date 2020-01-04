@@ -63,15 +63,7 @@ Class Autentication extends Model
 
             $this->sessao = $this->sessao->getSessaoByToken($st_token);
 
-            //Regras da sessão
-            $tempoSessao = $this->config->getConfig("nu_minutossessao");
-            $fimsessao = strtotime($this->sessao->dt_sessao) + ((int)$tempoSessao * 60);
-            $now = strtotime($this->nowTime());
-
-            if ($now > $fimsessao) {
-                throw new Exception("Sessão expirada!");
-            }
-
+            self::aplicaRegraSessao($this->sessao);
             return true;
 
         } catch (Exception $e) {
@@ -81,6 +73,26 @@ Class Autentication extends Model
                 return false;
             }
         }
+    }
+
+    /**
+     * @param $sessao
+     * @return bool
+     * @throws Exception
+     */
+    public static function aplicaRegraSessao($sessao)
+    {
+        $config = new Config();
+
+        $tempoSessao = $config->getConfig("nu_minutossessao");
+        $fimsessao = strtotime($sessao->dt_sessao) + ((int)$tempoSessao * 60);
+        $now = strtotime(self::nowTime());
+
+        if ($now > $fimsessao) {
+            throw new Exception("Sessão expirada!");
+        }
+
+        return true;
     }
 
     /**

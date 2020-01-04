@@ -6,7 +6,9 @@ namespace App\Controller\Api;
 use App\Business\Sessao;
 use App\Business\Usuario;
 use App\Controller\Controller;
+use App\Model\Autentication;
 use App\Model\Response;
+use App\Util\Token;
 use Exception;
 
 class LoginController extends Controller
@@ -25,11 +27,11 @@ class LoginController extends Controller
     public function postAction()
     {
         try {
-            $st_email = $this->getRequest()->getParameter("st_email");
+            $st_email = $this->getRequest()->getParameter("st_login");
             $st_senha = $this->getRequest()->getParameter("st_senha");
 
             if (empty($st_email)) {
-                throw new Exception("E-mail não informado!");
+                throw new Exception("Usuário não informado!");
             }
 
             if (empty($st_senha)) {
@@ -40,14 +42,23 @@ class LoginController extends Controller
             $this->usuario = $this->usuario->login($st_email, $st_senha);
 
             //Cria sessao para o usuário
-            $this->sessao->insert($this->usuario->id_usuario);
-
-            //Retorna o token
-            return $this->sessao->objectToArray();
+            return  $this->sessao->insert($this->usuario->id_usuario);
 
         } catch (Exception $e) {
             Response::exceptionResponse($e);
             return false;
         }
+    }
+
+    /**
+     * @return \App\Model\Entity\Sessao
+     * @throws Exception
+     */
+    public function getStatusSessaoAction()
+    {
+        $sessao = new Sessao();
+        $sessaoAtual = $sessao->getSessaoByToken(Token::getTokenByAuthorizationHeader());
+        Autentication::aplicaRegraSessao($sessaoAtual);
+        return $sessaoAtual;
     }
 }

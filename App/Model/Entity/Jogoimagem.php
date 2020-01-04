@@ -35,6 +35,8 @@ class Jogoimagem extends BdAction
     /**
      * @var $id_jogo
      * @required
+     * @foreign_key_table tb_jogo
+     * @foreign_key_column id_jogo
      */
     public $id_jogo;
 
@@ -42,6 +44,8 @@ class Jogoimagem extends BdAction
     /**
      * @var $id_imagem
      * @required
+     * @foreign_key_table tb_imagem
+     * @foreign_key_column id_imagem
      */
     public $id_imagem;
 
@@ -57,7 +61,7 @@ class Jogoimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Jogo
      */
     public function getIdJogo()
     {
@@ -66,7 +70,7 @@ class Jogoimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Imagem
      */
     public function getIdImagem()
     {

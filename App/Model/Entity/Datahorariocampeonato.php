@@ -35,6 +35,8 @@ class Datahorariocampeonato extends BdAction
     /**
      * @var $id_jogo
      * @required
+     * @foreign_key_table tb_jogo
+     * @foreign_key_column id_jogo
      */
     public $id_jogo;
 
@@ -64,7 +66,7 @@ class Datahorariocampeonato extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Jogo
      */
     public function getIdJogo()
     {

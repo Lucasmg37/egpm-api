@@ -127,7 +127,7 @@ class Secao extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStTexto()
     {
@@ -247,7 +247,7 @@ class Secao extends BdAction
 
 
     /**
-     * @param text $st_texto
+     * @param string $st_texto
      */
     public function setStTexto($st_texto)
     {

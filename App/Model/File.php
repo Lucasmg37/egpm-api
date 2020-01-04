@@ -2,118 +2,249 @@
 
 namespace App\Model;
 
+use App\Constants\TipoArquivo;
+use App\Util\Helper;
+use Exception;
 
 class File extends Model
 {
+    private $file;
 
-    public function upload($pastaDestino, $arquivo, $tipo, $obrigatorio = true, $bl_privado = false)
+    /**
+     * @return mixed
+     */
+    public function getFile()
     {
-        try {
-
-            if (($arquivo == null || $arquivo == "") && $obrigatorio) {
-                throw new \Exception("Arquivo não foi enviado!", 400);
-            }
-
-            if (!empty($arquivo["error"])) {
-                throw new \Exception("Ocorreu um erro no upload do arquivo!", 400);
-            }
-
-            if ($tipo === "image") {
-                if (!($arquivo["type"] === "image/jpeg" || $arquivo["type"] === "image/jpg" || $arquivo["type"] === "image/png")) {
-                    throw new \Exception("Tipo de arquivo não permitido!", 400);
-                }
-            }
-
-            if ($tipo === "html") {
-                if (!($arquivo["type"] === "text/html")) {
-                    throw new \Exception("Tipo de arquivo não permitido!", 400);
-                }
-            }
-
-            //Verifica tipo de upload
-            $diretoriosave = "upload/";
-
-            if ($bl_privado) {
-                $diretoriosave = "../files/";
-            }
-
-            //Verifica se pasta de destino não está em branco
-            $diretorio = $diretoriosave;
-
-            if ($pastaDestino) {
-                $diretorio = $diretoriosave . $pastaDestino . "/";
-            }
-
-            //Cria caminho completo
-            $caminhoCompleto = "";
-            $caminhoCompleto .= $diretorio;
-
-            //Verifica e cria pastas para save
-            if (!is_dir($diretoriosave)) {
-                mkdir($diretoriosave);
-            }
-
-            if (!is_dir($caminhoCompleto)) {
-                mkdir($caminhoCompleto);
-            }
-
-            //Pega Extensão do arquivo
-            $invertedname = strrev($arquivo['name']);
-            $extensao = strstr($invertedname, '.', true);
-            $extensao = strrev($extensao);
-
-            //Cria novo nome e adiciona extensão
-            $model = new Model();
-            $nameretorno = $model->criptografa(date("YmdHis"));
-            $name = $nameretorno . "." . $extensao;
-
-            $caminhoCompleto .= $name;
-
-            //Realiza upload
-            move_uploaded_file($arquivo['tmp_name'], $caminhoCompleto); //Fazer upload do arquivo
-
-            //Defini o caminho salvo no banco
-            $caminhobanco = "http://";
-            $caminhobanco .= $_SERVER["SERVER_NAME"];
-
-            if (!$bl_privado) {
-                $caminhobanco .= "/" . $caminhoCompleto;
-            } else {
-                $caminhobanco .= "/File/" . $nameretorno . "." . $extensao;
-            }
-
-            //Monta retorno
-            $retorno["extensao"] = $extensao;
-            $retorno["caminhobanco"] = $caminhobanco;
-            $retorno["name"] = $nameretorno;
-
-            return $retorno;
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
-        }
+        return $this->file;
     }
 
-    public function delete($st_file)
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNome()
+    {
+        return $this->nome;
+    }
+
+    /**
+     * @param mixed $nome
+     */
+    public function setNome($nome)
+    {
+        $this->nome = $nome;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNomeSave()
+    {
+        return $this->nomeSave;
+    }
+
+    /**
+     * @param mixed $nomeSave
+     */
+    public function setNomeSave($nomeSave)
+    {
+        $this->nomeSave = $nomeSave;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPathSave()
+    {
+        return $this->pathSave;
+    }
+
+    /**
+     * @param mixed $pathSave
+     */
+    public function setPathSave($pathSave)
+    {
+        $this->pathSave = $pathSave;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExtensao()
+    {
+        return $this->extensao;
+    }
+
+    /**
+     * @param mixed $extensao
+     */
+    public function setExtensao($extensao)
+    {
+        $this->extensao = $extensao;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPathWithFile()
+    {
+        return $this->pathWithFile;
+    }
+
+    /**
+     * @param mixed $pathWithFile
+     */
+    public function setPathWithFile($pathWithFile)
+    {
+        $this->pathWithFile = $pathWithFile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlAcesso()
+    {
+        return $this->urlAcesso;
+    }
+
+    /**
+     * @param mixed $urlAcesso
+     */
+    public function setUrlAcesso($urlAcesso)
+    {
+        $this->urlAcesso = $urlAcesso;
+    }
+
+    private $nome;
+    private $nomeSave;
+    private $pathSave;
+    private $extensao;
+    private $pathWithFile;
+    private $urlAcesso;
+
+    /**
+     * @param $destino
+     * @param $arquivo
+     * @param $tipo TipoArquivo|array
+     * @return $this
+     * @throws Exception
+     */
+    public function upload($destino, $arquivo, $tipo)
     {
 
+        if ($arquivo == null || $arquivo == "") {
+            throw new Exception("Arquivo não foi enviado!");
+        }
+
+        if (!empty($arquivo["error"])) {
+            throw new Exception("Ocorreu um erro no upload do arquivo!");
+        }
+
+        if (!File::verificaTipoArquivo($arquivo, $tipo)) {
+            throw new Exception("Arquivo com formato inválido para a operação.");
+        }
+
+        $diretoriosave = "upload/" . $destino . "/";
+
+        //Cria pasta se não existir
+        if (!is_dir($diretoriosave)) {
+            mkdir($diretoriosave, 0777, true);
+        }
+
+        $extensao = File::getExtensaoArquivo($arquivo["name"]);
+        $nomeSave = Helper::criptografaWithDate();
+
+        $save = $diretoriosave . $nomeSave . "." . $extensao;
+
+        move_uploaded_file($arquivo['tmp_name'], $save);
+
+        $caminhobanco = "http://" . $_SERVER["SERVER_NAME"] . "/" . $save;
+
+        $this->nome = $arquivo["name"];
+        $this->nomeSave = $nomeSave;
+        $this->file = $arquivo;
+        $this->extensao = $extensao;
+        $this->pathSave = $diretoriosave;
+        $this->pathWithFile = $save;
+        $this->urlAcesso = $caminhobanco;
+
+        return $this;
+    }
+
+    /**
+     * @param $arquivoName
+     * @return string
+     */
+    public static function getExtensaoArquivo($arquivoName)
+    {
+        $invertedname = strrev($arquivoName);
+        $extensao = strstr($invertedname, '.', true);
+        return strrev($extensao);
+    }
+
+    /**
+     * @param $arquivoName
+     * @return mixed
+     */
+    public static function getNameWithOutExtensaoArquivo($arquivoName)
+    {
+        $extensao = self::getExtensaoArquivo($arquivoName);
+        return str_replace("." . $extensao, "", $arquivoName);
+    }
+
+    /**
+     * @param $arquivo
+     * @param $tipos TipoArquivo|array
+     * @return bool
+     */
+    public static function verificaTipoArquivo($arquivo, $tipos = array())
+    {
+        return in_array($arquivo["type"], $tipos);
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public static function setPathFileLink($path)
+    {
+        return "http://" . $_SERVER["SERVER_NAME"] . "/" . $path;
+    }
+
+    /**
+     * @param $caminho
+     * @return mixed
+     */
+    public static function getPathLink($caminho)
+    {
+        return str_replace("http://" . $_SERVER["SERVER_NAME"] . "/", "", $caminho);
+    }
+
+    /**
+     * @param $st_file
+     * @return bool
+     * @throws Exception
+     */
+    public static function deletePublic($st_file)
+    {
         try {
             if (empty($st_file)) {
-                throw new \Exception("Nome do arquivo não informado!");
+                throw new Exception("Nome do arquivo não informado!");
             }
             //Criar caminho absoluto
-            $absolutePath = "../files/" . $st_file;
+            $absolutePath =  $st_file;
+            return unlink($absolutePath);
 
-            unlink($absolutePath);
-
-        } catch (\Exception $e) {
-            self::lancaErro($e);
+        } catch (Exception $e) {
+            throw $e;
         }
     }
-
-    public function getNameFileOfUrl($url)
-    {
-        return str_replace("http://" . $_SERVER["SERVER_NAME"] . "/File/", "", $url);
-    }
-
 
 }

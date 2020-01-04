@@ -2,8 +2,9 @@
 
 namespace App\Model;
 
+use Exception;
 
-class Request extends Model
+class Request
 {
 
     public $request;
@@ -26,6 +27,8 @@ class Request extends Model
     }
 
     /**
+     * @param $campo
+     * @param bool $campovazio
      * @return mixed
      */
     public function getSuperPost($campo, $campovazio = false)
@@ -35,14 +38,16 @@ class Request extends Model
                 return $this->superPost[$campo];
             } else {
                 if ($campovazio) {
-                    throw new \Exception("Campo -> $campo não disponível no request");
+                    throw new Exception("Campo -> $campo não disponível no request");
                 } else {
                     return null;
                 }
             }
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
+
+        return null;
     }
 
     /**
@@ -143,6 +148,8 @@ class Request extends Model
 
 
     /**
+     * @param $campo
+     * @param bool $lancaerro
      * @return mixed
      */
     public function getPost($campo, $lancaerro = false)
@@ -152,17 +159,21 @@ class Request extends Model
                 return $this->post[$campo];
             } else {
                 if ($lancaerro) {
-                    throw new \Exception("Campo -> $campo não disponível em POST");
+                    throw new Exception("Campo -> $campo não disponível em POST");
                 } else {
                     return null;
                 }
             }
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
+
+        return null;
     }
 
     /**
+     * @param $campo
+     * @param bool $lancaerro
      * @return mixed
      */
     public function getSuperGet($campo, $lancaerro = false)
@@ -172,18 +183,21 @@ class Request extends Model
                 return $this->superGet[$campo];
             } else {
                 if ($lancaerro) {
-                    throw new \Exception("Campo -> $campo não disponível em GET");
+                    throw new Exception("Campo -> $campo não disponível em GET");
                 } else {
                     return "";
                 }
             }
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
+
+        return null;
     }
 
 
     /**
+     * @param $campo
      * @return mixed
      */
     public function getGet($campo)
@@ -192,14 +206,17 @@ class Request extends Model
             if (isset($this->get[$campo])) {
                 return $this->get[$campo];
             } else {
-                throw new \Exception("Campo -> $campo não disponível em GET");
+                throw new Exception("Campo -> $campo não disponível em GET");
             }
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
+
+        return null;
     }
 
     /**
+     * @param $campo
      * @return mixed
      */
     public function getPut($campo)
@@ -208,29 +225,36 @@ class Request extends Model
             if (isset($this->put[$campo])) {
                 return $this->put[$campo];
             } else {
-                throw new \Exception("Campo -> $campo não disponível em PUT");
+                throw new Exception("Campo -> $campo não disponível em PUT");
             }
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
+
+        return null;
     }
 
     /**
+     * @param $campo
+     * @param bool $lancaErro
      * @return mixed
      */
-    public function getFile($campo)
+    public function getFile($campo, $lancaErro = true)
     {
 
         try {
             if (isset($this->file[$campo])) {
                 return $this->file[$campo];
             } else {
-                throw new \Exception("Arquivo -> $campo não disponível em FILE");
+                if ($lancaErro) {
+                    throw new Exception("Arquivo -> $campo não disponível em FILE");
+                }
+                return null;
             }
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
-
+        return null;
     }
 
     /**
@@ -280,17 +304,19 @@ class Request extends Model
                 return $this->superPost;
             }
 
-            throw new \Exception("Request sem parâmetros!");
+            throw new Exception("Request sem parâmetros!");
 
-
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
 
+        return null;
     }
 
     /**
-     * @return mixed
+     * @param $campo
+     * @param bool $campovazio
+     * @return string
      */
     public function getParameter($campo, $campovazio = false)
     {
@@ -322,14 +348,14 @@ class Request extends Model
 
 
             if ($campovazio) {
-                throw new \Exception("Campo -> $campo não disponível no request");
-            } else {
-                return "";
+                throw new Exception("Campo -> $campo não disponível no request");
             }
 
-        } catch (\Exception $e) {
-            $this->lancaErro($e);
+        } catch (Exception $e) {
+            Response::exceptionResponse($e);
         }
+
+        return "";
     }
 
 

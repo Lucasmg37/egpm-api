@@ -2,6 +2,7 @@
 
 namespace App\Business;
 
+use App\Model\Entity\Usuarios;
 use App\Model\Model;
 use App\Model\Request;
 use App\Util\Token;
@@ -15,13 +16,13 @@ class Usuario
 
     public function __construct()
     {
-        $this->usuarioEnt = new \App\Model\Entity\Usuario();
+        $this->usuarioEnt = new Usuarios();
         $this->request = new Request();
     }
 
     /**
      * @param $id_usuario
-     * @return \App\Model\Entity\Usuario
+     * @return Usuarios
      * @throws Exception
      */
     public function getUser($id_usuario)
@@ -38,7 +39,7 @@ class Usuario
      * @param $st_senha
      * @param $id_entidade
      * @param bool $bl_ativo
-     * @return \App\Model\Entity\Usuario
+     * @return Usuarios
      * @throws Exception
      */
     public function insert($st_nome, $st_email, $st_senha, $id_entidade, $bl_ativo = false)
@@ -79,13 +80,13 @@ class Usuario
      * Verifica parâmetros de login e retorna o usuário
      * @param $st_email
      * @param $st_senha
-     * @return \App\Model\Entity\Usuario
+     * @return Usuarios
      * @throws Exception
      */
     public function login($st_email, $st_senha)
     {
 
-        $this->usuarioEnt->setStEmail($st_email);
+        $this->usuarioEnt->setStLogin($st_email);
         $retorno = $this->usuarioEnt->find();
 
         if (!sizeof($retorno) > 0) {
@@ -97,10 +98,6 @@ class Usuario
 
         if (!$this->usuarioEnt->getIdUsuario()) {
             throw new Exception("Senha incorreta!");
-        }
-
-        if (!$this->usuarioEnt->getBlAtivo()) {
-            throw new Exception("Usuário não está ativado no sistema!", 1001);
         }
 
         $this->usuarioEnt->setStSenha("");
@@ -118,7 +115,7 @@ class Usuario
     }
 
     /**
-     * @return Usuario|\App\Model\Entity\Usuario
+     * @return Usuarios
      * @throws Exception
      */
     public static function getLoggedUser()

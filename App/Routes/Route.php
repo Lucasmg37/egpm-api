@@ -14,11 +14,16 @@ Class Route
     public function __construct()
     {
         $this->router = new Router();
-        $this->router->autenticated = true;
+        $this->router->autenticated = false;
 
         //Rotas personalizadas
         $this->router->setNewRoute("GET", "Index", "render", false);
         $this->router->setNewRoute("GET", "Index", "execute", false);
+
+        $this->router->setNewRoute("GET", "Patrocinador", "getPatrocinadores", false);
+        $this->router->setNewRoute("GET", "Patrocinador", "getApoiadores", false);
+        $this->router->setNewRoute("GET", "Patrocinador", "getRealizadores", false);
+
     }
 
     /**

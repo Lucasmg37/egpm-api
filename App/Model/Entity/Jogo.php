@@ -65,12 +65,6 @@ class Jogo extends BdAction
 
 
     /**
-     * @var $st_imagem
-     */
-    public $st_imagem;
-
-
-    /**
      * @var $st_ingresso
      */
     public $st_ingresso;
@@ -89,27 +83,9 @@ class Jogo extends BdAction
 
 
     /**
-     * @var $dt_jogo
-     */
-    public $dt_jogo;
-
-
-    /**
-     * @var $hr_jogo
-     */
-    public $hr_jogo;
-
-
-    /**
      * @var $st_regra
      */
     public $st_regra;
-
-
-    /**
-     * @var $st_observacao
-     */
-    public $st_observacao;
 
 
     /**
@@ -133,15 +109,8 @@ class Jogo extends BdAction
 
     /**
      * @var $nu_quantidadejogadores
-     * @required
      */
     public $nu_quantidadejogadores;
-
-
-    /**
-     * @var $id_imagem
-     */
-    public $id_imagem;
 
 
 
@@ -164,7 +133,7 @@ class Jogo extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStDescricao()
     {
@@ -191,20 +160,11 @@ class Jogo extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStVideo()
     {
         return $this->st_video;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getStImagem()
-    {
-        return $this->st_imagem;
     }
 
 
@@ -236,38 +196,11 @@ class Jogo extends BdAction
 
 
     /**
-     * @return date
-     */
-    public function getDtJogo()
-    {
-        return $this->dt_jogo;
-    }
-
-
-    /**
      * @return string
-     */
-    public function getHrJogo()
-    {
-        return $this->hr_jogo;
-    }
-
-
-    /**
-     * @return text
      */
     public function getStRegra()
     {
         return $this->st_regra;
-    }
-
-
-    /**
-     * @return text
-     */
-    public function getStObservacao()
-    {
-        return $this->st_observacao;
     }
 
 
@@ -307,15 +240,6 @@ class Jogo extends BdAction
     }
 
 
-    /**
-     * @return int
-     */
-    public function getIdImagem()
-    {
-        return $this->id_imagem;
-    }
-
-
 
     /**
      * @param int $id_jogo
@@ -338,7 +262,7 @@ class Jogo extends BdAction
 
 
     /**
-     * @param text $st_descricao
+     * @param string $st_descricao
      */
     public function setStDescricao($st_descricao)
     {
@@ -368,21 +292,11 @@ class Jogo extends BdAction
 
 
     /**
-     * @param text $st_video
+     * @param string $st_video
      */
     public function setStVideo($st_video)
     {
         $this->st_video = $st_video;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param string $st_imagem
-     */
-    public function setStImagem($st_imagem)
-    {
-        $this->st_imagem = $st_imagem;
         $this->atualizaAtributos($this);
     }
 
@@ -418,41 +332,11 @@ class Jogo extends BdAction
 
 
     /**
-     * @param date $dt_jogo
-     */
-    public function setDtJogo($dt_jogo)
-    {
-        $this->dt_jogo = $dt_jogo;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param string $hr_jogo
-     */
-    public function setHrJogo($hr_jogo)
-    {
-        $this->hr_jogo = $hr_jogo;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param text $st_regra
+     * @param string $st_regra
      */
     public function setStRegra($st_regra)
     {
         $this->st_regra = $st_regra;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param text $st_observacao
-     */
-    public function setStObservacao($st_observacao)
-    {
-        $this->st_observacao = $st_observacao;
         $this->atualizaAtributos($this);
     }
 
@@ -493,16 +377,6 @@ class Jogo extends BdAction
     public function setNuQuantidadejogadores($nu_quantidadejogadores)
     {
         $this->nu_quantidadejogadores = $nu_quantidadejogadores;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param int $id_imagem
-     */
-    public function setIdImagem($id_imagem)
-    {
-        $this->id_imagem = $id_imagem;
         $this->atualizaAtributos($this);
     }
 

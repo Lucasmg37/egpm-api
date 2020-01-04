@@ -63,7 +63,7 @@ class Duvida extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStDuvida()
     {
@@ -72,7 +72,7 @@ class Duvida extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStResposta()
     {
@@ -101,7 +101,7 @@ class Duvida extends BdAction
 
 
     /**
-     * @param text $st_duvida
+     * @param string $st_duvida
      */
     public function setStDuvida($st_duvida)
     {
@@ -111,7 +111,7 @@ class Duvida extends BdAction
 
 
     /**
-     * @param text $st_resposta
+     * @param string $st_resposta
      */
     public function setStResposta($st_resposta)
     {

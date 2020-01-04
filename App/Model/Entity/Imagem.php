@@ -52,6 +52,13 @@ class Imagem extends BdAction
     public $st_alt;
 
 
+    /**
+     * @var $st_prefixotamanho
+     * @default ori
+     */
+    public $st_prefixotamanho;
+
+
 
     /**
      * @return int
@@ -72,7 +79,7 @@ class Imagem extends BdAction
 
 
     /**
-     * @return text
+     * @return string
      */
     public function getStUrl()
     {
@@ -86,6 +93,15 @@ class Imagem extends BdAction
     public function getStAlt()
     {
         return $this->st_alt;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getStPrefixotamanho()
+    {
+        return $this->st_prefixotamanho;
     }
 
 
@@ -111,7 +127,7 @@ class Imagem extends BdAction
 
 
     /**
-     * @param text $st_url
+     * @param string $st_url
      */
     public function setStUrl($st_url)
     {
@@ -126,6 +142,16 @@ class Imagem extends BdAction
     public function setStAlt($st_alt)
     {
         $this->st_alt = $st_alt;
+        $this->atualizaAtributos($this);
+    }
+
+
+    /**
+     * @param string $st_prefixotamanho
+     */
+    public function setStPrefixotamanho($st_prefixotamanho)
+    {
+        $this->st_prefixotamanho = $st_prefixotamanho;
         $this->atualizaAtributos($this);
     }
 
