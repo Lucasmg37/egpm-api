@@ -24,6 +24,9 @@ Class Route
         $this->router->setNewRoute("GET", "Patrocinador", "getApoiadores", false);
         $this->router->setNewRoute("GET", "Patrocinador", "getRealizadores", false);
 
+        $this->router->setNewRoute("GET", "Agenda", "retorna-agendamentos-ativos", false);
+        $this->router->changeRoute("Agenda", "retorna-agendamentos-ativos", "Agenda", "getAtivos");
+
     }
 
     /**

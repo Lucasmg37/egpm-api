@@ -47,7 +47,6 @@ class Agenda extends BdAction
 
     /**
      * @var $st_local
-     * @required
      */
     public $st_local;
 
@@ -132,7 +131,7 @@ class Agenda extends BdAction
 
 
     /**
-     * @return date
+     * @return string
      */
     public function getDtData()
     {
@@ -141,7 +140,7 @@ class Agenda extends BdAction
 
 
     /**
-     * @return time
+     * @return string
      */
     public function getNuHorario()
     {
@@ -227,7 +226,7 @@ class Agenda extends BdAction
 
 
     /**
-     * @param date $dt_data
+     * @param string $dt_data
      */
     public function setDtData($dt_data)
     {
@@ -237,7 +236,7 @@ class Agenda extends BdAction
 
 
     /**
-     * @param time $nu_horario
+     * @param string $nu_horario
      */
     public function setNuHorario($nu_horario)
     {
