@@ -4,10 +4,11 @@
 namespace App\Controller\Api;
 
 
+use App\Controller\Controller;
 use App\Model\Entity\Social;
 use Exception;
 
-class SocialController
+class SocialController extends Controller
 {
 
     /**
@@ -22,6 +23,24 @@ class SocialController
         if (!empty($id_social)) {
             return $social->findOne($id_social);
         }
+        return $social->findAll();
+    }
+
+    /**
+     * @return mixed|void
+     * @throws Exception
+     */
+    public function putAction()
+    {
+        $socials = $this->request->getParameter("socials");
+        $social = new Social();
+
+        foreach ($socials as $item) {
+            $social->clearObject();
+            $social->mount($item);
+            $social->save();
+        }
+
         return $social->findAll();
     }
 
