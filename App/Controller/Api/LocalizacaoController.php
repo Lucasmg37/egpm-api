@@ -4,10 +4,12 @@
 namespace App\Controller\Api;
 
 
+use App\Controller\Controller;
 use App\Model\Entity\Localizacao;
+use App\Model\Validate;
 use Exception;
 
-class LocalizacaoController
+class LocalizacaoController extends Controller
 {
 
     /**
@@ -25,6 +27,19 @@ class LocalizacaoController
 
         return $localizacao->findAll();
 
+    }
+
+    /**
+     * @return Localizacao|array|void
+     * @throws Exception
+     */
+    public function postAction()
+    {
+        $input = $this->request->getAllParameters();
+
+        $localizacaoEntity = new Localizacao();
+        $localizacaoEntity->validate(Validate::LOCALIZACAO, [], $input, false);
+        return $localizacaoEntity->mount($input)->save();
     }
 
 }
