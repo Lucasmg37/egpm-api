@@ -3,6 +3,7 @@
 
 namespace App\Business;
 
+use App\Model\Entity\Icone;
 use App\Model\Entity\Secaoimagem;
 use Exception;
 
@@ -21,6 +22,7 @@ class Secao
         $secaoSelecionada = $secao->getFirst($secao->find());
         $secao->mount($secaoSelecionada);
         $secao->imagens = $this->getImagens($secao->getIdSecao());
+        $secao->icones = $this->getIcones($secao->getIdSecao());
 
         return $secao;
 
@@ -65,6 +67,18 @@ class Secao
         }
 
         return Imagem::mapeiaPorPrefixo($imagens);
+    }
+
+    /**
+     * @param $id_secao
+     * @return mixed
+     * @throws Exception
+     */
+    public function getIcones($id_secao)
+    {
+        $iconeEntity = new Icone();
+        $iconeEntity->setIdSecao($id_secao);
+        return $iconeEntity->find();
     }
 
 }
