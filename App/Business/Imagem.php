@@ -4,9 +4,14 @@
 namespace App\Business;
 
 
+use App\Constants\TipoArquivo;
+use App\Model\Entity\Comentarioimagem;
+use App\Model\Entity\Fotogaleriaimagem;
+use App\Model\Entity\Jogoimagem;
+use App\Model\Entity\Patrocinadorimagem;
+use App\Model\Entity\Secaoimagem;
 use App\Model\File;
 use App\Model\ResizeImage;
-use App\Util\Debug;
 use Gumlet\ImageResizeException;
 use Exception;
 
@@ -31,6 +36,11 @@ class Imagem
         return $retorno[$imagens["st_prefixotamanho"]] = $imagens;
     }
 
+    /**
+     * @param $imagens
+     * @param $st_prefixotamanho
+     * @return mixed
+     */
     public static function getUrlImagemPrefixo($imagens, $st_prefixotamanho)
     {
         if (is_array($imagens)) {
@@ -81,11 +91,82 @@ class Imagem
      */
     public static function deleteImage($id_imagem)
     {
-        $imagem = new \App\Model\Entity\Imagem();
-        $imagem->findOne($id_imagem);
+        try {
+            $imagem = new \App\Model\Entity\Imagem();
+            $imagem->findOne($id_imagem);
 
-        File::deletePublic(File::getPathLink($imagem->getStUrl()));
-        $imagem->delete();
+            File::deletePublic(File::getPathLink($imagem->getStUrl()));
+            $imagem->delete();
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * @param $arquivo
+     * @param $classeImagem Jogoimagem|Comentarioimagem|Fotogaleriaimagem|Patrocinadorimagem|Secaoimagem Classe de ligação entre Informações e imagens
+     * @param $setEntity string Set da informação de busca setIdJogo
+     * @param $valueSet int Valor do atributo a ser utilizado no Set
+     * @param $pathSave string Pasta para salvar imagens
+     * @return bool
+     * @throws ImageResizeException|Exception
+     */
+    public static function vinculaImagemWithResize($arquivo, $pathSave, $classeImagem, $setEntity, $valueSet)
+    {
+        $file = new File();
+        $file->upload("Imagens/$pathSave", $arquivo, TipoArquivo::TIPO_IMAGEM_DEFAULT);
+
+        if (!method_exists($classeImagem, $setEntity)) {
+            throw new Exception("O Set informado não existe no objeto enviado!");
+        }
+
+        $imagemEntiy = new \App\Model\Entity\Imagem();
+        $imagemEntiy->setStNome($file->getNome());
+        $imagemEntiy->setStPrefixotamanho(\App\Constants\Imagem::PREFIXO_ORIGINAL);
+        $imagemEntiy->setStUrl($file->getUrlAcesso());
+        $imagemEntiy->insert();
+
+        $classeImagem->setIdImagem($imagemEntiy->getIdImagem());
+        $classeImagem->$setEntity($valueSet);
+        $classeImagem->insert();
+
+        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $file->getNome(), \App\Constants\Imagem::RESIZE, $file->getPathSave());
+
+        foreach ($imagens as $image) {
+            $classeImagem->clearObject();
+            $classeImagem->$setEntity($valueSet);
+            $classeImagem->setIdImagem($image->getIdImagem());
+            $classeImagem->insert();
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $classeImagem Jogoimagem|Comentarioimagem|Fotogaleriaimagem|Patrocinadorimagem|Secaoimagem Classe de ligação entre Informações e imagens
+     * @param $setEntity string Set da informação de busca setIdJogo
+     * @param $valueSet int Valor do atributo a ser utilizado no Set
+     * @return bool
+     * @throws Exception
+     */
+    public static function desvinculaImagensWithResize($classeImagem, $setEntity, $valueSet)
+    {
+
+        if (!method_exists($classeImagem, $setEntity)) {
+            throw new Exception("O Set informado não existe no objeto enviado!");
+        }
+
+        $classeImagem->$setEntity($valueSet);
+        $imagens = $classeImagem->find();
+
+        foreach ($imagens as $imagem) {
+            $classeImagem->clearObject();
+            $classeImagem->mount($imagem);
+            $classeImagem->delete();
+            Imagem::deleteImage($imagem["id_imagem"]);
+        }
+
+        return true;
     }
 
 }
