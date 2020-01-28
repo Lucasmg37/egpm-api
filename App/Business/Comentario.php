@@ -44,7 +44,7 @@ class Comentario
     /**
      * @param $id_comentario
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getImagens($id_comentario)
     {
