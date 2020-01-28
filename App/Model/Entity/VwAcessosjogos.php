@@ -6,15 +6,15 @@ use App\Model\BdAction;
 use Exception;
 
 /**
- * Class Jogo
+ * Class VwAcessosjogos
  * @package App\Model\Entity
- * @table tb_jogo
+ * @table vw_acessosjogos
  */
-class Jogo extends BdAction
+class VwAcessosjogos extends BdAction
 {
 
     /**
-     * Jogo constructor.
+     * VwAcessosjogos constructor.
      * @param null $parameters
      * @throws Exception
      */
@@ -24,10 +24,17 @@ class Jogo extends BdAction
     }
 
     /**
-     * @var $id_jogo
-     * @primary_key
+     * @var $vw_primary_id_jogo
      * @required
-     * @auto_increment
+     * @default 0
+     */
+    public $vw_primary_id_jogo;
+
+
+    /**
+     * @var $id_jogo
+     * @required
+     * @default 0
      */
     public $id_jogo;
 
@@ -112,6 +119,23 @@ class Jogo extends BdAction
      */
     public $nu_quantidadejogadores;
 
+
+    /**
+     * @var $nu_acessos
+     * @required
+     * @default 0
+     */
+    public $nu_acessos;
+
+
+
+    /**
+     * @return int
+     */
+    public function getVwPrimaryIdJogo()
+    {
+        return $this->vw_primary_id_jogo;
+    }
 
 
     /**
@@ -239,6 +263,25 @@ class Jogo extends BdAction
         return $this->nu_quantidadejogadores;
     }
 
+
+    /**
+     * @return int
+     */
+    public function getNuAcessos()
+    {
+        return $this->nu_acessos;
+    }
+
+
+
+    /**
+     * @param int $vw_primary_id_jogo
+     */
+    public function setVwPrimaryIdJogo($vw_primary_id_jogo)
+    {
+        $this->vw_primary_id_jogo = $vw_primary_id_jogo;
+        $this->atualizaAtributos($this);
+    }
 
 
     /**
@@ -377,6 +420,16 @@ class Jogo extends BdAction
     public function setNuQuantidadejogadores($nu_quantidadejogadores)
     {
         $this->nu_quantidadejogadores = $nu_quantidadejogadores;
+        $this->atualizaAtributos($this);
+    }
+
+
+    /**
+     * @param int $nu_acessos
+     */
+    public function setNuAcessos($nu_acessos)
+    {
+        $this->nu_acessos = $nu_acessos;
         $this->atualizaAtributos($this);
     }
 

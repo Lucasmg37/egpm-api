@@ -34,15 +34,10 @@ class Icone extends BdAction
 
     /**
      * @var $id_secao
+     * @foreign_key_table tb_secao
+     * @foreign_key_column id_secao
      */
     public $id_secao;
-
-
-    /**
-     * @var $st_tabela
-     * @required
-     */
-    public $st_tabela;
 
 
     /**
@@ -60,6 +55,7 @@ class Icone extends BdAction
 
     /**
      * @var $st_valor
+     * @required
      */
     public $st_valor;
 
@@ -75,20 +71,11 @@ class Icone extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Secao
      */
     public function getIdSecao()
     {
         return $this->id_secao;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getStTabela()
-    {
-        return $this->st_tabela;
     }
 
 
@@ -136,16 +123,6 @@ class Icone extends BdAction
     public function setIdSecao($id_secao)
     {
         $this->id_secao = $id_secao;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param string $st_tabela
-     */
-    public function setStTabela($st_tabela)
-    {
-        $this->st_tabela = $st_tabela;
         $this->atualizaAtributos($this);
     }
 

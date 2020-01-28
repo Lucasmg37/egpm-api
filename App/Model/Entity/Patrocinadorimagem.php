@@ -35,6 +35,8 @@ class Patrocinadorimagem extends BdAction
     /**
      * @var $id_imagem
      * @required
+     * @foreign_key_table tb_imagem
+     * @foreign_key_column id_imagem
      */
     public $id_imagem;
 
@@ -42,6 +44,8 @@ class Patrocinadorimagem extends BdAction
     /**
      * @var $id_patrocinador
      * @required
+     * @foreign_key_table tb_patrocinador
+     * @foreign_key_column id_patrocinador
      */
     public $id_patrocinador;
 
@@ -57,7 +61,7 @@ class Patrocinadorimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Imagem
      */
     public function getIdImagem()
     {
@@ -66,7 +70,7 @@ class Patrocinadorimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Patrocinador
      */
     public function getIdPatrocinador()
     {

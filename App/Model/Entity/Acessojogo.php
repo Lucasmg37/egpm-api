@@ -82,7 +82,7 @@ class Acessojogo extends BdAction
 
 
     /**
-     * @return date
+     * @return string
      */
     public function getDtAcesso()
     {
@@ -122,7 +122,7 @@ class Acessojogo extends BdAction
 
 
     /**
-     * @param date $dt_acesso
+     * @param string $dt_acesso
      */
     public function setDtAcesso($dt_acesso)
     {

@@ -35,6 +35,8 @@ class Secaoimagem extends BdAction
     /**
      * @var $id_secao
      * @required
+     * @foreign_key_table tb_secao
+     * @foreign_key_column id_secao
      */
     public $id_secao;
 
@@ -42,6 +44,8 @@ class Secaoimagem extends BdAction
     /**
      * @var $id_imagem
      * @required
+     * @foreign_key_table tb_imagem
+     * @foreign_key_column id_imagem
      */
     public $id_imagem;
 
@@ -57,7 +61,7 @@ class Secaoimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Secao
      */
     public function getIdSecao()
     {
@@ -66,7 +70,7 @@ class Secaoimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Imagem
      */
     public function getIdImagem()
     {

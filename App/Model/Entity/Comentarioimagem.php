@@ -35,6 +35,8 @@ class Comentarioimagem extends BdAction
     /**
      * @var $id_comentario
      * @required
+     * @foreign_key_table tb_comentario
+     * @foreign_key_column id_comentario
      */
     public $id_comentario;
 
@@ -42,6 +44,8 @@ class Comentarioimagem extends BdAction
     /**
      * @var $id_imagem
      * @required
+     * @foreign_key_table tb_imagem
+     * @foreign_key_column id_imagem
      */
     public $id_imagem;
 
@@ -57,7 +61,7 @@ class Comentarioimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Comentario
      */
     public function getIdComentario()
     {
@@ -66,7 +70,7 @@ class Comentarioimagem extends BdAction
 
 
     /**
-     * @return int
+     * @return int|Imagem
      */
     public function getIdImagem()
     {

@@ -34,50 +34,23 @@ class Secao extends BdAction
 
     /**
      * @var $st_titulo
+     * @required
      */
     public $st_titulo;
 
 
     /**
      * @var $st_texto
+     * @required
      */
     public $st_texto;
 
 
     /**
-     * @var $st_textobotao
-     */
-    public $st_textobotao;
-
-
-    /**
      * @var $st_rota
+     * @required
      */
     public $st_rota;
-
-
-    /**
-     * @var $st_imagem
-     */
-    public $st_imagem;
-
-
-    /**
-     * @var $st_color
-     */
-    public $st_color;
-
-
-    /**
-     * @var $bl_parallax
-     */
-    public $bl_parallax;
-
-
-    /**
-     * @var $nu_order
-     */
-    public $nu_order;
 
 
     /**
@@ -88,6 +61,7 @@ class Secao extends BdAction
 
     /**
      * @var $bl_hasvideo
+     * @required
      * @default 0
      */
     public $bl_hasvideo;
@@ -95,6 +69,7 @@ class Secao extends BdAction
 
     /**
      * @var $bl_hasimagem
+     * @required
      * @default 0
      */
     public $bl_hasimagem;
@@ -102,6 +77,7 @@ class Secao extends BdAction
 
     /**
      * @var $bl_hasicone
+     * @required
      * @default 0
      */
     public $bl_hasicone;
@@ -138,54 +114,9 @@ class Secao extends BdAction
     /**
      * @return string
      */
-    public function getStTextobotao()
-    {
-        return $this->st_textobotao;
-    }
-
-
-    /**
-     * @return string
-     */
     public function getStRota()
     {
         return $this->st_rota;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getStImagem()
-    {
-        return $this->st_imagem;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getStColor()
-    {
-        return $this->st_color;
-    }
-
-
-    /**
-     * @return boolean
-     */
-    public function getBlParallax()
-    {
-        return $this->bl_parallax;
-    }
-
-
-    /**
-     * @return int
-     */
-    public function getNuOrder()
-    {
-        return $this->nu_order;
     }
 
 
@@ -257,61 +188,11 @@ class Secao extends BdAction
 
 
     /**
-     * @param string $st_textobotao
-     */
-    public function setStTextobotao($st_textobotao)
-    {
-        $this->st_textobotao = $st_textobotao;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
      * @param string $st_rota
      */
     public function setStRota($st_rota)
     {
         $this->st_rota = $st_rota;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param string $st_imagem
-     */
-    public function setStImagem($st_imagem)
-    {
-        $this->st_imagem = $st_imagem;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param string $st_color
-     */
-    public function setStColor($st_color)
-    {
-        $this->st_color = $st_color;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param boolean $bl_parallax
-     */
-    public function setBlParallax($bl_parallax)
-    {
-        $this->bl_parallax = $bl_parallax;
-        $this->atualizaAtributos($this);
-    }
-
-
-    /**
-     * @param int $nu_order
-     */
-    public function setNuOrder($nu_order)
-    {
-        $this->nu_order = $nu_order;
         $this->atualizaAtributos($this);
     }
 

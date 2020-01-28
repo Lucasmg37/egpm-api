@@ -6,15 +6,15 @@ use App\Model\BdAction;
 use Exception;
 
 /**
- * Class Usuarioimagem
+ * Class VwUsuarioimagem
  * @package App\Model\Entity
  * @table vw_usuarioimagem
  */
-class Usuarioimagem extends BdAction
+class VwUsuarioimagem extends BdAction
 {
 
     /**
-     * Usuarioimagem constructor.
+     * VwUsuarioimagem constructor.
      * @param null $parameters
      * @throws Exception
      */
@@ -84,6 +84,13 @@ class Usuarioimagem extends BdAction
      * @default 2
      */
     public $id_tipousuario;
+
+
+    /**
+     * @var $st_prefixotamanho
+     * @default ori
+     */
+    public $st_prefixotamanho;
 
 
 
@@ -165,6 +172,15 @@ class Usuarioimagem extends BdAction
     public function getIdTipousuario()
     {
         return $this->id_tipousuario;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getStPrefixotamanho()
+    {
+        return $this->st_prefixotamanho;
     }
 
 
@@ -255,6 +271,16 @@ class Usuarioimagem extends BdAction
     public function setIdTipousuario($id_tipousuario)
     {
         $this->id_tipousuario = $id_tipousuario;
+        $this->atualizaAtributos($this);
+    }
+
+
+    /**
+     * @param string $st_prefixotamanho
+     */
+    public function setStPrefixotamanho($st_prefixotamanho)
+    {
+        $this->st_prefixotamanho = $st_prefixotamanho;
         $this->atualizaAtributos($this);
     }
 
