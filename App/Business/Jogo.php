@@ -9,7 +9,6 @@ use App\Model\Entity\Datahorariocampeonato;
 use App\Model\Entity\Jogoimagem;
 use App\Model\File;
 use App\Model\Validate;
-use App\Util\Debug;
 use Exception;
 use Gumlet\ImageResizeException;
 

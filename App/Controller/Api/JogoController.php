@@ -5,8 +5,10 @@ namespace App\Controller\Api;
 
 
 use App\Controller\Controller;
+use App\Model\Entity\Acessojogo;
 use App\Model\Entity\Jogo;
-use App\Util\Debug;
+use App\Model\Entity\VwAcessosjogos;
+use App\Model\Model;
 use Exception;
 use Gumlet\ImageResizeException;
 
@@ -23,16 +25,15 @@ class JogoController extends Controller
         $jogoNegocio = new \App\Business\Jogo();
 
         if ($id_jogo) {
-            return $jogoNegocio->getOne($id_jogo);
+            $retorno = $jogoNegocio->getOne($id_jogo);
 
-            //todo salvar acesso do jogo quando não estiver autenticado
-//            if (!Autentication::getBearerToken()) {
-//                $tb_acessojogo = new tb_acessojogoDAO(null);
-//                $tb_acessojogo->id_jogo = $id;
-//                $tb_acessojogo->dt_acessojogo = Model::nowTime();
-//                $tb_acessojogo->dt_acesso = Model::now();
-//                $tb_acessojogo->save();
-//            }
+            $acessoJogoEntity = new Acessojogo();
+            $acessoJogoEntity->setIdJogo($id_jogo);
+            $acessoJogoEntity->setDtAcesso(Model::now());
+            $acessoJogoEntity->setDtAcessojogo(Model::nowTime());
+            $acessoJogoEntity->save();
+
+            return $retorno;
 
         }
         return $jogoNegocio->getAll();
@@ -82,8 +83,8 @@ class JogoController extends Controller
     }
 
     /**
-     * @return Jogo
-     * @throws ImageResizeException
+     * @return Jogo|void
+     * @throws ImageResizeException|Exception
      */
     public function putAction()
     {
@@ -97,6 +98,16 @@ class JogoController extends Controller
         }
 
         return $jogoEntity;
+    }
+
+    /**
+     * @return mixed
+     * @throws Exception
+     */
+    public function getAcessosAction()
+    {
+        $acesssoEntity = new VwAcessosjogos();
+        return $acesssoEntity->findAll();
     }
 
 }
