@@ -3,8 +3,10 @@
 namespace App\Business;
 
 use App\Model\Entity\Usuarios;
-use App\Model\Model;
+use App\Model\Entity\VwUsuarioimagem;
 use App\Model\Request;
+use App\Model\Response;
+use App\Model\Validate;
 use App\Util\Token;
 use Exception;
 
@@ -34,46 +36,49 @@ class Usuario
     }
 
     /**
-     * @param $st_nome
-     * @param $st_email
-     * @param $st_senha
-     * @param $id_entidade
-     * @param bool $bl_ativo
+     * @param $parameters
      * @return Usuarios
      * @throws Exception
      */
-    public function insert($st_nome, $st_email, $st_senha, $id_entidade, $bl_ativo = false)
+    public function insert($parameters)
     {
-        $this->usuarioEnt->clearObject();
-        $this->usuarioEnt->setStNome($st_nome);
-        $this->usuarioEnt->setStSenha($st_senha);
-        $this->usuarioEnt->setStEmail($st_email);
-        $this->usuarioEnt->setIdEntidade($id_entidade);
-        $this->usuarioEnt->setBlAtivo($bl_ativo);
-        $this->usuarioEnt->setDtCriacao(Model::nowTime());
+        $usuario = new Usuarios();
+        $usuario->validate(Validate::USUARIO, ["INSERT"], $parameters, false);
+        $usuario->mount($parameters);
 
-        if (empty($this->usuarioEnt->getStNome())) {
-            throw new Exception("Nome não foi informado!");
+        $usuarioCheckLogin = new Usuarios();
+        $usuarioCheckLogin->setStLogin($usuario->getStLogin());
+        $usuarioCheckLogin->mount($usuarioCheckLogin->getFirst($usuarioCheckLogin->find()));
+        if ($usuarioCheckLogin->getIdUsuario()) {
+            throw new Exception("O nome de login informado já está sendo utilizado.");
         }
 
-        if (empty($this->usuarioEnt->getStEmail())) {
-            throw new Exception("Email não foi informado!");
+        $usuario->insert();
+        return $usuario;
+    }
+
+    /**
+     * @param $parameters
+     * @return Usuarios
+     * @throws Exception
+     */
+    public function update($parameters)
+    {
+        $usuario = new Usuarios();
+        $usuario->validate(Validate::USUARIO, ["UPDATE"], $parameters, true);
+        $usuario->findOne($parameters["id_usuario"]);
+        $usuario->mount($parameters);
+
+        $usuarioCheckLogin = new Usuarios();
+        $usuarioCheckLogin->setStLogin($usuario->getStLogin());
+        $usuarioCheckLogin->mount($usuarioCheckLogin->getFirst($usuarioCheckLogin->find()));
+        if ($usuarioCheckLogin->getIdUsuario() !== $usuario->getIdUsuario()) {
+            throw new Exception("O nome de login informado já está sendo utilizado.");
         }
 
-        if (empty($this->usuarioEnt->getStSenha())) {
-            throw new Exception("Senha não foi informada!");
-        }
-
-        //Verificar se email já foi cadastrado
-        $usuarioCheckEmail = new \App\Model\Entity\Usuario();
-        $usuarioCheckEmail->setStEmail($this->usuarioEnt->getStEmail());
-        $usuarios = $usuarioCheckEmail->find();
-
-        if (sizeof($usuarios) > 0) {
-            throw new Exception("E-mail já está cadastrado!", 1002);
-        }
-
-        return $this->usuarioEnt->insert();
+        $usuario->update();
+        $usuario->setStSenha("");
+        return $usuario;
     }
 
     /**
@@ -128,5 +133,59 @@ class Usuario
         return $usuario;
     }
 
+    /**
+     * @param $id_usuario
+     * @return VwUsuarioimagem
+     * @throws Exception
+     */
+    public function getOne($id_usuario)
+    {
+        $vwUsuario = new VwUsuarioimagem();
+        $vwUsuario->setIdUsuario($id_usuario);
+        $vwUsuario->mount($vwUsuario->getFirst($vwUsuario->find()));
+        return $vwUsuario;
+    }
+
+    /**
+     * @return Usuarios[]
+     * @throws Exception
+     */
+    public function getAll()
+    {
+        $usuario = new VwUsuarioimagem();
+        $usuarios = $usuario->findAll();
+
+        $retorno = [];
+        foreach ($usuarios as $user) {
+            $usuario->clearObject();
+            $usuario->mount($user);
+            $retorno[] = $this->getOne($usuario->getIdUsuario());
+        }
+
+        return $retorno;
+
+    }
+
+    /**
+     * @param $id_usuario int
+     * @return bool
+     * @throws Exception
+     */
+    public function delete($id_usuario)
+    {
+        if (empty($id_usuario)) {
+            Response::failResponse("O identificador do usuário não foi enviado!");
+        }
+
+        $usuario = new Usuarios();
+        $usuario->findOne($id_usuario);
+
+        if ($usuario->getIdImagem()) {
+            Imagem::deleteImage($usuario->getIdImagem());
+        }
+
+        $usuario->delete($id_usuario);
+        return true;
+    }
 
 }
