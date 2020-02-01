@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Constants\TipoArquivo;
 use App\Util\Helper;
+use App\Util\Server;
 use Exception;
 
 class File extends Model
@@ -165,7 +166,7 @@ class File extends Model
 
         move_uploaded_file($arquivo['tmp_name'], $save);
 
-        $caminhobanco = "http://" . $_SERVER["SERVER_NAME"] . "/" . $save;
+        $caminhobanco = Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/" . $save;
 
         $this->nome = $arquivo["name"];
         $this->nomeSave = $nomeSave;
@@ -215,7 +216,7 @@ class File extends Model
      */
     public static function setPathFileLink($path)
     {
-        return "http://" . $_SERVER["SERVER_NAME"] . "/" . $path;
+        return Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/" . $path;
     }
 
     /**
@@ -224,7 +225,7 @@ class File extends Model
      */
     public static function getPathLink($caminho)
     {
-        return str_replace("http://" . $_SERVER["SERVER_NAME"] . "/", "", $caminho);
+        return str_replace(Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/", "", $caminho);
     }
 
     /**
@@ -239,7 +240,7 @@ class File extends Model
                 throw new Exception("Nome do arquivo não informado!");
             }
             //Criar caminho absoluto
-            $absolutePath =  $st_file;
+            $absolutePath = $st_file;
             return unlink($absolutePath);
 
         } catch (Exception $e) {
