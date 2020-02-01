@@ -397,6 +397,17 @@ class BdAction
 
     /**
      * @return bool
+     */
+    private function isPrimaryKeyAutoIncrement()
+    {
+        $autoIncrement = $this->dataBdAction["auto_increment"];
+        $primaryKey = $this->getPrimaryKey();
+
+        return in_array($primaryKey, $autoIncrement);
+    }
+
+    /**
+     * @return bool
      * @throws Exception
      */
     public function clearObject()
@@ -713,6 +724,7 @@ class BdAction
         $this->dataBdAction["primary_key"] = $this->getPrimaryKeyDoc($docs);
         $this->dataBdAction["foreign_key"] = $this->getForeignKeysDoc($docs);
         $this->dataBdAction["required"] = $this->getRequiredsDoc($docs);
+        $this->dataBdAction["auto_increment"] = $this->getAutoIncrementDoc($docs);
 
     }
 
@@ -791,6 +803,24 @@ class BdAction
 
         return $required;
     }
+
+    private function getAutoIncrementDoc($docs)
+    {
+
+        $autoIncrement = [];
+        foreach ($this->dataBdAction["atributos"] as $key => $value) {
+
+            //Tratar DOCS
+            $arrayDocs = DocsTools::docsToArray($docs[$key]);
+            if (DocsTools::isExistsParameter("auto_increment", $arrayDocs)) {
+                $autoIncrement[] = $key;
+            }
+
+        }
+
+        return $autoIncrement;
+    }
+
 
     /**
      * Defini parâmetros contidos nos Docs da Classe
