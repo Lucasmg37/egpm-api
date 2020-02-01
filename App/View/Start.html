@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuração Inicial</title>
+    <link
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous">
+
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+            integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+            crossorigin="anonymous">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+    </script>
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row text-center animateIn" id="welcome">
+        <div class="col-md-6 col-sm-12 mx-auto">
+
+            <div class="pt-5 mt-5">
+                <img class="logo" src="https://egpmdeveloper.lucasjunior.com.br/upload/Imagens/20190628181453.png"
+                     alt="Logo Encontro Gamer">
+                <h5>Olá, Seja bem vindo ao assistente de configuração da API-EGPM.</h5>
+                <p>Este software ou partes dele não podem ser usados para fins comerciais.<br>
+                    Para saber mais ou abrir um issue, acesse o respositório do projeto no <a
+                            href="https://github.com/Lucasmg37/api-egpm">GitHub</a>.<br>
+                    Desenvolvido utilizando o EFframework. Confira a documentação para saber a estrutura e seus
+                    recursos. <a href="https://github.com/Lucasmg37/pesquisa_de_satisfacao_back/tree/framework/master">Repositório
+                        base</a></p>
+                <p>Feito com ❤ by <a href="https://github.com/Lucasmg37/"> <i class="fab fa-github"></i> Lucasmg37</a>
+                </p>
+            </div>
+
+            <div class="container-alert alert alert-danger" role="alert"></div>
+
+            <div class="configuracao-ok">
+                <h5 class="mb-3">Vamos começar!</h5>
+                <button class="btn btn-lg btn-primary" onclick="changeScreen('#database')"> COMEÇAR <i
+                        class="fa fa-check"></i></button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row oculto" id="database">
+        <div class="col-md-6 col-sm-12 mx-auto box">
+
+            <div class="py-5 mt-5">
+
+                <div class="container-alert alert alert-danger" role="alert"></div>
+
+                <form>
+                    <h5>Banco de dados</h5>
+                    <p>Informe os dados da base de dados que será usada pelo sistema.</p>
+
+                    <div class="form-group">
+                        <label for="st_nomebanco">Nome de usuário:</label>
+                        <input id="st_nomebanco"
+                               name="st_nomebanco"
+                               type="text"
+                               required
+                               placeholder="Lucas"
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="st_senhabanco">Senha de usuário:</label>
+                        <input id="st_senhabanco"
+                               name="st_senhabanco"
+                               type="text"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="st_banco">Nome da base de dados:</label>
+                        <input id="st_banco"
+                               name="st_banco"
+                               type="text"
+                               required
+                               placeholder="egpm"
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="st_servidor">Servidor da base de dados:</label>
+                        <input id="st_servidor"
+                               name="st_servidor"
+                               required
+                               type="text"
+                               value="localhost"
+                               class="form-control">
+                    </div>
+                </form>
+
+                <button class="btn btn-light mr-1" onclick="changeScreen('#welcome', false)"> VOLTAR</button>
+                <button class="btn btn-primary" onclick="changeScreen('#user')"> PRÓXIMO</button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row oculto" id="user">
+        <div class="col-md-6 col-sm-12 mx-auto box">
+
+            <div class="py-5 mt-5">
+
+                <div class="container-alert alert alert-danger" role="alert"></div>
+
+                <form>
+                    <h5>Usuário administrador</h5>
+                    <p>Informe os dados do usuário administrador do sistema.</p>
+
+                    <div class="form-group">
+                        <label for="st_nomeusuario">Nome de usuário:</label>
+                        <input id="st_nomeusuario"
+                               name="st_nomeusuario"
+                               type="text"
+                               required
+                               disabled
+                               value="admin"
+                               placeholder="admin"
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="st_senhausuario">Senha de usuário:</label>
+                        <input id="st_senhausuario"
+                               name="st_senhausuario"
+                               type="password"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="st_senhausuarioconfirma">Confirmação de senha:</label>
+                        <input id="st_senhausuarioconfirma"
+                               name="st_senhausuarioconfirma"
+                               type="password"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="st_email">Email para recuperação de senha:</label>
+                        <input id="st_email"
+                               name="st_email"
+                               type="text"
+                               required
+                               placeholder="admin@admin.com.br"
+                               class="form-control">
+                    </div>
+
+                </form>
+
+                <button class="btn btn-light mr-1" onclick="changeScreen('#database', false)"> VOLTAR</button>
+                <button class="btn btn-primary" onclick="changeScreen('#others')"> PRÓXIMO</button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row oculto" id="others">
+        <div class="col-md-6 col-sm-12 mx-auto box">
+
+            <div class="py-5 mt-5">
+
+                <div class="container-alert alert alert-danger" role="alert"></div>
+
+                <form>
+                    <h5>Outras Configurações</h5>
+
+                    <h6 class="mt-4">Re-Capcha</h6>
+                    <div class="form-group">
+                        <label for="st_capcha">Chave server side Capcha:</label>
+                        <input id="st_capcha"
+                               name="st_capcha"
+                               type="text"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <h6 class="mt-4">Sessão de usuário</h6>
+                    <div class="form-group">
+                        <label for="nu_minutossessao">Duração de sessão (minutos):</label>
+                        <input id="nu_minutossessao"
+                               name="nu_minutossessao"
+                               type="number"
+                               required
+                               placeholder="30"
+                               class="form-control">
+                    </div>
+                </form>
+
+                <button class="btn btn-light mr-1" onclick="changeScreen('#user', false)"> VOLTAR</button>
+                <button class="btn btn-primary" onclick="verificarInfo()"> VERIFICAR INFORMAÇÕES</button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row oculto" id="verifica">
+        <div class="col-md-6 col-sm-12 mx-auto box">
+
+            <div class="py-5 mt-5">
+
+                <div class="container-alert alert alert-danger" role="alert"></div>
+
+                <form class="mb-5">
+                    <h4>Confirme as informações</h4>
+
+                    <h5>Banco de dados:</h5>
+                    <b>Usuário: </b> <span id="verifica_st_nomebanco"></span> <br>
+                    <b>Senha: </b> <span id="verifica_st_senhabanco"></span> <br>
+                    <b>Banco: </b> <span id="verifica_st_banco"></span> <br>
+                    <b>Servidor: </b> <span id="verifica_st_servidor"></span> <br>
+
+                    <hr class="my-3">
+
+                    <h5>Usuário administrador:</h5>
+                    <b>Usuário: </b> <span id="verifica_st_nomeusuario"></span> <br>
+                    <b>Email: </b> <span id="verifica_st_email"></span> <br>
+
+                    <hr class="my-3">
+
+                    <h5>Outras Configurações:</h5>
+                    <b>Capcha: </b> <span id="verifica_st_capcha"></span> <br>
+                    <b>Tempo de sessão: </b> <span id="verifica_nu_minutossessao"></span> <br>
+
+
+                </form>
+
+                <button class="btn btn-light mr-1" onclick="changeScreen('#others', false)"> VOLTAR</button>
+                <button class="btn btn-primary" onclick="salvarInformacoes()"> SALVAR</button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row oculto text-center" id="finish">
+        <div class="col-md-6 col-sm-12 mx-auto">
+
+            <div class="pt-5 mt-5">
+                <img class="logo" src="https://egpmdeveloper.lucasjunior.com.br/upload/Imagens/20190628181453.png"
+                     alt="Logo Encontro Gamer">
+                <h5>Assistente de configuração da API-EGPM.</h5>
+                <p>Configuração realizada com sucesso! Os dados de configuração são salvos nos arquivo config contido na
+                    pasta config. Para mais detalhes consulte a documentação.</p>
+                <p>Feito com ❤ by <a href="https://github.com/Lucasmg37/"> <i class="fab fa-github"></i> Lucasmg37</a>
+                </p>
+            </div>
+
+            <div>
+                <h5 class="mb-3">Tudo Pronto!</h5>
+                <button class="btn btn-lg btn-success"> CONFIGURADO <i
+                        class="fa fa-check"></i></button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+
+<script lang="js">
+
+    let screen = "#welcome";
+
+    let st_nomebanco;
+    let st_senhabanco;
+    let st_banco;
+    let st_servidor;
+
+    let st_nomeusuario;
+    let st_senhausuario;
+    let st_senhausuarioconfirma;
+    let st_email;
+
+    let nu_minutossessao;
+    let st_capcha;
+
+    let api = "https://api-egpm.lucasjunior.com.br/Api/";
+
+    function salvarInformacoes() {
+        let data = {
+            st_nomebanco: st_nomebanco,
+            st_senhabanco: st_senhabanco,
+            st_banco: st_banco,
+            st_servidor: st_servidor,
+            st_nomeusuario: st_nomeusuario,
+            st_senhausuario: st_senhausuario,
+            st_senhausuarioconfirma: st_senhausuarioconfirma,
+            st_email: st_email,
+            nu_minutossessao: nu_minutossessao,
+            st_capcha: st_capcha
+        };
+
+        salvarConfiguracao(data);
+
+    }
+
+    function changeScreen(id_screen, valida_campos = true) {
+        getDataInputs();
+        if (!validaInputs() && valida_campos) {
+            return false;
+        }
+
+        $(".container-alert").hide();
+
+        closeAll();
+        $(id_screen).addClass("animateIn").show();
+        screen = id_screen;
+    }
+
+    function validaInputs() {
+        switch (screen) {
+            case "#welcome":
+                break;
+            case "#database":
+                return validaFormDataBase();
+            case "#user":
+                return validaFormUser();
+            case "#others":
+                return validaFormOthers();
+        }
+
+        return true;
+    }
+
+    function setErrorCampoObrigatorio(id_input, name_message, messageFull = null) {
+        $(id_input).focus();
+        let campo = $(".container-alert");
+
+        if (messageFull) {
+            campo.show().html(messageFull);
+            return true;
+        }
+        campo.show().html("O campo " + name_message + " é obrigatório.");
+        return true;
+    }
+
+    function validaFormOthers() {
+        if (!st_capcha) {
+            setErrorCampoObrigatorio("#st_capcha", "key Capcha");
+            return false;
+        }
+
+        if (!nu_minutossessao) {
+            setErrorCampoObrigatorio("#nu_minutossessao", "tempo de sessão");
+            return false;
+        }
+
+        return true;
+    }
+
+    function validaFormUser() {
+
+        if (!st_senhausuario) {
+            setErrorCampoObrigatorio("#st_senhausuario", "senha do usuário");
+            return false;
+        }
+
+        if (!st_senhausuarioconfirma) {
+            setErrorCampoObrigatorio("#st_senhausuarioconfirma", "confirmação de senha");
+            return false;
+        }
+
+        if (st_senhausuario !== st_senhausuarioconfirma) {
+            setErrorCampoObrigatorio("#st_senhausuarioconfirma", null, "As senhas informadas não conferem.");
+            return false;
+        }
+
+        if (!st_email) {
+            setErrorCampoObrigatorio("#st_email", "email do usuário");
+            return false;
+        }
+
+        return true;
+    }
+
+    function validaFormDataBase() {
+
+        if (!st_nomebanco) {
+            setErrorCampoObrigatorio("#st_nomebanco", "nome de usuário do banco");
+            return false;
+        }
+
+        if (!st_banco) {
+            setErrorCampoObrigatorio("#st_banco", "nome do banco");
+            return false;
+        }
+
+        if (!st_servidor) {
+            setErrorCampoObrigatorio("#st_servidor", "nome do servidor do banco");
+            return false;
+        }
+
+        return true;
+    }
+
+    function getDataInputs() {
+        st_nomebanco = $("#st_nomebanco").val();
+        st_senhabanco = $("#st_senhabanco").val();
+        st_banco = $("#st_banco").val();
+        st_servidor = $("#st_servidor").val();
+
+        st_nomeusuario = $("#st_nomeusuario").val();
+        st_senhausuario = $("#st_senhausuario").val();
+        st_senhausuarioconfirma = $("#st_senhausuarioconfirma").val();
+        st_email = $("#st_email").val();
+
+        nu_minutossessao = $("#nu_minutossessao").val();
+        st_capcha = $("#st_capcha").val();
+
+    }
+
+    function verificarInfo() {
+        changeScreen('#verifica');
+
+        $("#verifica_st_nomebanco").html(st_nomebanco);
+        $("#verifica_st_senhabanco").html(st_senhabanco);
+        $("#verifica_st_banco").html(st_banco);
+        $("#verifica_st_servidor").html(st_servidor);
+
+        $("#verifica_st_nomeusuario").html(st_nomeusuario);
+        $("#verifica_st_email").html(st_email);
+
+        $("#verifica_st_capcha").html(st_capcha);
+        $("#verifica_nu_minutossessao").html(nu_minutossessao);
+
+    }
+
+    function closeAll() {
+        $("#database").hide();
+        $("#welcome").hide();
+        $("#user").hide();
+        $("#others").hide();
+        $("#verifica").hide();
+    }
+
+    function getStatusConfiguracao() {
+        axios.get(api + "Index/getStatusConfiguracao", {})
+            .then(() => {
+                $(".configuracao-ok").hide();
+                $(".container-alert").show().html("Já existe um arquivo de configuração neste ambiente. <br> Para prosseguir com o auto instalador remova o arquivo.");
+            });
+    }
+
+    function salvarConfiguracao(data) {
+        axios.post(api + "Index/salvarConfiguracao", data, {})
+            .then(() => {
+                changeScreen("#finish", false);
+            }).catch(error => {
+            $(".container-alert").show().html(error.response.data.message);
+        });
+    }
+
+    getStatusConfiguracao();
+
+</script>
+
+<style>
+    .oculto {
+        display: none;
+    }
+
+    .animateIn {
+        display: block;
+        animation: ease-out .5s animateIn forwards;
+    }
+
+    @keyframes animateIn {
+        from {
+            opacity: 0;
+            margin-top: 100%;
+        }
+
+        to {
+            opacity: 1;
+            margin-top: 0;
+        }
+    }
+
+    .box {
+        background: whitesmoke;
+    }
+
+    body {
+        background: #333;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    #welcome, #finish {
+        color: whitesmoke;
+    }
+
+    .logo {
+        max-width: 500px;
+        margin-bottom: 30px;
+    }
+
+    .container-alert {
+        display: none;
+    }
+
+</style>
