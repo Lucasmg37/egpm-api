@@ -46,11 +46,17 @@ Class Banco
             $config = new Config();
             $dataBanco = $config->getFirstBd();
 
-            self::setHost($dataBanco["st_host"]);
-            self::setBd($dataBanco["st_dbname"]);
-            self::setUser($dataBanco["st_user"]);
-            self::setPassword($dataBanco["st_password"]);
-            self::conexaoMySql();
+            if (
+                !empty($dataBanco["st_host"]) &&
+                !empty($dataBanco["st_user"]) &&
+                !empty($dataBanco["st_host"])
+            ) {
+                self::setHost($dataBanco["st_host"]);
+                self::setBd($dataBanco["st_dbname"]);
+                self::setUser($dataBanco["st_user"]);
+                self::setPassword($dataBanco["st_password"]);
+                self::conexaoMySql();
+            }
         }
     }
 
@@ -152,6 +158,7 @@ Class Banco
 
     /**
      * @return bool|PDO
+     * @throws Exception
      */
     public function conexaoMySql()
     {
@@ -160,12 +167,10 @@ Class Banco
             self::setConexao($con);
             return $con;
         } catch (PDOException $e) {
-            Response::exceptionResponse($e);
+            throw $e;
         } catch (Exception $e) {
-            Response::exceptionResponse($e);
+            throw $e;
         }
-
-        return true;
     }
 
     /**
