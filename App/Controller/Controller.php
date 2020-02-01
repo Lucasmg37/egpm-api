@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Constants\System\BdAction;
+use App\Model\File;
 use App\Model\Model;
 use App\Model\Render;
 use App\Model\Request;
@@ -17,6 +18,7 @@ Class Controller
     public $model;
     public $response;
     public $render;
+    public $file;
 
     public $BDA;
 
@@ -84,6 +86,22 @@ Class Controller
         $this->render = $render;
     }
 
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @return File
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
     public function __construct()
     {
         $this->setModel(new Model());
@@ -91,6 +109,33 @@ Class Controller
         $this->setResponse(new Response(null, null, null, null, null, null));
         $this->setRender(new Render());
         $this->BDA = new BdAction;
+        $this->setFile(new File());
+    }
+
+    public function postAction()
+    {
+        Response::failResponse("Método não implementado.");
+    }
+
+    public function putAction()
+    {
+        Response::failResponse("Método não implementado.");
+    }
+
+    /**
+     * @param $id
+     */
+    public function getAction($id)
+    {
+        Response::failResponse("Método não implementado.");
+    }
+
+    /**
+     * @param $id
+     */
+    public function deleteAction($id)
+    {
+        Response::failResponse("Método não implementado.");
     }
 
 }
