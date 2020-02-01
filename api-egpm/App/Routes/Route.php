@@ -31,7 +31,6 @@ Class Route
         $this->router->setNewRoute("GET", "Index", "getStatusConfiguracao", false);
         $this->router->setNewRoute("POST", "Index", "salvarConfiguracao", false);
 
-
         $this->router->setNewRoute("POST", "Secao", "salvar-icones-secao", true);
         $this->router->changeRoute("Secao", "salvar-icones-secao", "Secao", "salvarIcones");
 

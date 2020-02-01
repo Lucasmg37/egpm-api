@@ -123,7 +123,9 @@ class BdAction
         $sql = "INSERT INTO " . $this->getTabela() . " " . $valuesInsert["fields"] . " VALUES " . $valuesInsert["values"];
         $this->execute($sql, $parameters);
         $this->clearObject();
-        $this->findOne($this->isPrimaryKeyAutoIncrement() ? $this->getModel()->bd->lastInsertId() : $parameters[$this->getPrimaryKey()]);
+        $this->findOne($this->isPrimaryKeyAutoIncrement()
+            ? $this->getModel()->bd->lastInsertId()
+            : isset($parameters[$this->getPrimaryKey()]) ? $parameters[$this->getPrimaryKey()] : null);
         return $this;
 
     }
@@ -696,7 +698,11 @@ class BdAction
      */
     private function getValueAtribute($nameAtribute)
     {
-        return $this->dataBdAction["atributos"][$nameAtribute];
+        if (isset($this->dataBdAction["atributos"][$nameAtribute])) {
+            return $this->dataBdAction["atributos"][$nameAtribute];
+        }
+
+        return null;
     }
 
     /**

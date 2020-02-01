@@ -26,6 +26,7 @@ class Sessao
      */
     public function insert($id_usuario)
     {
+
         //Apagar todas as sessões de um usuário
         $this->clearAllSessions($id_usuario);
 

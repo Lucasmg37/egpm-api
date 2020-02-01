@@ -32,7 +32,7 @@ Class Init
     public static function trataURI($uri = null)
     {
 
-        if (empty($uri)) {
+        if (empty($uri) && isset($_SERVER["PATH_INFO"])) {
             $uri = $_SERVER["PATH_INFO"];
         }
 

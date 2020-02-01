@@ -69,9 +69,11 @@ Class IndexController extends Controller
         $texto[] = "st_operacao: PRO;";
         $texto[] = "nu_minutossessao: " . $request->getParameter("nu_minutossessao", true) . ";";
         $texto[] = "st_senhacapcha: " . $request->getParameter("st_capcha", true) . ";";
-        $texto[] = "st_key: " . Helper::criptografaWithDate($request->getParameter("st_email", true)) . ";";
 
-        $text = implode("\n", $texto);
+        $st_key = Helper::criptografaWithDate($request->getParameter("st_email", true));
+        $texto[] = "st_key: " . $st_key . ";";
+
+        $text = implode("\r\n", $texto);
 
         if (!is_dir("../config")) {
             mkdir("../config");
@@ -90,16 +92,12 @@ Class IndexController extends Controller
 
         try {
             $banco->getConexao()->beginTransaction();
-            $insertTipoUsuario = "INSERT INTO tb_tipousuario (id_tipousuario, st_tipousuario) VALUES (1, 'Administrador'), (2, 'Padrão'), (3, 'Participante'); COMMIT;";
+            $insertTipoUsuario = "INSERT INTO tb_tipousuario (id_tipousuario, st_tipousuario) VALUES (1, 'Administrador'), (2, 'Padrão'), (3, 'Participante');";
             $banco->getConexao()->exec($insertTipoUsuario);
 
-            $usuario = new Usuarios();
-            $usuario->changeConnection($banco->getConexao());
-            $usuario->setStNome("admin");
-            $usuario->setStLogin("admin");
-            $usuario->setIdTipousuario(1);
-            $usuario->setStSenha($request->getParameter("st_senhausuario", true));
-            $usuario->save();
+            $senha = Helper::criptografaWithKey($st_key, $request->getParameter("st_senhausuario", true));
+            $insertUsuario = "INSERT INTO tb_usuarios (st_nome, st_login, st_senha, id_tipousuario) VALUES ('admin', 'admin', '" . $senha . "', 1 );";
+            $banco->getConexao()->exec($insertUsuario);
 
             $banco->getConexao()->commit();
 
