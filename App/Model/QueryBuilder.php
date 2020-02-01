@@ -48,7 +48,7 @@ class QueryBuilder extends Model
             $this->setSql($this->order);
 
         } catch (\Exception $e) {
-            $this->lancaErro($e);
+            Response::exceptionResponse($e);
         }
     }
 
@@ -65,10 +65,11 @@ class QueryBuilder extends Model
             if (!$ok) {
                 throw new \Exception($execute->errorInfo()[2], 400);
             }
-            return $this->trataRetornoAllArray($execute);
+
+            return $execute->fetchAll(\PDO::FETCH_ASSOC);
 
         } catch (\Exception $e) {
-            $this->lancaErro($e);
+            Response::exceptionResponse($e);
         }
     }
 

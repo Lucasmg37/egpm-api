@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Model\Model;
+use App\Model\Response;
 
 Class FileController
 {
@@ -10,17 +10,17 @@ Class FileController
     {
 
         if (empty($st_imagem)) {
-            Model::failJson("Nome da imagem não enviado!");
+            Response::failResponse("Nome da imagem não enviado!");
         }
 
 
         $caminho_imagem = "../files/" . $st_imagem;
 
-        $mime = mime_content_type( $caminho_imagem);
+        $mime = mime_content_type($caminho_imagem);
         $tamanho = filesize($caminho_imagem);
 
         if (!$mime) {
-            Model::failJson("Arquivo não encontrado!");
+            Response::failResponse("Arquivo não encontrado!");
         }
 
         header("Content-Type: " . $mime);

@@ -29,20 +29,6 @@ Class Model
     }
 
     /**
-     * @param $retorno PDOStatement
-     * @return mixed
-     * @deprecated
-     */
-    public function trataRetornoAllArray($retorno)
-    {
-        $result = $retorno->fetchAll(PDO::FETCH_ASSOC);
-        $array["data"] = $result;
-        $array["status"] = true;
-
-        return $array;
-    }
-
-    /**
      * @param $bd PDO
      * @param $sql
      * @param null $parameters
@@ -59,46 +45,6 @@ Class Model
         }
 
         return $execute->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * @param $message
-     * @param string $type
-     * @param int $code
-     * @param null $data
-     * @deprecated
-     */
-    public static function failJson($message, $type = "error", $code = 202, $data = null)
-    {
-
-        header('HTTP/1.1 400 Bad Request');
-
-        if ($data) {
-            $array["erro"]["data"] = $data;
-        }
-
-        $array["erro"]["message"] = $message;
-        $array["erro"]["type"] = $type;
-        $array["erro"]["code"] = $code;
-        $array["status"] = false;
-        echo json_encode($array);
-        exit;
-    }
-
-    /**
-     * @param $Exeption Exception
-     * @deprecated
-     */
-    public static function lancaErro($Exeption)
-    {
-        header('HTTP/1.1 400 Bad Request');
-
-        $erro["erro"]["type"] = "error";
-        $erro["status"] = false;
-        $erro["erro"]["message"] = $Exeption->getMessage();
-        $erro["erro"]["code"] = $Exeption->getCode();
-        echo json_encode($erro);
-        exit;
     }
 
     /**
@@ -129,18 +75,6 @@ Class Model
     {
         $data = date("H:i:s");
         return $data;
-    }
-
-    /**
-     * @param $valor
-     * @return string
-     * @deprecated
-     */
-    public function criptografa($valor)
-    {
-        $cod = "sha256";
-        $chave = $this->nowTime();
-        return hash($cod, $chave . $valor);
     }
 
     /**
