@@ -314,6 +314,10 @@ class BdAction
     {
         try {
 
+            if (!$params) {
+                $params = $this->getAllAtributes();
+            }
+
             $atributosaValidar = [];
 
             //Pegar parâmetros Globais
