@@ -6,6 +6,7 @@ namespace App\Controller\Api;
 use App\Business\Sessao;
 use App\Business\Usuario;
 use App\Controller\Controller;
+use App\Integrations\ReCAPTCHA;
 use App\Model\Autentication;
 use App\Model\Response;
 use App\Util\Token;
@@ -29,6 +30,11 @@ class LoginController extends Controller
         try {
             $st_email = $this->getRequest()->getParameter("st_login");
             $st_senha = $this->getRequest()->getParameter("st_senha");
+            $recaptchatoken = $this->getRequest()->getParameter("recaptchatoken");
+
+            if (!ReCAPTCHA::siteVerify($recaptchatoken)) {
+                throw new Exception("Ocorreu um erro na verificação do ReCAPTCHA!");
+            }
 
             if (empty($st_email)) {
                 throw new Exception("Usuário não informado!");
@@ -42,7 +48,7 @@ class LoginController extends Controller
             $this->usuario = $this->usuario->login($st_email, $st_senha);
 
             //Cria sessao para o usuário
-            return  $this->sessao->insert($this->usuario->id_usuario);
+            return $this->sessao->insert($this->usuario->id_usuario);
 
         } catch (Exception $e) {
             Response::exceptionResponse($e);
