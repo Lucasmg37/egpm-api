@@ -245,8 +245,10 @@ Class Router
          * @var $routeObject Route
          */
         $routeObject = self::returnClassRouter($controller);
-
         $router = $routeObject->getRouter();
+        $router->definiRotaAll($controller);
+        $routeObject->execute();
+
         $rotaValida = $router->validateRouter($controller, $action);
 
         if (is_array($rotaValida) && sizeof($rotaValida) > 1) {
@@ -267,8 +269,23 @@ Class Router
             $unique = $parametrosURI["parametrosMontados"][$action];
         }
 
+        //Se não achou nenhuma rota, será utilizada a rota padrão
+        //Iremos pegar as definições realizadas pelo usuário *changeRoute
+        if (!is_array($rotaValida)) {
+            $rotaValida = $router->validateRouter($controller, $action);
+
+            if (is_array($rotaValida) && sizeof($rotaValida) > 1) {
+                $rotaValida = $rotaValida[sizeof($rotaValida) - 1];
+            }
+
+            if (is_array($rotaValida)) {
+                $rotaValida = $rotaValida[0];
+            }
+
+        }
+
         /**
-         * Se a rota é vallida, usarei o seu retorno para definição das regras de roteamento
+         * Se a rota é valida, usarei o seu retorno para definição das regras de roteamento
          */
         $action = !empty($rotaValida["actionCall"]) ? $rotaValida["actionCall"] : $action;
         $controller = !empty($rotaValida["controllerCall"]) ? $rotaValida["controllerCall"] : $controller;
@@ -351,6 +368,21 @@ Class Router
     }
 
     /**
+     * @param $controller
+     */
+    public function definiRotaAll($controller)
+    {
+
+        foreach ($this->assignatureRoutes as &$route) {
+            if ($route["controller"] === "*") {
+                $route["controller"] = $controller;
+                $route["controllerCall"] = $controller;
+            }
+        }
+
+    }
+
+    /**
      * Retorna objeto Route de acordo com a Controller
      * @param $controller
      * @return Route
@@ -381,11 +413,15 @@ Class Router
 
         $isAmbienteValido = false;
 
-        foreach ($router->getOperation() as $operation) {
-            if ($operation === $ambiente) {
-                $isAmbienteValido = true;
-                break;
+        if ($ambiente) {
+            foreach ($router->getOperation() as $operation) {
+                if ($operation === $ambiente) {
+                    $isAmbienteValido = true;
+                    break;
+                }
             }
+        } else {
+            $isAmbienteValido = true;
         }
 
         if (!$isAmbienteValido) {
@@ -505,7 +541,6 @@ Class Router
 
             }
         }
-
     }
 
 
