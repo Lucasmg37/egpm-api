@@ -12,6 +12,9 @@ class Login extends Route
         parent::__construct();
         $this->router->setAutenticated(false);
         $this->setNewRoute("GET", "Login", "getStatusSessao");
+
+        $this->setNewRoute("POST", "Login", "logout", true);
+        $this->changeRoute("Login", "logout", "Usuario", "logout");
     }
 
 }

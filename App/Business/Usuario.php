@@ -98,10 +98,8 @@ class Usuario
             throw new Exception("Usuário não encontrado!");
         }
 
-        $this->usuarioEnt->setStSenha($st_senha);
-        $this->usuarioEnt->mount($this->usuarioEnt->getFirst($this->usuarioEnt->find()));
-
-        if (!$this->usuarioEnt->getIdUsuario()) {
+        $this->usuarioEnt->mount($this->usuarioEnt->getFirst($retorno));
+        if (!$this->verificaSenhaCriptografada($st_senha, $this->usuarioEnt->getStSenha())) {
             throw new Exception("Senha incorreta!");
         }
 
