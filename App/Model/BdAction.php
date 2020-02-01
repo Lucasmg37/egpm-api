@@ -123,7 +123,7 @@ class BdAction
         $sql = "INSERT INTO " . $this->getTabela() . " " . $valuesInsert["fields"] . " VALUES " . $valuesInsert["values"];
         $this->execute($sql, $parameters);
         $this->clearObject();
-        $this->findOne($this->getModel()->bd->lastInsertId());
+        $this->findOne($this->isPrimaryKeyAutoIncrement() ? $this->getModel()->bd->lastInsertId() : $parameters[$this->getPrimaryKey()]);
         return $this;
 
     }
