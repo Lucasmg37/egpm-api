@@ -9,3 +9,4 @@ st_host: ;
 st_operacao: DEV;
 nu_minutossessao: 60;
 st_senhacapcha: ;
+st_key: ;
