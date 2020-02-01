@@ -330,10 +330,16 @@ class BdAction
                 $atributosaValidar[$key] = $value;
             }
 
+            $ignore = [];
+
             if (is_array($seletors) && sizeof($seletors) > 0) {
                 foreach ($seletors as $seletor) {
                     foreach ($validate["$seletor"] as $key => $value) {
-                        $atributosaValidar[$key] = $value;
+                        if ($key === "IGNORE") {
+                            $ignore = array_merge($ignore, $value);
+                        } else {
+                            $atributosaValidar[$key] = $value;
+                        }
                     }
                 }
             }
@@ -347,7 +353,7 @@ class BdAction
 
             //Realizar validação
             foreach ($requireds as $required) {
-                if ($params[$required] === null || $params[$required] === "") {
+                if (($params[$required] === null || $params[$required] === "") && !in_array($required, $ignore)) {
                     $message = $atributosaValidar[$required];
 
                     if (empty($message)) {
@@ -540,7 +546,7 @@ class BdAction
     private function generateSetUpdate($parameters = null)
     {
         if (!$parameters) {
-            $parameters = $this->generateBindValues();
+            $parameters = $this->generateBindValues(null, false);
         }
 
         $keys = [];
@@ -582,9 +588,10 @@ class BdAction
 
     /**
      * @param null $values
+     * @param bool $verificaNullEmpty
      * @return array
      */
-    private function generateBindValues($values = null)
+    private function generateBindValues($values = null, $verificaNullEmpty = true)
     {
 
         if ($values) {
@@ -596,7 +603,11 @@ class BdAction
         foreach ($this->getAllAtributes() as $attr => $value) {
             $valor = $this->getFilho()->$attr;
 
-            if ($valor !== null && $valor !== "") {
+            if ($verificaNullEmpty) {
+                if ($valor !== null && $valor !== "") {
+                    $parameters[$attr] = $valor;
+                }
+            } else {
                 $parameters[$attr] = $valor;
             }
 
@@ -613,7 +624,8 @@ class BdAction
     }
 
     /**
-     * @param $atributes array
+     * @param $atributes
+     * @return $this
      */
     public function mount($atributes)
     {
@@ -624,6 +636,7 @@ class BdAction
             }
         }
 
+        return $this;
     }
 
     /**
@@ -756,6 +769,10 @@ class BdAction
         return $arrayForeignKeys;
     }
 
+    /**
+     * @param $docs
+     * @return array
+     */
     private function getRequiredsDoc($docs)
     {
 
