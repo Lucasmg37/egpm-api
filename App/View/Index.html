@@ -33,7 +33,7 @@
     }
 
     .logo {
-        width: 100%;
+        max-width: 400px;
     }
 
     .background {
@@ -58,7 +58,6 @@
     .banner {
         text-align: center;
     }
-
 
 </style>
 
@@ -89,142 +88,42 @@
                 </div>
             </div>
 
-<!--            <div class="card">-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">Geral</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Está API contém todos os métodos necessários para o correto funcinamento do CMS acoplado ao-->
-<!--                        Site Encontro Gamer Pará de Minas. É possível realizar consultas no banco e operações de-->
-<!--                        inserçoes e remoção.-->
-<!--                        Todas as possibilidades de ajustes estão aqui listadas.-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Geral</h5>
+                    <p class="card-text">
+                        Está API contém todos os métodos necessários para o correto funcinamento do CMS acoplado ao
+                        Site Encontro Gamer Pará de Minas. É possível realizar consultas no banco e operações de
+                        inserçoes e remoção.
+                        Todas as possibilidades de ajustes serão aqui listadas.
+                    </p>
+                </div>
+            </div>
 
-<!--            <div class="card mt-2">-->
-<!--                &lt;!&ndash;<h5 class="card-header">Destaque</h5>&ndash;&gt;-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">Requisições</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        As requisições devem ter os dados enviados no formato JSON, exceto quando for necessário o envio-->
-<!--                        de arquivos,-->
-<!--                        aceitando o FormType. <br>-->
-<!--                        Requisições a endpoints públicos podem ser realizadas sem a informação de chaves de acesso.<br>-->
-<!--                        Requisições a endpoints privados só aceitam requisições com um id de usuário (id_usuario) e seu-->
-<!--                        token de acesso (st_token).-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--            </div>-->
 
-<!--            <div class="card mt-2">-->
-<!--                <h5 class="card-header">Login</h5>-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-unlock"></i> [post] Login/</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Recebe dados de usuário para realizar login no sistema.-->
-<!--                    </p>-->
-<!--                </div>-->
+            <div class="card mt-2">
+                <h5 class="card-header">Login</h5>
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa fa-unlock"></i> [post] Login/</h5>
+                    <p class="card-text">
+                        Recebe dados de usuário para realizar login no sistema.
+                    </p>
+                </div>
 
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-unlock"></i> [post] Login/[id_usuário]/logout</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Destrói sessão de usuário no sistema-->
-<!--                    </p>-->
-<!--                </div>-->
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa fa-unlock"></i> [post] Login/[id_usuário]/logout</h5>
+                    <p class="card-text">
+                        Destrói sessão de usuário no sistema
+                    </p>
+                </div>
 
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-unlock"></i> [post] Login/[id_usuário]/verificalogin</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Verifica se um usuário tem sessões ativas no sistema-->
-<!--                    </p>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="card mt-2">-->
-<!--                <h5 class="card-header">Usuario</h5>-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [post] Usuario/</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Altera informações de um usuário existente caso seja informado um id_usuario válido ou-->
-<!--                        cria um novo usuário com as informações inseridas.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [get] Usuario/[id_usuário]</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Retorna dados do usuário.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--            </div>-->
-
-<!--            <div class="card mt-2">-->
-<!--                <h5 class="card-header">Jogo</h5>-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [post] Jogo/</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Altera informações de um jogo existente caso seja informado um id_jogo válido ou-->
-<!--                        cria um novo jogo com as informações inseridas.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [delete] Jogo/[id_jogo]</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Remove jogo informado da base de dados.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-unlock"></i> [get] Jogo/[id_jogo]</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Retorna dados do jogo.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-unlock"></i> [get] Jogo/</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Retorna dados de todos os jogos.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--            </div>-->
-
-<!--            <div class="card mt-2">-->
-<!--                <h5 class="card-header">Imagem</h5>-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [post] Imagem/</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Altera informações de uma imagem existente caso seja informado um id_imagem válido ou-->
-<!--                        cria uma nova iamgem com as informações inseridas. (Arquivo de imagem e o link gerado no ato de-->
-<!--                        criação não podem ser alterado)-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [get] Imagem/[id_imagem]</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Retorna dados de imagem.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [get] Imagem/</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Retorna dados de todas as imagens.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title"><i class="fa fa-lock"></i> [delete] Imagem/[id_imagem]</h5>-->
-<!--                    <p class="card-text">-->
-<!--                        Remove imagem informada.-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--            </div>-->
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa fa-unlock"></i> [post] Login/[id_usuário]/verificalogin</h5>
+                    <p class="card-text">
+                        Verifica se um usuário tem sessões ativas no sistema
+                    </p>
+                </div>
+            </div>
 
         </div>
     </div>
