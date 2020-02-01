@@ -864,6 +864,16 @@ class BdAction
     }
 
     /**
+     * @param $connection PDO
+     * @return PDO
+     */
+    public function changeConnection($connection)
+    {
+        $this->dataBdAction["model"]->bd = $connection;
+        return $this->getModel()->bd;
+    }
+
+    /**
      * @return string
      */
     private function getTabela()
