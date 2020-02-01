@@ -247,7 +247,7 @@ class Request
                 return $this->file[$campo];
             } else {
                 if ($lancaErro) {
-                    throw new Exception("Arquivo -> $campo não disponível em FILE");
+                    throw new Exception("Arquivo obrigatório não foi encontrado!");
                 }
                 return null;
             }
@@ -316,7 +316,7 @@ class Request
     /**
      * @param $campo
      * @param bool $campovazio
-     * @return string
+     * @return string|array
      */
     public function getParameter($campo, $campovazio = false)
     {
@@ -348,7 +348,7 @@ class Request
 
 
             if ($campovazio) {
-                throw new Exception("Campo -> $campo não disponível no request");
+                throw new Exception("O $campo deve ser enviado.");
             }
 
         } catch (Exception $e) {
