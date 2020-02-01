@@ -161,9 +161,16 @@ class EntityGenerate
      */
     private function getNameClasse($table)
     {
+        if (strstr($table["name"], "vw_")) {
+            $name = substr($table["name"], 3);
+            $name = "Vw" . ucfirst($name);
+            return $name;
+        }
+
         $name = substr($table["name"], 3);
         $name = ucfirst($name);
         return $name;
+
     }
 
     /**
@@ -265,7 +272,7 @@ class EntityGenerate
             if ($atribute["Null"] === "NO") {
                 $text[] = " * @required";
             }
-            
+
             if ($atribute["Extra"] === "auto_increment") {
                 $text[] = " * @auto_increment";
             }
@@ -337,6 +344,8 @@ class EntityGenerate
         switch ($typeBanco) {
             case "varchar":
             case "text":
+            case "date":
+            case "time":
                 $typePhp = "string";
                 break;
             case "tinyint":
