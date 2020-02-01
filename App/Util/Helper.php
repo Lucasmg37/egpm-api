@@ -11,10 +11,10 @@ class Helper
 
     /**
      * Criptografa informação (Sem chave)
-     * @param $data
+     * @param $data string|int
      * @return string
      */
-    public static function criptografaWithDate($data)
+    public static function criptografaWithDate($data = "")
     {
         return hash("sha256", Model::nowTime() . $data);
     }
