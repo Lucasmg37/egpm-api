@@ -10,6 +10,8 @@ class BdAction
     const WHERE_LIKE_L = "likeL";
 
     const WHERE_EQUAL = "=";
+    const WHERE_NOT_EQUAL = "<>";
+
     const WHERE_BIGGER = ">";
     const WHERE_BIGGER_EQUAL = ">=";
     const WHERE_LESS = "<";
