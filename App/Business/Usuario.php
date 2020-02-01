@@ -7,7 +7,10 @@ use App\Model\Entity\VwUsuarioimagem;
 use App\Model\Request;
 use App\Model\Response;
 use App\Model\Validate;
+use App\Util\Helper;
 use App\Util\Token;
+use App\Constants\TipoUsuario;
+use Bootstrap\Config;
 use Exception;
 
 class Usuario
@@ -53,6 +56,7 @@ class Usuario
             throw new Exception("O nome de login informado já está sendo utilizado.");
         }
 
+        $usuario->setStSenha($this->geraSenhaCriptografada($usuario->getStSenha()));
         $usuario->insert();
         return $usuario;
     }
@@ -67,13 +71,26 @@ class Usuario
         $usuario = new Usuarios();
         $usuario->validate(Validate::USUARIO, ["UPDATE"], $parameters, true);
         $usuario->findOne($parameters["id_usuario"]);
+
+        $isAdministrador = Usuario::isAdministrator($usuario->getIdUsuario());
+        $tipoAtual = (int)$usuario->getIdTipousuario();
+
         $usuario->mount($parameters);
+        $newTipo = (int)$usuario->getIdTipousuario();
+
+        if ($tipoAtual !== $newTipo && !$isAdministrador) {
+            self::isAdministrator(null, true);
+        }
 
         $usuarioCheckLogin = new Usuarios();
         $usuarioCheckLogin->setStLogin($usuario->getStLogin());
         $usuarioCheckLogin->mount($usuarioCheckLogin->getFirst($usuarioCheckLogin->find()));
         if ($usuarioCheckLogin->getIdUsuario() !== $usuario->getIdUsuario()) {
             throw new Exception("O nome de login informado já está sendo utilizado.");
+        }
+
+        if (!empty($parameters["st_senha"])) {
+            $usuario->setStSenha($this->geraSenhaCriptografada($parameters["st_senha"]));
         }
 
         $usuario->update();
@@ -184,6 +201,83 @@ class Usuario
 
         $usuario->delete($id_usuario);
         return true;
+    }
+
+    /**
+     * @param null $id_usuario
+     * @param bool $lancaErro
+     * @param null $erroMessage
+     * @return bool
+     * @throws Exception
+     */
+    public static function isAdministrator($id_usuario = null, $lancaErro = false, $erroMessage = null)
+    {
+
+        try {
+            $usuario = new Usuarios();
+            if (!$id_usuario) {
+                $usuario = Usuario::getLoggedUser();
+            } else {
+                $usuario->findOne($id_usuario);
+            }
+
+            if ((int)$usuario->getIdTipousuario() !== TipoUsuario::ADMINISTRADOR) {
+                throw new Exception("Ação permitida somente para usuários administradores!");
+            }
+
+            return true;
+        } catch (Exception $exception) {
+            if ($lancaErro) {
+
+                if ($erroMessage) {
+                    throw new Exception($erroMessage);
+                }
+
+                throw $exception;
+
+            }
+
+            return false;
+        }
+
+    }
+
+    /**
+     * @param $id_usuario
+     * @return bool
+     * @throws Exception
+     */
+    public static function isUserLogged($id_usuario)
+    {
+
+        $usuarioLogged = Usuario::getLoggedUser();
+        return (int)$usuarioLogged->getIdUsuario() === $id_usuario;
+
+    }
+
+    /**
+     * @param $senha
+     * @return string
+     * @throws Exception
+     */
+    public function geraSenhaCriptografada($senha)
+    {
+        $config = new Config();
+        $key = $config->getConfig("st_key");
+        return Helper::criptografaWithKey($key, $senha);
+    }
+
+    /**
+     * @param $senha
+     * @param $hash
+     * @return bool
+     * @throws Exception
+     */
+    public function verificaSenhaCriptografada($senha, $hash)
+    {
+        $config = new Config();
+        $key = $config->getConfig("st_key");
+        return Helper::isValidHash($hash, $key, $senha);
     }
 
 }
