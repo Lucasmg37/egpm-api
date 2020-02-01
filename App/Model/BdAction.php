@@ -156,7 +156,7 @@ class BdAction
             throw new Exception("Primary key não informada!");
         }
 
-        $parameters = $this->generateBindValues();
+        $parameters = $this->generateBindValues(null, false);
         $sets = $this->generateSetUpdate($parameters);
 
         $sql = "UPDATE " . $this->getTabela() . " SET " . $sets . " WHERE " . $this->getPrimaryKey() . " = " . $value_primary_key;
@@ -236,10 +236,14 @@ class BdAction
         $where = $this->generateWhereCustom($where);
         $parameters = $where["parameters"];
 
+        $whereString = "";
+        if (!empty($where["where"])) {
+            $whereString = "WHERE " . $where["where"];
+        }
 
         $sql[] = "SELECT $distinct  $select";
         $sql[] = "FROM " . $this->getTabela();
-        $sql[] = "WHERE " . $where["where"];
+        $sql[] = $whereString;
         $sql[] = $order;
         $sql[] = $limit;
 
