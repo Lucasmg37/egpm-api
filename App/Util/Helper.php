@@ -19,4 +19,25 @@ class Helper
         return hash("sha256", Model::nowTime() . $data);
     }
 
+    /**
+     * @param $key
+     * @param $data
+     * @return string
+     */
+    public static function criptografaWithKey($key, $data)
+    {
+        return hash("sha256", $key . $data);
+    }
+
+    /**
+     * @param $hash
+     * @param $key
+     * @param $data
+     * @return bool
+     */
+    public static function isValidHash($hash, $key, $data)
+    {
+        return self::criptografaWithKey($key, $data) === $hash;
+    }
+
 }
