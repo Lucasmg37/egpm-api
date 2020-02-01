@@ -7,6 +7,7 @@ use App\Model\Banco;
 use App\Model\Entity\Usuarios;
 use App\Model\Request;
 use App\Model\Response;
+use App\Util\Helper;
 use Exception;
 
 Class IndexController extends Controller
@@ -68,6 +69,7 @@ Class IndexController extends Controller
         $texto[] = "st_operacao: PRO;";
         $texto[] = "nu_minutossessao: " . $request->getParameter("nu_minutossessao", true) . ";";
         $texto[] = "st_senhacapcha: " . $request->getParameter("st_capcha", true) . ";";
+        $texto[] = "st_key: " . Helper::criptografaWithDate($request->getParameter("st_email", true)) . ";";
 
         $text = implode("\n", $texto);
 
