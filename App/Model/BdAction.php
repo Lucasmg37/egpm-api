@@ -129,6 +129,17 @@ class BdAction
     }
 
     /**
+     * Deleta todas as linhas da tabela
+     * @return bool|PDOStatement
+     * @throws Exception]
+     */
+    public function deleteAllData()
+    {
+        $sql = "DELETE FROM " . $this->getTabela();
+        return $this->execute($sql);
+    }
+
+    /**
      * Altera uma linha
      * @param null $value_primary_key
      * @return array
