@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Constants\System\App;
 use App\Controller\Controller;
 use App\Model\Banco;
 use App\Model\Entity\Usuarios;
@@ -73,7 +74,7 @@ Class IndexController extends Controller
         $st_key = Helper::criptografaWithDate($request->getParameter("st_email", true));
         $texto[] = "st_key: " . $st_key . ";";
 
-        $text = implode("\r\n", $texto);
+        $text = implode(App::BREAK_LINE, $texto);
 
         if (!is_dir("../config")) {
             mkdir("../config");

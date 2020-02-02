@@ -3,6 +3,7 @@
 
 namespace App\Model\Entity;
 
+use App\Constants\System\App;
 use App\Model\Banco;
 use App\Model\Model;
 use Exception;
@@ -84,7 +85,7 @@ class EntityGenerate
 
             }
 
-            $final = implode("\n", $final);
+            $final = implode(App::BREAK_LINE, $final);
             $genereted[] = $this->generateFile($this->getNameClasse($table), $final, "../App/Model/Entity/");
 
         }
