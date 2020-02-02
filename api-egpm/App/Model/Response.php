@@ -62,9 +62,9 @@ class Response
     /**
      * @param null $message
      * @param int $codeHttp
-     * @param null $data
+     * @param array $data
      */
-    public static function succesResponse($message = null, $data = null)
+    public static function succesResponse($message = null, $data = [])
     {
         $response = new Response(self::CODE_200_OK, self::TYPE_REQUEST_SUCCESS, true, $message, $data, null);
         $response->responseReturn();
@@ -90,9 +90,7 @@ class Response
             $retorno["message"] = $this->getMessage();
         }
 
-        if ($this->getData()) {
-            $retorno["data"] = $this->getData();
-        }
+        $retorno["data"] = $this->getData();
 
         if ($this->getErrorCode()) {
             $retorno["code"] = $this->getErrorCode();
