@@ -1,5 +1,5 @@
 {
-    "name": "lucas/pesquisa_de_satisfacao_back",
+    "name": "lucas/api-egpm",
     "type": "project",
     "authors": [
         {
@@ -13,5 +13,11 @@
         "ext-pdo": "*",
         "ext-json": "*",
         "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "api-egpm/App/",
+            "Bootstrap\\": "api-egpm/Bootstrap/"
+        }
     }
 }

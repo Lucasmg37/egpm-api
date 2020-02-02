@@ -13,5 +13,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
-require_once ("../Bootstrap/autoload.php");
+require "../../vendor/autoload.php";
 \Bootstrap\Init::start();
