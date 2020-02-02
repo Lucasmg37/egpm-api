@@ -15,7 +15,7 @@ class Server
      */
     public static function isHttps()
     {
-        return $_SERVER['HTTPS'] ? true : false;
+        return isset($_SERVER['HTTPS']);
     }
 
     /**
