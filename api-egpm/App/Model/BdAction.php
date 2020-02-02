@@ -125,7 +125,7 @@ class BdAction
         $this->clearObject();
         $this->findOne($this->isPrimaryKeyAutoIncrement()
             ? $this->getModel()->bd->lastInsertId()
-            : isset($parameters[$this->getPrimaryKey()]) ? $parameters[$this->getPrimaryKey()] : null);
+            : $this->getValuePrimayKey());
         return $this;
 
     }
@@ -355,7 +355,7 @@ class BdAction
 
             //Realizar validação
             foreach ($requireds as $required) {
-                if (($params[$required] === null || $params[$required] === "") && !in_array($required, $ignore)) {
+                if ((!isset($params[$required]) || $params[$required] === null || $params[$required] === "") && !in_array($required, $ignore)) {
                     $message = $atributosaValidar[$required];
 
                     if (empty($message)) {
@@ -493,39 +493,40 @@ class BdAction
     {
         $where = [];
         $parameter = [];
-        foreach ($arrayWhere as $key => $value) {
-            switch ($value) {
-                case \App\Constants\System\BdAction::WHERE_LIKE :
-                case \App\Constants\System\BdAction::WHERE_LIKE_L :
-                case \App\Constants\System\BdAction::WHERE_LIKE_R :
-                    if ($value === \App\Constants\System\BdAction::WHERE_LIKE) {
-                        $where[] = $key . " " . \App\Constants\System\BdAction::WHERE_LIKE . " :$key";
-                        $parameter[$key] = "%" . $this->getFilho()->$key . "%";
-                    }
+        if (is_array($arrayWhere)) {
+            foreach ($arrayWhere as $key => $value) {
+                switch ($value) {
+                    case \App\Constants\System\BdAction::WHERE_LIKE :
+                    case \App\Constants\System\BdAction::WHERE_LIKE_L :
+                    case \App\Constants\System\BdAction::WHERE_LIKE_R :
+                        if ($value === \App\Constants\System\BdAction::WHERE_LIKE) {
+                            $where[] = $key . " " . \App\Constants\System\BdAction::WHERE_LIKE . " :$key";
+                            $parameter[$key] = "%" . $this->getFilho()->$key . "%";
+                        }
 
-                    if ($value === \App\Constants\System\BdAction::WHERE_LIKE_L) {
-                        $where[] = $key . " " . \App\Constants\System\BdAction::WHERE_LIKE . " :$key'";
-                        $parameter[$key] = "%" . $this->getFilho()->$key;
-                    }
+                        if ($value === \App\Constants\System\BdAction::WHERE_LIKE_L) {
+                            $where[] = $key . " " . \App\Constants\System\BdAction::WHERE_LIKE . " :$key'";
+                            $parameter[$key] = "%" . $this->getFilho()->$key;
+                        }
 
-                    if ($value === \App\Constants\System\BdAction::WHERE_LIKE_R) {
-                        $where[] = $key . " " . \App\Constants\System\BdAction::WHERE_LIKE . " :$key";
-                        $parameter[$key] = $this->getFilho()->$key . "%";
-                    }
+                        if ($value === \App\Constants\System\BdAction::WHERE_LIKE_R) {
+                            $where[] = $key . " " . \App\Constants\System\BdAction::WHERE_LIKE . " :$key";
+                            $parameter[$key] = $this->getFilho()->$key . "%";
+                        }
 
-                    break;
+                        break;
 
-                case \App\Constants\System\BdAction::WHERE_BIGGER:
-                case \App\Constants\System\BdAction::WHERE_BIGGER_EQUAL:
-                case \App\Constants\System\BdAction::WHERE_EQUAL:
-                case \App\Constants\System\BdAction::WHERE_LESS:
-                case \App\Constants\System\BdAction::WHERE_LESS_EQUAL:
-                    $where[] = $key . " " . $value . " :$key";
-                    $parameter[$key] = $this->getFilho()->$key;
-                    break;
+                    case \App\Constants\System\BdAction::WHERE_BIGGER:
+                    case \App\Constants\System\BdAction::WHERE_BIGGER_EQUAL:
+                    case \App\Constants\System\BdAction::WHERE_EQUAL:
+                    case \App\Constants\System\BdAction::WHERE_LESS:
+                    case \App\Constants\System\BdAction::WHERE_LESS_EQUAL:
+                        $where[] = $key . " " . $value . " :$key";
+                        $parameter[$key] = $this->getFilho()->$key;
+                        break;
+                }
             }
         }
-
         return [
             "where" => implode(" AND ", $where),
             "parameters" => $parameter
@@ -642,10 +643,12 @@ class BdAction
      */
     public function mount($atributes)
     {
-        foreach ($atributes as $attr => $value) {
-            if ($this->existsAtribute($attr)) {
-                $this->getFilho()->$attr = $value;
-                $this->setValueAtribute($attr, $value);
+        if (is_array($atributes)) {
+            foreach ($atributes as $attr => $value) {
+                if ($this->existsAtribute($attr)) {
+                    $this->getFilho()->$attr = $value;
+                    $this->setValueAtribute($attr, $value);
+                }
             }
         }
 
@@ -858,7 +861,12 @@ class BdAction
      */
     private function getOne($bdAction)
     {
-        return $this->getResult($bdAction)[0];
+        $results = $this->getResult($bdAction);
+        if (is_array($results)) {
+            return array_shift($results);
+        }
+
+        return [];
     }
 
     /**
