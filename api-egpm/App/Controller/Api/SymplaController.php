@@ -17,13 +17,14 @@ class SymplaController extends Controller
 
     /**
      * @param $id
-     * @return array
+     * @return Integracaosympla
      * @throws Exception
      */
     public function getIntegracaoAction($id)
     {
         $integracao = new Integracaosympla();
-        return $integracao->findOne($id);
+        $integracao->findOne($id);
+        return $integracao;
     }
 
     /**
@@ -34,8 +35,18 @@ class SymplaController extends Controller
     {
         $input = $this->request->getAllParameters();
         $integracao = new Integracaosympla();
-        $integracao->validate(Validate::INTEGRACAO, ["UPDATE"], $input, true);
-        $integracao->mount($input)->save();
+        $integracao->mount($integracao->getFirst($integracao->findAll()));
+
+        if ($integracao->getIdIntegracaosympla()) {
+            $integracao->validate(Validate::INTEGRACAO, ["UPDATE"], $input, false);
+            $integracao->mount($input);
+            $integracao->save();
+            return $integracao;
+        }
+
+        $integracao->validate(Validate::INTEGRACAO, [], $input, false);
+        $integracao->mount($input)->setIdIntegracaosympla(1);
+        $integracao->insert();
         return $integracao;
     }
 
