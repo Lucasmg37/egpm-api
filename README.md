@@ -1,7 +1,7 @@
-![Código Fonte do Site 3º Encontro Gamer De Pará de Minas. Vue + Webpack](https://user-images.githubusercontent.com/25160385/57738272-2d0c0080-7685-11e9-80a9-756e1e97dc9a.jpg)
+![Código Fonte da API 3º Encontro Gamer De Pará de Minas.](https://user-images.githubusercontent.com/25160385/73674435-40d21980-468f-11ea-9efc-b1b5d3882953.jpg)
 
 ## Do que se trata?
-Este é o repositório da Api desenvolvida para alimentar o site do Terceiro Encontro Gamer de Pará de Minas e o CMS responsável por tornar as informações do site dinâmicas.
+Este é o repositório da API desenvolvida para alimentar o site do Terceiro Encontro Gamer de Pará de Minas e o CMS responsável por tornar as informações do site dinâmicas.
 Desenvolvida em framework próprio, [Nome Framework](https://github.com/Lucasmg37/pesquisa_de_satisfacao_back/tree/framework/master), utilizando PHP e seguindo o padrão Rest.
 
 Projeto desenvolvido em conjunto com Marcus Pereira e Eduardo, em disciplina interdisciplinar do curso Gestão de Tecnologia da Informação da FAPAM (Faculdade de Pará de Minas).
@@ -37,17 +37,17 @@ Esse comando baixa e instala as dependências necessárias utilizadas no projeto
 A configuração da aplicação pode ser realizada de duas maneiras distintas.
 
 ### Configuração por interface
-A configuração por interface, foi construída para facilitar o processo de instalação e configuração da Api, para isto, acesse a seguinte rota com o projeto já instalado.
+A configuração por interface, foi construída para facilitar o processo de instalação e configuração da API, para isto, acesse a seguinte rota com o projeto já instalado.
 
 ```
 /Start
 ```
 
-Por exemplo http://api.egpm.com.br/**Start**
+Por exemplo http://API.egpm.com.br/**Start**
 
 Será aberto uma página pra realização da configuração. Siga os passos até obter a mensagem de sucesso.
 
-####❗ Importante
+#### ❗ Importante
 Ao realizar a autoconfiguração, é necessário ter o conhecimento que:
 * O arquivo de configuração do sistema pode existir (Arquivo demonstrado no próximo método)
 * Todas as tabelas do banco serão gerados automáticamente, isto se a tabela não existir, se você já tem uma base de dados configurada, não use este método.
@@ -97,7 +97,7 @@ Use DEV para desenvolvimento e PRO para produção
 * **st_senhacapcha**: Chave secreta do reCAPTCHA
 * **st_key**: Chave utilizada para geração de senhas pelo sistema (Não deve ser alterada após sua primeira definição)
 
-####❗ Importante
+#### ❗ Importante
  * Para este modo de configuração você irá precisar criar as tabelas do banco de dados da aplicação manualmente.
 
  * O script para crição se encontra na mesma pasta do arquivo de configuração **DataBaseStructure.sql**
