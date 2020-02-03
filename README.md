@@ -117,7 +117,7 @@ Use DEV para desenvolvimento e PRO para produção
  * O script para crição se encontra na mesma pasta do arquivo de configuração **DataBaseStructure.sql**
 
  * Também será necessário criar na base de dados alguns itens necessários para o funcionamento da aplicação, para isto execute o arquivo
-DataBaseStartData.sql.
+**DataBaseStartData.sql**.
 
  * Após será necessário a criação do usuário administrador.
 
