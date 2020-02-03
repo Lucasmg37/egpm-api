@@ -12,13 +12,14 @@ class IngressoController extends Controller
 {
 
     /**
-     * @return mixed|null
+     * @param $id
+     * @return mixed|void|null
      * @throws Exception
      */
-    public function getAction()
+    public function getAction($id)
     {
         $botao = new Botao();
-        return $botao->getFirst($botao->findAll());
+        return $botao->mount($botao->getFirst($botao->findAll()));
     }
 
     /**
@@ -28,10 +29,20 @@ class IngressoController extends Controller
     public function putAction()
     {
         $botao = new Botao();
+
+        $botao->mount($botao->getFirst($botao->findAll()));
+
+        if ($botao->getIdBotao()) {
+            $botao->setBlAtivo($this->request->getParameter("bl_ativo"));
+            $botao->setStLink($this->request->getParameter("st_link"));
+            $botao->save();
+            return $botao;
+        }
+
         $botao->setBlAtivo($this->request->getParameter("bl_ativo"));
         $botao->setStLink($this->request->getParameter("st_link"));
         $botao->setIdBotao(1);
-        $botao->save();
+        $botao->insert();
         return $botao;
 
     }

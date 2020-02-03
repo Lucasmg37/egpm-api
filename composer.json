@@ -1,5 +1,5 @@
 {
-    "name": "lucas/pesquisa_de_satisfacao_back",
+    "name": "lucas/api-egpm",
     "type": "project",
     "authors": [
         {
@@ -8,10 +8,15 @@
         }
     ],
     "require": {
-        "mpdf/mpdf": "^8.0",
         "gumlet/php-image-resize": "1.9.*",
         "ext-pdo": "*",
         "ext-json": "*",
         "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/",
+            "Bootstrap\\": "Bootstrap/"
+        }
     }
 }

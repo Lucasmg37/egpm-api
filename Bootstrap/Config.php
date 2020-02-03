@@ -16,99 +16,99 @@ class Config
      */
     public function __construct()
     {
-        $texto = file_get_contents("../config/config");
-        $texto = str_replace(" ", "", $texto);
-        $texto = explode(";", $texto);
+        if (file_exists("../config/config")) {
+            $texto = file_get_contents("../config/config");
+            $texto = str_replace(" ", "", $texto);
+            $texto = explode(";", $texto);
 
-        $linhas = [];
+            $linhas = [];
 
-        foreach ($texto as $linha) {
-            $linha = preg_replace('/[\n|\r|\n\r|\r\n]{2,}/', '', $linha);
-            $linhas[] = $linha;
-        }
-
-        $sectionAtual = "config";
-        $banco = 0;
-        $data = [];
-
-        foreach ($linhas as $linha) {
-
-            $hasTwoPoints = strstr($linha, ":");
-            $hasOpenColchete = strstr($linha, "[");
-            $hasCloseColchete = strstr($linha, "]");
-
-            if (empty($linha)) {
-                continue;
+            foreach ($texto as $linha) {
+                $linha = preg_replace('/[\n|\r|\n\r|\r\n]{2,}/', '', $linha);
+                $linhas[] = $linha;
             }
 
-            if ($hasCloseColchete && $hasOpenColchete) {
-                $sectionAtual = str_replace("[", "", $linha);
-                $sectionAtual = str_replace("]", "", $sectionAtual);
+            $sectionAtual = "config";
+            $banco = 0;
+            $data = [];
 
-                if ($sectionAtual === "bd") {
-                    $banco++;
-                }
+            foreach ($linhas as $linha) {
 
-            }
+                $hasTwoPoints = strstr($linha, ":");
+                $hasOpenColchete = strstr($linha, "[");
+                $hasCloseColchete = strstr($linha, "]");
 
-            if ($hasTwoPoints) {
-
-                $item = explode(":", $linha);
-
-                if ($sectionAtual === "bd") {
-                    $data[$sectionAtual][$banco][] = ["atributo" => $item[0], "valor" => $item[1]];
+                if (empty($linha)) {
                     continue;
                 }
 
-                $data[$sectionAtual][] = ["atributo" => $item[0], "valor" => $item[1]];
-                continue;
-            }
+                if ($hasCloseColchete && $hasOpenColchete) {
+                    $sectionAtual = str_replace("[", "", $linha);
+                    $sectionAtual = str_replace("]", "", $sectionAtual);
 
-            if (!$hasTwoPoints && !$hasCloseColchete && !$hasOpenColchete) {
-                throw new Exception("Configuração incorreta!");
-            }
+                    if ($sectionAtual === "bd") {
+                        $banco++;
+                    }
 
-        }
+                }
 
+                if ($hasTwoPoints) {
 
-        //Tratar configs
-        $save = [];
-        foreach ($data["config"] as $value) {
-            $save[$value["atributo"]] = $value["valor"];
-        }
+                    $item = explode(":", $linha);
 
-        $this->setConfigs($save);
+                    if ($sectionAtual === "bd") {
+                        $data[$sectionAtual][$banco][] = ["atributo" => $item[0], "valor" => $item[1]];
+                        continue;
+                    }
 
-        //Tratar bancos
-        $save = [];
-        foreach ($data["bd"] as $bancos) {
+                    $data[$sectionAtual][] = ["atributo" => $item[0], "valor" => $item[1]];
+                    continue;
+                }
 
-            $dataBd = [];
-            foreach ($bancos as $banco) {
-                $dataBd[$banco["atributo"]] = $banco["valor"];
-            }
-
-            if (array_key_exists($dataBd["st_name"], $save)) {
-                throw new Exception("1 ou mais bancos possuem o mesmo nome!");
-            }
-
-            $save[$dataBd["st_name"]] = $dataBd;
-
-        }
-
-        $this->setBancos($save);
-
-        //Tratar outros
-        $save = [];
-        foreach ($data as $indice => $itens) {
-            if ($indice !== "config" && $indice !== "bd") {
-                foreach ($itens as $item) {
-                    $save[$indice][$item["atributo"]] = $item["valor"];
+                if (!$hasTwoPoints && !$hasCloseColchete && !$hasOpenColchete) {
+                    throw new Exception("Configuração incorreta!");
                 }
             }
-        }
 
-        $this->setPersonConfig($save);
+            //Tratar configs
+            $save = [];
+            foreach ($data["config"] as $value) {
+                $save[$value["atributo"]] = $value["valor"];
+            }
+
+            $this->setConfigs($save);
+
+            //Tratar bancos
+            $save = [];
+            foreach ($data["bd"] as $bancos) {
+
+                $dataBd = [];
+                foreach ($bancos as $banco) {
+                    $dataBd[$banco["atributo"]] = $banco["valor"];
+                }
+
+                if (array_key_exists($dataBd["st_name"], $save)) {
+                    throw new Exception("1 ou mais bancos possuem o mesmo nome!");
+                }
+
+                $save[$dataBd["st_name"]] = $dataBd;
+
+            }
+
+            $this->setBancos($save);
+
+            //Tratar outros
+            $save = [];
+            foreach ($data as $indice => $itens) {
+                if ($indice !== "config" && $indice !== "bd") {
+                    foreach ($itens as $item) {
+                        $save[$indice][$item["atributo"]] = $item["valor"];
+                    }
+                }
+            }
+
+            $this->setPersonConfig($save);
+        }
 
     }
 
@@ -145,8 +145,7 @@ class Config
 
     /**
      * @param $nameConfig
-     * @return |null
-     * @throws Exception
+     * @return string|null
      */
     public function getConfig($nameConfig)
     {
@@ -183,8 +182,10 @@ class Config
      */
     public function getFirstBd()
     {
-        foreach ($this->bancos as $banco) {
-            return $banco;
+        if (is_array($this->bancos)) {
+            foreach ($this->bancos as $banco) {
+                return $banco;
+            }
         }
 
         return false;

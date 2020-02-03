@@ -338,14 +338,13 @@ class Request
             if ($this->put[$campo]) {
                 return $this->put[$campo];
             }
-            if ($this->superGet[$campo]) {
+            if (isset($this->superGet[$campo]) && $this->superGet[$campo]) {
                 return $this->superGet[$campo];
             }
 
-            if ($this->superPost[$campo]) {
+            if (isset($this->superPost[$campo]) && $this->superPost[$campo]) {
                 return $this->superPost[$campo];
             }
-
 
             if ($campovazio) {
                 throw new Exception("O $campo deve ser enviado.");

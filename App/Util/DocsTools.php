@@ -4,6 +4,8 @@
 namespace App\Util;
 
 
+use App\Constants\System\App;
+
 class DocsTools
 {
     /**
@@ -20,11 +22,12 @@ class DocsTools
         $docs = str_replace("*", "", $docs);
 
         //Separar linhas em array
-        $docs = explode("\n", $docs);
+        $docs = explode(App::BREAK_LINE, $docs);
 
         //Limpa Array
         foreach ($docs as &$doc) {
             $doc = str_replace("  ", "", $doc);
+            $doc = str_replace(App::BREAK_LINE, "", $doc);
         }
 
         foreach ($docs as $key => $value) {

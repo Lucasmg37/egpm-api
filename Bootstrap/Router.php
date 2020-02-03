@@ -265,7 +265,7 @@ Class Router
         if (!empty($action) && !$rotaValida) {
             $unique = $action;
             $action = $router->returnActionByVerb();
-        } elseif ($rotaValida) {
+        } elseif ($rotaValida && isset($parametrosURI["parametrosMontados"][$action])) {
             $unique = $parametrosURI["parametrosMontados"][$action];
         }
 
@@ -469,7 +469,7 @@ Class Router
         //Chamar a Controller
         //Verificar se existe Unique e Parameter
         if (!$router->getUnique() && !sizeof($router->getParameters()) > 0) {
-            Response::succesResponse("Operação realizada com sucesso!", $classeController->$action());
+            Response::succesResponse("Operação realizada com sucesso!", $classeController->$action(null));
             return true;
         }
 
