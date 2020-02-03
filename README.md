@@ -1,5 +1,19 @@
 ![Código Fonte da API 3º Encontro Gamer De Pará de Minas.](https://user-images.githubusercontent.com/25160385/73674435-40d21980-468f-11ea-9efc-b1b5d3882953.jpg)
 
+## Indíce
+
+* [Do que se trata? ](https://github.com/Lucasmg37/api-egpm/tree/read.me#do-que-se-trata)
+* [Requisitos do servidor](https://github.com/Lucasmg37/api-egpm/tree/read.me#requisitos-do-servidor)
+* [Requisitos para instalação](https://github.com/Lucasmg37/api-egpm/tree/read.me#requisitos-para-instala%C3%A7%C3%A3o)
+* [Instalando o projeto](https://github.com/Lucasmg37/api-egpm/tree/read.me#instalando-o-projeto)
+* [Configuração](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o)
+    * [Configuração por interface](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o-por-interface)
+    * [Configuração por arquivo](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o-por-arquivo)
+    * [Migração de ambientes](https://github.com/Lucasmg37/api-egpm/tree/read.me#migra%C3%A7%C3%A3o-de-ambientes)
+* [Desenvolvimento](https://github.com/Lucasmg37/api-egpm/tree/read.me#desenvolvimento)
+* [Deploy](https://github.com/Lucasmg37/api-egpm/tree/read.me#deployo)
+
+
 ## Do que se trata?
 Este é o repositório da API desenvolvida para alimentar o site do Terceiro Encontro Gamer de Pará de Minas e o CMS responsável por tornar as informações do site dinâmicas.
 Desenvolvida em framework próprio, [Nome Framework](https://github.com/Lucasmg37/pesquisa_de_satisfacao_back/tree/framework/master), utilizando PHP e seguindo o padrão Rest.
