@@ -178,7 +178,7 @@ class UsuarioController extends Controller
         $recovery = new Recovery();
         $recoveryEntity = $recovery->salvarSolicitacaoRecovery($usuario->getIdUsuario());
 
-        return $sendMail->sendEmailSystem($usuario->getStEmail(), "Teste", $recoveryEntity->getStCodigo());
+        return $sendMail->sendEmailSystem($usuario->getStEmail(), "Recuperação de Senha EGPM.", $recoveryEntity->getStCodigo());
 
     }
 
