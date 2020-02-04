@@ -2,139 +2,143 @@
 
 namespace App\Model;
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
-class SendMail extends Model
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+
+class SendMail
 {
 
-    private $IsSMTP = true;
-    private $SMTPSecure = "ssl";
+    private $isSMTP = true;
+    private $sMTPSecure = "ssl";
     private $charSet = "UTF-8";
-    private $SMTPDebug = 0;
-    private $Host;
-    private $SMTPAuth = true;
-    private $Port;
-    private $Username;
-    private $Password;
+    private $sMTPDebug = 0;
+    private $host;
+    private $sMTPAuth = true;
+    private $port;
+    private $username;
+    private $password;
 
-    private $SetFrom;
-    private $SetFromAlias;
-    private $AddReplyTo;
-    private $AddReplyToAlias;
-    private $Subject;
-    private $AddAddress;
-    private $MsgHTML;
+    private $setFrom;
+    private $setFromAlias;
+    private $addReplyTo;
+    private $addReplyToAlias;
+    private $subject;
+    private $addAddress;
+    private $msgHTML;
 
-    private $AltBody;
-    private $Priority = 1;
-    private $Encoding = "8bit";
-    private $ContentType = 'text/html; charset=utf-8\r\n';
-    private $WordWrap = 900;
+    private $altBody;
+    private $priority = 1;
+    private $encoding = "8bit";
+    private $contentType = 'text/html; charset=utf-8\r\n';
+    private $wordWrap = 900;
     private $isHTML = true;
 
+    private $phpMailer;
+
+    /**
+     * SendMail constructor.
+     */
     public function __construct()
     {
-        parent::__construct();
-    }
-
-    public function sendEmail()
-    {
-        try {
-
-//            var_dump("dfvsdv");
-//            exit;
-
-            $Mail = new PHPMailer(true);
-
-            if ($this->IsSMTP) {
-                $Mail->IsSMTP();
-            }
-
-            $Mail->Host        = $this->getHost();
-            $Mail->SMTPDebug   = $this->getSMTPDebug();
-            $Mail->SMTPAuth    = $this->getSMTPAuth();
-            $Mail->SMTPSecure  = $this->getSMTPSecure();
-            $Mail->Port        = $this->getPort();
-            $Mail->Username    = $this->getUsername();
-            $Mail->Password    = $this->getPassword();
-            $Mail->Priority    = $this->getPriority();
-            $Mail->CharSet     = $this->getCharSet();
-            $Mail->Encoding    = $this->getEncoding();
-            $Mail->Subject     = $this->getSubject();
-            $Mail->ContentType = $this->getContentType();
-            $Mail->From        = $this->getSetFrom();
-            $Mail->FromName    = $this->getSetFromAlias();
-            $Mail->WordWrap    = $this->getWordWrap();
-
-            $Mail->AddAddress( $this->getAddAddress());
-            $Mail->isHTML($this->isHTML());
-            $Mail->Body    = $this->getMsgHTML();
-            $Mail->AltBody = $this->getAltBody();
-            $Mail->AddReplyTo($this->AddReplyTo, $this->AddReplyToAlias);
-
-//            var_dump($Mail);
-//            exit;
-
-            $retorno = $Mail->Send();
-
-            $Mail->SmtpClose();
-
-//            var_dump($Mail);
-//            exit;
-
-            return $retorno;
-
-        } catch ( \phpmailerException $e) {
-
-            return $this->fail($e->getMessage());
-
-        }catch (\Exception $e){
-            Response::failResponse($e->getMessage(), $e);
-        }
-    }
-
-
-
-    /**
-     * @return mixed
-     */
-    public function getIsSMTP()
-    {
-        return $this->IsSMTP;
+        $this->phpMailer = new PHPMailer();
     }
 
     /**
-     * @param mixed $IsSMTP
      * @return $this
+     * @throws Exception
      */
-    public function setIsSMTP($IsSMTP)
+    public function mountPhpMailer()
     {
-        $this->IsSMTP = $IsSMTP;
+        if ($this->isSMTP) {
+            $this->phpMailer->IsSMTP();
+        }
+
+        $this->phpMailer->Host = $this->getHost();
+        $this->phpMailer->SMTPDebug = $this->getSMTPDebug();
+        $this->phpMailer->SMTPAuth = $this->isSMTPAuth();
+        $this->phpMailer->SMTPSecure = $this->getSMTPSecure();
+        $this->phpMailer->Port = $this->getPort();
+        $this->phpMailer->Username = $this->getUsername();
+        $this->phpMailer->Password = $this->getPassword();
+        $this->phpMailer->Priority = $this->getPriority();
+        $this->phpMailer->CharSet = $this->getCharSet();
+        $this->phpMailer->Encoding = $this->getEncoding();
+        $this->phpMailer->Subject = $this->getSubject();
+        $this->phpMailer->ContentType = $this->getContentType();
+        $this->phpMailer->From = $this->getSetFrom();
+        $this->phpMailer->FromName = $this->getSetFromAlias();
+        $this->phpMailer->WordWrap = $this->getWordWrap();
+
+        $this->phpMailer->AddAddress($this->getAddAddress());
+        $this->phpMailer->isHTML($this->isHTML());
+        $this->phpMailer->Body = $this->getMsgHTML();
+        $this->phpMailer->AltBody = $this->getAltBody();
+        $this->phpMailer->AddReplyTo($this->getAddReplyTo(), $this->getAddReplyToAlias());
+
         return $this;
     }
 
     /**
-     * @return mixed
+     * @param null $phpMailer
+     * @return bool
+     * @throws Exception
+     */
+    public function send($phpMailer = null)
+    {
+        if (!$phpMailer) {
+            $phpMailer = $this->phpMailer;
+        }
+
+        $retorno = $phpMailer->Send();
+        $phpMailer->SmtpClose();
+
+        return $retorno;
+
+    }
+
+    /**
+     * @param $file
+     */
+    public function setHtmlForFile($file)
+    {
+        $this->setMsgHTML(file_get_contents($file));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSMTP()
+    {
+        return $this->isSMTP;
+    }
+
+    /**
+     * @param bool $isSMTP
+     */
+    public function setIsSMTP($isSMTP)
+    {
+        $this->isSMTP = $isSMTP;
+    }
+
+    /**
+     * @return string
      */
     public function getSMTPSecure()
     {
-        return $this->SMTPSecure;
+        return $this->sMTPSecure;
     }
 
     /**
-     * @param mixed $SMTPSecure
-     * @return $this
+     * @param string $sMTPSecure
      */
-    public function setSMTPSecure($SMTPSecure)
+    public function setSMTPSecure($sMTPSecure)
     {
-        $this->SMTPSecure = $SMTPSecure;
-        return $this;
+        $this->sMTPSecure = $sMTPSecure;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCharSet()
     {
@@ -142,13 +146,11 @@ class SendMail extends Model
     }
 
     /**
-     * @param mixed $charSet
-     * @return $this
+     * @param string $charSet
      */
     public function setCharSet($charSet)
     {
         $this->charSet = $charSet;
-        return $this;
     }
 
     /**
@@ -156,17 +158,15 @@ class SendMail extends Model
      */
     public function getSMTPDebug()
     {
-        return $this->SMTPDebug;
+        return $this->sMTPDebug;
     }
 
     /**
-     * @param int $SMTPDebug
-     * @return $this
+     * @param int $sMTPDebug
      */
-    public function setSMTPDebug($SMTPDebug)
+    public function setSMTPDebug($sMTPDebug)
     {
-        $this->SMTPDebug = $SMTPDebug;
-        return $this;
+        $this->sMTPDebug = $sMTPDebug;
     }
 
     /**
@@ -174,35 +174,31 @@ class SendMail extends Model
      */
     public function getHost()
     {
-        return $this->Host;
+        return $this->host;
     }
 
     /**
-     * @param mixed $Host
-     * @return $this
+     * @param mixed $host
      */
-    public function setHost($Host)
+    public function setHost($host)
     {
-        $this->Host = $Host;
-        return $this;
+        $this->host = $host;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getSMTPAuth()
+    public function isSMTPAuth()
     {
-        return $this->SMTPAuth;
+        return $this->sMTPAuth;
     }
 
     /**
-     * @param mixed $SMTPAuth
-     * @return $this
+     * @param bool $sMTPAuth
      */
-    public function setSMTPAuth($SMTPAuth)
+    public function setSMTPAuth($sMTPAuth)
     {
-        $this->SMTPAuth = $SMTPAuth;
-        return $this;
+        $this->sMTPAuth = $sMTPAuth;
     }
 
     /**
@@ -210,17 +206,15 @@ class SendMail extends Model
      */
     public function getPort()
     {
-        return $this->Port;
+        return $this->port;
     }
 
     /**
-     * @param mixed $Port
-     * @return $this
+     * @param mixed $port
      */
-    public function setPort($Port)
+    public function setPort($port)
     {
-        $this->Port = $Port;
-        return $this;
+        $this->port = $port;
     }
 
     /**
@@ -228,17 +222,15 @@ class SendMail extends Model
      */
     public function getUsername()
     {
-        return $this->Username;
+        return $this->username;
     }
 
     /**
-     * @param mixed $Username
-     * @return $this
+     * @param mixed $username
      */
-    public function setUsername($Username)
+    public function setUsername($username)
     {
-        $this->Username = $Username;
-        return $this;
+        $this->username = $username;
     }
 
     /**
@@ -246,17 +238,15 @@ class SendMail extends Model
      */
     public function getPassword()
     {
-        return $this->Password;
+        return $this->password;
     }
 
     /**
-     * @param mixed $Password
-     * @return $this
+     * @param mixed $password
      */
-    public function setPassword($Password)
+    public function setPassword($password)
     {
-        $this->Password = $Password;
-        return $this;
+        $this->password = $password;
     }
 
     /**
@@ -264,94 +254,15 @@ class SendMail extends Model
      */
     public function getSetFrom()
     {
-        return $this->SetFrom;
+        return $this->setFrom;
     }
 
     /**
-     * @param mixed $SetFrom
-     * @return $this
+     * @param mixed $setFrom
      */
-    public function setSetFrom($SetFrom)
+    public function setSetFrom($setFrom)
     {
-        $this->SetFrom = $SetFrom;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAddReplyTo()
-    {
-        return $this->AddReplyTo;
-    }
-
-    /**
-     * @param mixed $AddReplyTo
-     * @return $this
-     */
-    public function setAddReplyTo($AddReplyTo)
-    {
-        $this->AddReplyTo = $AddReplyTo;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSubject()
-    {
-        return $this->Subject;
-    }
-
-    /**
-     * @param mixed $Subject
-     * @return $this
-     */
-    public function setSubject($Subject)
-    {
-        $this->Subject = $Subject;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAddAddress()
-    {
-        return $this->AddAddress;
-    }
-
-    /**
-     * @param mixed $AddAddress
-     * @return $this
-     */
-    public function setAddAddress($AddAddress)
-    {
-        $this->AddAddress = $AddAddress;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMsgHTML()
-    {
-        return $this->MsgHTML;
-    }
-
-    /**
-     * @param mixed $MsgHTML
-     * @return $this
-     */
-    public function setMsgHTML($MsgHTML)
-    {
-        $this->MsgHTML = $MsgHTML;
-        return $this;
-    }
-
-    public function setHtmlForFile($file)
-    {
-        $this->setMsgHTML(file_get_contents($file));
+        $this->setFrom = $setFrom;
     }
 
     /**
@@ -359,15 +270,31 @@ class SendMail extends Model
      */
     public function getSetFromAlias()
     {
-        return $this->SetFromAlias;
+        return $this->setFromAlias;
     }
 
     /**
-     * @param mixed $SetFromAlias
+     * @param mixed $setFromAlias
      */
-    public function setSetFromAlias($SetFromAlias)
+    public function setSetFromAlias($setFromAlias)
     {
-        $this->SetFromAlias = $SetFromAlias;
+        $this->setFromAlias = $setFromAlias;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddReplyTo()
+    {
+        return $this->addReplyTo;
+    }
+
+    /**
+     * @param mixed $addReplyTo
+     */
+    public function setAddReplyTo($addReplyTo)
+    {
+        $this->addReplyTo = $addReplyTo;
     }
 
     /**
@@ -375,15 +302,63 @@ class SendMail extends Model
      */
     public function getAddReplyToAlias()
     {
-        return $this->AddReplyToAlias;
+        return $this->addReplyToAlias;
     }
 
     /**
-     * @param mixed $AddReplyToAlias
+     * @param mixed $addReplyToAlias
      */
-    public function setAddReplyToAlias($AddReplyToAlias)
+    public function setAddReplyToAlias($addReplyToAlias)
     {
-        $this->AddReplyToAlias = $AddReplyToAlias;
+        $this->addReplyToAlias = $addReplyToAlias;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
+     * @param mixed $subject
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddAddress()
+    {
+        return $this->addAddress;
+    }
+
+    /**
+     * @param mixed $addAddress
+     */
+    public function setAddAddress($addAddress)
+    {
+        $this->addAddress = $addAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMsgHTML()
+    {
+        return $this->msgHTML;
+    }
+
+    /**
+     * @param mixed $msgHTML
+     */
+    public function setMsgHTML($msgHTML)
+    {
+        $this->msgHTML = $msgHTML;
     }
 
     /**
@@ -391,15 +366,15 @@ class SendMail extends Model
      */
     public function getAltBody()
     {
-        return $this->AltBody;
+        return $this->altBody;
     }
 
     /**
-     * @param mixed $AltBody
+     * @param mixed $altBody
      */
-    public function setAltBody($AltBody)
+    public function setAltBody($altBody)
     {
-        $this->AltBody = $AltBody;
+        $this->altBody = $altBody;
     }
 
     /**
@@ -407,15 +382,15 @@ class SendMail extends Model
      */
     public function getPriority()
     {
-        return $this->Priority;
+        return $this->priority;
     }
 
     /**
-     * @param int $Priority
+     * @param int $priority
      */
-    public function setPriority($Priority)
+    public function setPriority($priority)
     {
-        $this->Priority = $Priority;
+        $this->priority = $priority;
     }
 
     /**
@@ -423,15 +398,15 @@ class SendMail extends Model
      */
     public function getEncoding()
     {
-        return $this->Encoding;
+        return $this->encoding;
     }
 
     /**
-     * @param string $Encoding
+     * @param string $encoding
      */
-    public function setEncoding($Encoding)
+    public function setEncoding($encoding)
     {
-        $this->Encoding = $Encoding;
+        $this->encoding = $encoding;
     }
 
     /**
@@ -439,15 +414,15 @@ class SendMail extends Model
      */
     public function getContentType()
     {
-        return $this->ContentType;
+        return $this->contentType;
     }
 
     /**
-     * @param string $ContentType
+     * @param string $contentType
      */
-    public function setContentType($ContentType)
+    public function setContentType($contentType)
     {
-        $this->ContentType = $ContentType;
+        $this->contentType = $contentType;
     }
 
     /**
@@ -455,15 +430,15 @@ class SendMail extends Model
      */
     public function getWordWrap()
     {
-        return $this->WordWrap;
+        return $this->wordWrap;
     }
 
     /**
-     * @param int $WordWrap
+     * @param int $wordWrap
      */
-    public function setWordWrap($WordWrap)
+    public function setWordWrap($wordWrap)
     {
-        $this->WordWrap = $WordWrap;
+        $this->wordWrap = $wordWrap;
     }
 
     /**
@@ -480,6 +455,22 @@ class SendMail extends Model
     public function setIsHTML($isHTML)
     {
         $this->isHTML = $isHTML;
+    }
+
+    /**
+     * @return PHPMailer
+     */
+    public function getPhpMailer()
+    {
+        return $this->phpMailer;
+    }
+
+    /**
+     * @param PHPMailer $phpMailer
+     */
+    public function setPhpMailer($phpMailer)
+    {
+        $this->phpMailer = $phpMailer;
     }
 
 
