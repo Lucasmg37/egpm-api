@@ -80,6 +80,48 @@ class SendMail
     }
 
     /**
+     * @return $this
+     * @throws \Exception
+     */
+    public function getEmailConfig()
+    {
+        $config = new Config();
+        $dataEmail = $config->getCustomConfig("email");
+        $this->setHost($dataEmail["host"]);
+        $this->setPort($dataEmail["port"]);
+        $this->setUsername($dataEmail["username"]);
+        $this->setPassword($dataEmail["password"]);
+        $this->setSMTPSecure($dataEmail["SMTPSecure"]);
+        $this->setSMTPAuth($dataEmail["SMTPAuth"]);
+        $this->setIsSMTP($dataEmail["IsSMTP"]);
+        $this->setSetFrom($dataEmail["from"]);
+        $this->setAddReplyTo($dataEmail["replyTo"]);
+
+        $this->setSetFromAlias("EGPM");
+        $this->setAddReplyToAlias("EGPM");
+
+        return $this;
+    }
+
+    /**
+     * @param $email
+     * @param $assunto
+     * @param $html
+     * @return bool
+     * @throws Exception|\Exception
+     */
+    public function sendEmailSystem($email, $assunto, $html)
+    {
+
+        $this->setAddAddress($email);
+        $this->setSubject($assunto);
+        $this->setMsgHTML($html);
+
+        return $this->getEmailConfig()->mountPhpMailer()->send();
+
+    }
+
+    /**
      * @param null $phpMailer
      * @return bool
      * @throws Exception
@@ -472,8 +514,6 @@ class SendMail
     {
         $this->phpMailer = $phpMailer;
     }
-
-
 
 
 }
