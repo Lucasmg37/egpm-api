@@ -570,7 +570,7 @@ CREATE TABLE IF NOT EXISTS `vw_usuarioimagem` (
 --
 DROP TABLE IF EXISTS `vw_acessosjogos`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`localhost` SQL SECURITY DEFINER VIEW `vw_acessosjogos`  AS  select `j`.`id_jogo` AS `vw_primary_id_jogo`,`j`.`id_jogo` AS `id_jogo`,`j`.`st_nome` AS `st_nome`,`j`.`st_descricao` AS `st_descricao`,`j`.`dt_lancamento` AS `dt_lancamento`,`j`.`st_estilo` AS `st_estilo`,`j`.`st_video` AS `st_video`,`j`.`st_ingresso` AS `st_ingresso`,`j`.`nu_vaga` AS `nu_vaga`,`j`.`st_plataforma` AS `st_plataforma`,`j`.`st_regra` AS `st_regra`,`j`.`bl_campeonato` AS `bl_campeonato`,`j`.`st_classificacaoindicativa` AS `st_classificacaoindicativa`,`j`.`st_plataformacampeonato` AS `st_plataformacampeonato`,`j`.`nu_quantidadejogadores` AS `nu_quantidadejogadores`,count(`j`.`id_jogo`) AS `nu_acessos` from (`tb_jogo` `j` join `tb_acessojogo` `a` on(`a`.`id_jogo` = `j`.`id_jogo`)) group by `j`.`id_jogo` ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_acessosjogos`  AS  select `j`.`id_jogo` AS `vw_primary_id_jogo`,`j`.`id_jogo` AS `id_jogo`,`j`.`st_nome` AS `st_nome`,`j`.`st_descricao` AS `st_descricao`,`j`.`dt_lancamento` AS `dt_lancamento`,`j`.`st_estilo` AS `st_estilo`,`j`.`st_video` AS `st_video`,`j`.`st_ingresso` AS `st_ingresso`,`j`.`nu_vaga` AS `nu_vaga`,`j`.`st_plataforma` AS `st_plataforma`,`j`.`st_regra` AS `st_regra`,`j`.`bl_campeonato` AS `bl_campeonato`,`j`.`st_classificacaoindicativa` AS `st_classificacaoindicativa`,`j`.`st_plataformacampeonato` AS `st_plataformacampeonato`,`j`.`nu_quantidadejogadores` AS `nu_quantidadejogadores`,count(`j`.`id_jogo`) AS `nu_acessos` from (`tb_jogo` `j` join `tb_acessojogo` `a` on(`a`.`id_jogo` = `j`.`id_jogo`)) group by `j`.`id_jogo` ;
 
 -- --------------------------------------------------------
 
@@ -579,7 +579,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`localhost` SQL SECURITY D
 --
 DROP TABLE IF EXISTS `vw_notificacao`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`localhost` SQL SECURITY DEFINER VIEW `vw_notificacao`  AS  select `notus`.`id_notificacaousuario` AS `vw_primary_id_notificacaousuario`,`notus`.`id_notificacaousuario` AS `id_notificacaousuario`,`noti`.`st_titulo` AS `st_titulo`,`noti`.`st_descricao` AS `st_descricao`,`notus`.`dt_vizualizado` AS `dt_vizualizado`,`noti`.`dt_notificacao` AS `dt_notificacao`,`notus`.`id_usuario` AS `id_usuario`,`notus`.`bl_vizualizado` AS `bl_vizualizado` from (`tb_notificacao` `noti` join `tb_notificacaousuario` `notus` on(`notus`.`id_notificacao` = `noti`.`id_notificacao`)) order by `noti`.`dt_notificacao` desc,`notus`.`bl_vizualizado` desc ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_notificacao`  AS  select `notus`.`id_notificacaousuario` AS `vw_primary_id_notificacaousuario`,`notus`.`id_notificacaousuario` AS `id_notificacaousuario`,`noti`.`st_titulo` AS `st_titulo`,`noti`.`st_descricao` AS `st_descricao`,`notus`.`dt_vizualizado` AS `dt_vizualizado`,`noti`.`dt_notificacao` AS `dt_notificacao`,`notus`.`id_usuario` AS `id_usuario`,`notus`.`bl_vizualizado` AS `bl_vizualizado` from (`tb_notificacao` `noti` join `tb_notificacaousuario` `notus` on(`notus`.`id_notificacao` = `noti`.`id_notificacao`)) order by `noti`.`dt_notificacao` desc,`notus`.`bl_vizualizado` desc ;
 
 -- --------------------------------------------------------
 
@@ -588,7 +588,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`localhost` SQL SECURITY D
 --
 DROP TABLE IF EXISTS `vw_usuarioimagem`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`127.0.0.1` SQL SECURITY DEFINER VIEW `vw_usuarioimagem`  AS  select `tb_usuarios`.`id_usuario` AS `vw_primary_id_usuario`,`tb_usuarios`.`id_usuario` AS `id_usuario`,`tb_usuarios`.`st_nome` AS `st_nome`,`tb_usuarios`.`st_login` AS `st_login`,`tb_usuarios`.`st_email` AS `st_email`,`tb_imagem`.`id_imagem` AS `id_imagem`,`tb_imagem`.`st_nome` AS `st_nomeimagem`,`tb_imagem`.`st_url` AS `st_url`,`tb_imagem`.`st_alt` AS `st_alt`,`tb_usuarios`.`id_tipousuario` AS `id_tipousuario`,`tb_imagem`.`st_prefixotamanho` AS `st_prefixotamanho` from (`tb_usuarios` left join `tb_imagem` on(`tb_usuarios`.`id_imagem` = `tb_imagem`.`id_imagem`)) ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_usuarioimagem`  AS  select `tb_usuarios`.`id_usuario` AS `vw_primary_id_usuario`,`tb_usuarios`.`id_usuario` AS `id_usuario`,`tb_usuarios`.`st_nome` AS `st_nome`,`tb_usuarios`.`st_login` AS `st_login`,`tb_usuarios`.`st_email` AS `st_email`,`tb_imagem`.`id_imagem` AS `id_imagem`,`tb_imagem`.`st_nome` AS `st_nomeimagem`,`tb_imagem`.`st_url` AS `st_url`,`tb_imagem`.`st_alt` AS `st_alt`,`tb_usuarios`.`id_tipousuario` AS `id_tipousuario`,`tb_imagem`.`st_prefixotamanho` AS `st_prefixotamanho` from (`tb_usuarios` left join `tb_imagem` on(`tb_usuarios`.`id_imagem` = `tb_imagem`.`id_imagem`)) ;
 
 --
 -- Constraints for dumped tables
