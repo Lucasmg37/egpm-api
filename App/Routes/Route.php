@@ -55,6 +55,10 @@ Class Route
         $this->router->setNewRoute("GET", "Patrocinador", "getPatrocinadores", false);
         $this->router->setNewRoute("GET", "Patrocinador", "getApoiadores", false);
         $this->router->setNewRoute("GET", "Patrocinador", "getRealizadores", false);
+
+        $this->router->setNewRoute("POST", "Recovery", "recovery", false);
+        $this->router->setNewRoute("POST", "Recovery", "recoveryConfirmationCode", false);
+        $this->router->setNewRoute("POST", "Recovery", "resetaSenha", false);
     }
 
     /**
