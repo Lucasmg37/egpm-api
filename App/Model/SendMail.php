@@ -3,6 +3,7 @@
 namespace App\Model;
 
 
+use Bootstrap\Config;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
