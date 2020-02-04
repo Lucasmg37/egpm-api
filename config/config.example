@@ -5,6 +5,17 @@ st_password: ;
 st_dbname: ;
 st_host: ;
 
+[email];
+host: ;
+port:;
+username: ;
+password: ;
+SMTPSecure: ;
+SMTPAuth: ;
+IsSMTP: ;
+from: ;
+replyTo: ;
+
 [config];
 st_operacao: DEV;
 nu_minutossessao: 60;
