@@ -11,15 +11,16 @@ use App\Model\Entity\VwUsuarioimagem;
 use App\Model\Render;
 use App\Model\SendMail;
 use Exception;
+use App\Business\Recovery;
 
-class Recovery extends Controller
+class RecoveryController extends Controller
 {
 
     /**
      * @return VwUsuarioimagem|bool
      * @throws \PHPMailer\PHPMailer\Exception|Exception
      */
-    public function recoveryAction()
+    public function postAction()
     {
         $st_codigo = $this->request->getParameter("st_codigo");
 
@@ -39,7 +40,7 @@ class Recovery extends Controller
             throw new Exception("O e-mail informado não se encontra na base de dados!");
         }
 
-        $recovery = new \App\Business\Recovery();
+        $recovery = new Recovery();
         $recoveryEntity = $recovery->salvarSolicitacaoRecovery($usuario->getIdUsuario());
 
         $parametrosRender = [
@@ -64,7 +65,7 @@ class Recovery extends Controller
         $st_codigo = $this->request->getParameter("st_codigo", true, "O código de verificação é obrigatório.");
         $st_email = $this->request->getParameter("st_email", true, "O email deve ser enviado!");
 
-        $recovery = new \App\Business\Recovery();
+        $recovery = new Recovery();
         $recoveryEntity = $recovery->verificaCodigo($st_codigo);
 
         if (!$recoveryEntity->getIdUsuario()) {
