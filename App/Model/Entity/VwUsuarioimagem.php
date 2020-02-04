@@ -54,6 +54,13 @@ class VwUsuarioimagem extends BdAction
 
 
     /**
+     * @var $st_email
+     * @required
+     */
+    public $st_email;
+
+
+    /**
      * @var $id_imagem
      * @default 0
      */
@@ -127,6 +134,15 @@ class VwUsuarioimagem extends BdAction
     public function getStLogin()
     {
         return $this->st_login;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getStEmail()
+    {
+        return $this->st_email;
     }
 
 
@@ -221,6 +237,16 @@ class VwUsuarioimagem extends BdAction
     public function setStLogin($st_login)
     {
         $this->st_login = $st_login;
+        $this->atualizaAtributos($this);
+    }
+
+
+    /**
+     * @param string $st_email
+     */
+    public function setStEmail($st_email)
+    {
+        $this->st_email = $st_email;
         $this->atualizaAtributos($this);
     }
 

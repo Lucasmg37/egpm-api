@@ -149,4 +149,5 @@ class UsuarioController extends Controller
         Response::succesResponse("Usuário deslogado!");
     }
 
+
 }

@@ -318,7 +318,7 @@ class Request
      * @param bool $campovazio
      * @return string|array
      */
-    public function getParameter($campo, $campovazio = false)
+    public function getParameter($campo, $campovazio = false, $messageError = null)
     {
 
         try {
@@ -327,15 +327,15 @@ class Request
                 return $this->all[$campo];
             }
 
-            if ($this->get[$campo]) {
+            if (isset($this->get[$campo]) && $this->get[$campo]) {
                 return $this->get[$campo];
             }
 
-            if ($this->post[$campo]) {
+            if (isset($this->post[$campo]) && $this->post[$campo]) {
                 return $this->post[$campo];
             }
 
-            if ($this->put[$campo]) {
+            if (isset($this->put[$campo]) && $this->put[$campo]) {
                 return $this->put[$campo];
             }
             if (isset($this->superGet[$campo]) && $this->superGet[$campo]) {
@@ -347,6 +347,9 @@ class Request
             }
 
             if ($campovazio) {
+                if ($messageError) {
+                    throw new Exception($messageError);
+                }
                 throw new Exception("O $campo deve ser enviado.");
             }
 

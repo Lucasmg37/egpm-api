@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table `tb_acessojogo`
 --
@@ -382,6 +380,21 @@ CREATE TABLE IF NOT EXISTS `tb_patrocinadorimagem` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_recovery`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_recovery` (
+  `id_recovery` int(11) NOT NULL AUTO_INCREMENT,
+  `st_codigo` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dt_geracao` datetime NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  PRIMARY KEY (`id_recovery`),
+  KEY `id_usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tb_secao`
 --
 
@@ -480,6 +493,7 @@ CREATE TABLE IF NOT EXISTS `tb_usuarios` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `st_nome` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `st_login` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `st_email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `st_senha` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_imagem` int(11) DEFAULT NULL,
   `id_tipousuario` int(11) NOT NULL DEFAULT 2,
@@ -540,6 +554,7 @@ CREATE TABLE IF NOT EXISTS `vw_usuarioimagem` (
 ,`id_usuario` int(11)
 ,`st_nome` varchar(255)
 ,`st_login` varchar(255)
+,`st_email` varchar(200)
 ,`id_imagem` int(11)
 ,`st_nomeimagem` varchar(255)
 ,`st_url` text
@@ -573,7 +588,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_notificacao`  AS  selec
 --
 DROP TABLE IF EXISTS `vw_usuarioimagem`;
 
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_usuarioimagem`  AS  select `tb_usuarios`.`id_usuario` AS `vw_primary_id_usuario`,`tb_usuarios`.`id_usuario` AS `id_usuario`,`tb_usuarios`.`st_nome` AS `st_nome`,`tb_usuarios`.`st_login` AS `st_login`,`tb_imagem`.`id_imagem` AS `id_imagem`,`tb_imagem`.`st_nome` AS `st_nomeimagem`,`tb_imagem`.`st_url` AS `st_url`,`tb_imagem`.`st_alt` AS `st_alt`,`tb_usuarios`.`id_tipousuario` AS `id_tipousuario`,`tb_imagem`.`st_prefixotamanho` AS `st_prefixotamanho` from (`tb_usuarios` left join `tb_imagem` on(`tb_usuarios`.`id_imagem` = `tb_imagem`.`id_imagem`)) ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_usuarioimagem`  AS  select `tb_usuarios`.`id_usuario` AS `vw_primary_id_usuario`,`tb_usuarios`.`id_usuario` AS `id_usuario`,`tb_usuarios`.`st_nome` AS `st_nome`,`tb_usuarios`.`st_login` AS `st_login`,`tb_usuarios`.`st_email` AS `st_email`,`tb_imagem`.`id_imagem` AS `id_imagem`,`tb_imagem`.`st_nome` AS `st_nomeimagem`,`tb_imagem`.`st_url` AS `st_url`,`tb_imagem`.`st_alt` AS `st_alt`,`tb_usuarios`.`id_tipousuario` AS `id_tipousuario`,`tb_imagem`.`st_prefixotamanho` AS `st_prefixotamanho` from (`tb_usuarios` left join `tb_imagem` on(`tb_usuarios`.`id_imagem` = `tb_imagem`.`id_imagem`)) ;
 
 --
 -- Constraints for dumped tables
@@ -619,6 +634,12 @@ ALTER TABLE `tb_jogoimagem`
 ALTER TABLE `tb_patrocinadorimagem`
   ADD CONSTRAINT `tb_patrocinadorimagem_ibfk_1` FOREIGN KEY (`id_patrocinador`) REFERENCES `tb_patrocinador` (`id_patrocinador`),
   ADD CONSTRAINT `tb_patrocinadorimagem_ibfk_2` FOREIGN KEY (`id_imagem`) REFERENCES `tb_imagem` (`id_imagem`);
+
+--
+-- Constraints for table `tb_recovery`
+--
+ALTER TABLE `tb_recovery`
+  ADD CONSTRAINT `tb_recovery_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `tb_usuarios` (`id_usuario`);
 
 --
 -- Constraints for table `tb_secaoimagem`

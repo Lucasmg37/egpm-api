@@ -280,4 +280,21 @@ class Usuario
         return Helper::isValidHash($hash, $key, $senha);
     }
 
+    /**
+     * @param $id_usuario
+     * @param $st_senha
+     * @return Usuarios
+     * @throws Exception
+     */
+    public function alterarSenha($id_usuario, $st_senha)
+    {
+
+        $usuario = new Usuarios();
+        $usuario->findOne($id_usuario);
+        $usuario->setStSenha($this->geraSenhaCriptografada($st_senha));
+        $usuario->save();
+        return $usuario;
+
+    }
+
 }
