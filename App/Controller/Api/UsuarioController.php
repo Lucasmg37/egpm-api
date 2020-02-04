@@ -3,6 +3,7 @@
 
 namespace App\Controller\Api;
 
+use App\Business\Recovery;
 use App\Business\Usuario;
 use App\Constants\TipoArquivo;
 use App\Controller\Controller;
@@ -10,6 +11,7 @@ use App\Model\Entity\Imagem;
 use App\Model\Response;
 use App\Model\Entity\VwUsuarioimagem;
 use App\Model\Entity\Usuarios;
+use App\Model\SendMail;
 use Exception;
 
 class UsuarioController extends Controller
@@ -147,6 +149,78 @@ class UsuarioController extends Controller
     {
         $this->usuario->logout();
         Response::succesResponse("Usuário deslogado!");
+    }
+
+    /**
+     * @return VwUsuarioimagem|bool
+     * @throws \PHPMailer\PHPMailer\Exception|Exception
+     */
+    public function recoveryAction()
+    {
+        $st_codigo = $this->request->getParameter("st_codigo");
+
+        if ($st_codigo) {
+            return $this->recoveryConfirmationCode();
+        }
+
+        $sendMail = new SendMail();
+        $email = $this->request->getParameter("st_email", true, "O e-mail deve ser informado.");
+
+
+        $usuario = new Usuarios();
+        $usuario->setStEmail($email);
+        $usuario->mount($usuario->getFirst($usuario->find()));
+
+        if (!$usuario->getIdUsuario()) {
+            throw new Exception("O e-mail informado não se encontra na base de dados!");
+        }
+
+        $recovery = new Recovery();
+        $recoveryEntity = $recovery->salvarSolicitacaoRecovery($usuario->getIdUsuario());
+
+        return $sendMail->sendEmailSystem($usuario->getStEmail(), "Teste", $recoveryEntity->getStCodigo());
+
+    }
+
+    /**
+     * @return VwUsuarioimagem
+     * @throws Exception
+     */
+    public function recoveryConfirmationCode()
+    {
+        $st_codigo = $this->request->getParameter("st_codigo", true, "O código de verificação é obrigatório.");
+        $st_email = $this->request->getParameter("st_email", true, "O email deve ser enviado!");
+
+        $recovery = new Recovery();
+        $recoveryEntity = $recovery->verificaCodigo($st_codigo);
+
+        if (!$recoveryEntity->getIdUsuario()) {
+            throw new Exception("Código informado inválido!");
+        }
+
+        $usuario = new Usuario();
+        $usuarioEntity = $usuario->getOne($recoveryEntity->getIdUsuario());
+
+        if ($usuarioEntity->getStEmail() === $st_email) {
+            return $usuarioEntity;
+        }
+
+        throw new Exception("O código informado não foi gerado para o email informado.");
+
+    }
+
+    /**
+     * @return VwUsuarioimagem
+     * @throws Exception
+     */
+    public function resetaSenha()
+    {
+        $usuarioEntity = $this->recoveryConfirmationCode();
+        $st_senha = $this->request->getParameter("st_senha", true, "A senha não foi enviada.");
+        $usuario = new Usuario();
+        $usuario->alterarSenha($usuarioEntity->getIdUsuario(), $st_senha);
+        return $usuarioEntity;
+
     }
 
 }
