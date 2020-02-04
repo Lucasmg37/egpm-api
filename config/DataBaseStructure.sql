@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table `tb_acessojogo`
 --
@@ -382,6 +380,21 @@ CREATE TABLE IF NOT EXISTS `tb_patrocinadorimagem` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_recovery`
+--
+
+CREATE TABLE IF NOT EXISTS `tb_recovery` (
+  `id_recovery` int(11) NOT NULL AUTO_INCREMENT,
+  `st_codigo` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dt_geracao` datetime NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  PRIMARY KEY (`id_recovery`),
+  KEY `id_usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tb_secao`
 --
 
@@ -480,6 +493,7 @@ CREATE TABLE IF NOT EXISTS `tb_usuarios` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `st_nome` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `st_login` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `st_email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `st_senha` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_imagem` int(11) DEFAULT NULL,
   `id_tipousuario` int(11) NOT NULL DEFAULT 2,
@@ -540,6 +554,7 @@ CREATE TABLE IF NOT EXISTS `vw_usuarioimagem` (
 ,`id_usuario` int(11)
 ,`st_nome` varchar(255)
 ,`st_login` varchar(255)
+,`st_email` varchar(200)
 ,`id_imagem` int(11)
 ,`st_nomeimagem` varchar(255)
 ,`st_url` text
@@ -555,7 +570,7 @@ CREATE TABLE IF NOT EXISTS `vw_usuarioimagem` (
 --
 DROP TABLE IF EXISTS `vw_acessosjogos`;
 
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_acessosjogos`  AS  select `j`.`id_jogo` AS `vw_primary_id_jogo`,`j`.`id_jogo` AS `id_jogo`,`j`.`st_nome` AS `st_nome`,`j`.`st_descricao` AS `st_descricao`,`j`.`dt_lancamento` AS `dt_lancamento`,`j`.`st_estilo` AS `st_estilo`,`j`.`st_video` AS `st_video`,`j`.`st_ingresso` AS `st_ingresso`,`j`.`nu_vaga` AS `nu_vaga`,`j`.`st_plataforma` AS `st_plataforma`,`j`.`st_regra` AS `st_regra`,`j`.`bl_campeonato` AS `bl_campeonato`,`j`.`st_classificacaoindicativa` AS `st_classificacaoindicativa`,`j`.`st_plataformacampeonato` AS `st_plataformacampeonato`,`j`.`nu_quantidadejogadores` AS `nu_quantidadejogadores`,count(`j`.`id_jogo`) AS `nu_acessos` from (`tb_jogo` `j` join `tb_acessojogo` `a` on(`a`.`id_jogo` = `j`.`id_jogo`)) group by `j`.`id_jogo` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`localhost` SQL SECURITY DEFINER VIEW `vw_acessosjogos`  AS  select `j`.`id_jogo` AS `vw_primary_id_jogo`,`j`.`id_jogo` AS `id_jogo`,`j`.`st_nome` AS `st_nome`,`j`.`st_descricao` AS `st_descricao`,`j`.`dt_lancamento` AS `dt_lancamento`,`j`.`st_estilo` AS `st_estilo`,`j`.`st_video` AS `st_video`,`j`.`st_ingresso` AS `st_ingresso`,`j`.`nu_vaga` AS `nu_vaga`,`j`.`st_plataforma` AS `st_plataforma`,`j`.`st_regra` AS `st_regra`,`j`.`bl_campeonato` AS `bl_campeonato`,`j`.`st_classificacaoindicativa` AS `st_classificacaoindicativa`,`j`.`st_plataformacampeonato` AS `st_plataformacampeonato`,`j`.`nu_quantidadejogadores` AS `nu_quantidadejogadores`,count(`j`.`id_jogo`) AS `nu_acessos` from (`tb_jogo` `j` join `tb_acessojogo` `a` on(`a`.`id_jogo` = `j`.`id_jogo`)) group by `j`.`id_jogo` ;
 
 -- --------------------------------------------------------
 
@@ -564,7 +579,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_acessosjogos`  AS  sele
 --
 DROP TABLE IF EXISTS `vw_notificacao`;
 
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_notificacao`  AS  select `notus`.`id_notificacaousuario` AS `vw_primary_id_notificacaousuario`,`notus`.`id_notificacaousuario` AS `id_notificacaousuario`,`noti`.`st_titulo` AS `st_titulo`,`noti`.`st_descricao` AS `st_descricao`,`notus`.`dt_vizualizado` AS `dt_vizualizado`,`noti`.`dt_notificacao` AS `dt_notificacao`,`notus`.`id_usuario` AS `id_usuario`,`notus`.`bl_vizualizado` AS `bl_vizualizado` from (`tb_notificacao` `noti` join `tb_notificacaousuario` `notus` on(`notus`.`id_notificacao` = `noti`.`id_notificacao`)) order by `noti`.`dt_notificacao` desc,`notus`.`bl_vizualizado` desc ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`localhost` SQL SECURITY DEFINER VIEW `vw_notificacao`  AS  select `notus`.`id_notificacaousuario` AS `vw_primary_id_notificacaousuario`,`notus`.`id_notificacaousuario` AS `id_notificacaousuario`,`noti`.`st_titulo` AS `st_titulo`,`noti`.`st_descricao` AS `st_descricao`,`notus`.`dt_vizualizado` AS `dt_vizualizado`,`noti`.`dt_notificacao` AS `dt_notificacao`,`notus`.`id_usuario` AS `id_usuario`,`notus`.`bl_vizualizado` AS `bl_vizualizado` from (`tb_notificacao` `noti` join `tb_notificacaousuario` `notus` on(`notus`.`id_notificacao` = `noti`.`id_notificacao`)) order by `noti`.`dt_notificacao` desc,`notus`.`bl_vizualizado` desc ;
 
 -- --------------------------------------------------------
 
@@ -573,7 +588,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_notificacao`  AS  selec
 --
 DROP TABLE IF EXISTS `vw_usuarioimagem`;
 
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_usuarioimagem`  AS  select `tb_usuarios`.`id_usuario` AS `vw_primary_id_usuario`,`tb_usuarios`.`id_usuario` AS `id_usuario`,`tb_usuarios`.`st_nome` AS `st_nome`,`tb_usuarios`.`st_login` AS `st_login`,`tb_imagem`.`id_imagem` AS `id_imagem`,`tb_imagem`.`st_nome` AS `st_nomeimagem`,`tb_imagem`.`st_url` AS `st_url`,`tb_imagem`.`st_alt` AS `st_alt`,`tb_usuarios`.`id_tipousuario` AS `id_tipousuario`,`tb_imagem`.`st_prefixotamanho` AS `st_prefixotamanho` from (`tb_usuarios` left join `tb_imagem` on(`tb_usuarios`.`id_imagem` = `tb_imagem`.`id_imagem`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`u535725043_teste`@`127.0.0.1` SQL SECURITY DEFINER VIEW `vw_usuarioimagem`  AS  select `tb_usuarios`.`id_usuario` AS `vw_primary_id_usuario`,`tb_usuarios`.`id_usuario` AS `id_usuario`,`tb_usuarios`.`st_nome` AS `st_nome`,`tb_usuarios`.`st_login` AS `st_login`,`tb_usuarios`.`st_email` AS `st_email`,`tb_imagem`.`id_imagem` AS `id_imagem`,`tb_imagem`.`st_nome` AS `st_nomeimagem`,`tb_imagem`.`st_url` AS `st_url`,`tb_imagem`.`st_alt` AS `st_alt`,`tb_usuarios`.`id_tipousuario` AS `id_tipousuario`,`tb_imagem`.`st_prefixotamanho` AS `st_prefixotamanho` from (`tb_usuarios` left join `tb_imagem` on(`tb_usuarios`.`id_imagem` = `tb_imagem`.`id_imagem`)) ;
 
 --
 -- Constraints for dumped tables
@@ -619,6 +634,12 @@ ALTER TABLE `tb_jogoimagem`
 ALTER TABLE `tb_patrocinadorimagem`
   ADD CONSTRAINT `tb_patrocinadorimagem_ibfk_1` FOREIGN KEY (`id_patrocinador`) REFERENCES `tb_patrocinador` (`id_patrocinador`),
   ADD CONSTRAINT `tb_patrocinadorimagem_ibfk_2` FOREIGN KEY (`id_imagem`) REFERENCES `tb_imagem` (`id_imagem`);
+
+--
+-- Constraints for table `tb_recovery`
+--
+ALTER TABLE `tb_recovery`
+  ADD CONSTRAINT `tb_recovery_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `tb_usuarios` (`id_usuario`);
 
 --
 -- Constraints for table `tb_secaoimagem`
