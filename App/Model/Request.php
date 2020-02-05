@@ -323,7 +323,7 @@ class Request
 
         try {
 
-            if ($this->all[$campo]) {
+            if (isset($this->all[$campo]) && $this->all[$campo]) {
                 return $this->all[$campo];
             }
 
