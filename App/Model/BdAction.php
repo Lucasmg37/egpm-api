@@ -356,7 +356,9 @@ class BdAction
             //Realizar validação
             foreach ($requireds as $required) {
                 if ((!isset($params[$required]) || $params[$required] === null || $params[$required] === "") && !in_array($required, $ignore)) {
-                    $message = $atributosaValidar[$required];
+                    if (isset($atributosaValidar[$required])){
+                        $message = $atributosaValidar[$required];
+                    }
 
                     if (empty($message)) {
                         $message = Validate::DEFAULT_MESSAGE;

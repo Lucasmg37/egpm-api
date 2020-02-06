@@ -36,7 +36,8 @@ class Validate
     const USUARIO = [
         "GLOBAL" => [
             "st_nome" => "O nome do usuário deve ser informado.",
-            "st_login" => "O login do usuário deve ser informado."
+            "st_login" => "O login do usuário deve ser informado.",
+            "st_email" => "O email do usuário deve ser informado."
         ],
         "INSERT" => [
             "st_senha" => "A senha deve ser informada."
