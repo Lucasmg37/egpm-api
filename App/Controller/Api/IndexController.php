@@ -6,6 +6,7 @@ use App\Constants\System\App;
 use App\Constants\TipoUsuario;
 use App\Controller\Controller;
 use App\Model\Banco;
+use App\Model\Entity\EntityGenerate;
 use App\Model\Entity\Usuarios;
 use App\Model\Request;
 use App\Model\Response;
@@ -64,6 +65,10 @@ Class IndexController extends Controller
         } catch (Exception $e) {
             throw new Exception("Ocorreu um erro ao realizar a conexão com o banco de dados! " . $e->getMessage());
         }
+
+        $entityGenerate = new EntityGenerate();
+        $entityGenerate->setBd($banco);
+        $entityGenerate->generateEntity();
 
         //Abrindo transaction
         $banco->getConexao()->beginTransaction();

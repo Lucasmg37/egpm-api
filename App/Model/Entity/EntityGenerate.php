@@ -19,6 +19,13 @@ class EntityGenerate
     }
 
     /**
+     * @param Banco $bd
+     */
+    public function setBd($bd)
+    {
+        $this->bd = $bd;
+    }
+    /**
      * @param null $tabela
      * @return array
      * @throws Exception
