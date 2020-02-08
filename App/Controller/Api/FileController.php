@@ -16,7 +16,7 @@ class FileController extends Controller
     public function getAction($caminhoArquivo)
     {
 
-        $caminhoArquivo = "upload/" . $caminhoArquivo;
+        $caminhoArquivo = "../Files/" . $caminhoArquivo;
 
         $mime = mime_content_type($caminhoArquivo);
         $tamanho = filesize($caminhoArquivo);

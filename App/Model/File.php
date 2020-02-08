@@ -152,11 +152,11 @@ class File extends Model
             throw new Exception("Arquivo com formato inválido para a operação.");
         }
 
-        $diretoriosave = "upload/" . $destino . "/";
+        $diretoriosave = "../Files/" . $destino . "/";
 
         //Cria pasta se não existir
         if (!is_dir($diretoriosave)) {
-            mkdir($diretoriosave, 0777, true);
+            mkdir($diretoriosave, 0755, true);
         }
 
         $extensao = File::getExtensaoArquivo($arquivo["name"]);

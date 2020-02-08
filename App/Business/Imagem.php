@@ -60,7 +60,7 @@ class Imagem
      */
     private static function generateLink($st_url)
     {
-        $st_url = str_replace("upload/", "", $st_url);
+        $st_url = str_replace("../Files/", "", $st_url);
         return Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/Api/File/" . $st_url;
     }
 
