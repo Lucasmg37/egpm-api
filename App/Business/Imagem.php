@@ -77,7 +77,7 @@ class Imagem
                 $retorno[$imagen["st_prefixotamanho"]] = $imagen;
             }
 
-            return $retorno["$st_prefixotamanho"]["st_url"];
+            return isset($retorno["$st_prefixotamanho"]["st_url"]) ? $retorno["$st_prefixotamanho"]["st_url"] : null;
         }
 
         return $imagens["st_url"];
