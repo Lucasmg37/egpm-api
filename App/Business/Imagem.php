@@ -12,6 +12,7 @@ use App\Model\Entity\Patrocinadorimagem;
 use App\Model\Entity\Secaoimagem;
 use App\Model\File;
 use App\Model\ResizeImage;
+use App\Util\Server;
 use Gumlet\ImageResizeException;
 use Exception;
 
@@ -75,6 +76,7 @@ class Imagem
                     File::getPathLink($arquivo),
                     File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name),
                     $valor,
+                    80,
                     $pathSave));
             $imagem->setStNome(File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name));
             $imagem->setStPrefixotamanho($indice);
@@ -120,17 +122,21 @@ class Imagem
             throw new Exception("O Set informado não existe no objeto enviado!");
         }
 
+        //Salva a imagem original
         $imagemEntiy = new \App\Model\Entity\Imagem();
         $imagemEntiy->setStNome($file->getNome());
         $imagemEntiy->setStPrefixotamanho(\App\Constants\Imagem::PREFIXO_ORIGINAL);
         $imagemEntiy->setStUrl($file->getUrlAcesso());
         $imagemEntiy->insert();
 
+        //Vincular imagem a classe específicada
         $classeImagem->setIdImagem($imagemEntiy->getIdImagem());
         $classeImagem->$setEntity($valueSet);
         $classeImagem->insert();
 
-        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $file->getNome(), \App\Constants\Imagem::RESIZE, $file->getPathSave());
+        $nomeCompletoArquivo = $file->getNomeSave() . "." . $file->getExtensao();
+
+        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $nomeCompletoArquivo, \App\Constants\Imagem::RESIZE, $file->getPathSave());
 
         foreach ($imagens as $image) {
             $classeImagem->clearObject();
