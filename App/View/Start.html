@@ -25,8 +25,8 @@
 
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row text-center animateIn" id="welcome">
+<div class="container-fluid vh-100">
+    <div class="row text-center vh-100 animateIn" id="welcome">
         <div class="col-md-6 col-sm-12 mx-auto">
 
             <div class="pt-5 mt-5">
@@ -54,10 +54,10 @@
         </div>
     </div>
 
-    <div class="row oculto" id="database">
+    <div class="row oculto vh-100" id="database">
         <div class="col-md-6 col-sm-12 mx-auto box">
 
-            <div class="py-5 mt-5">
+            <div class="py-5">
 
                 <div class="container-alert alert alert-danger" role="alert"></div>
 
@@ -79,7 +79,7 @@
                         <label for="st_senhabanco">Senha de usuário:</label>
                         <input id="st_senhabanco"
                                name="st_senhabanco"
-                               type="text"
+                               type="password"
                                required
                                class="form-control">
                     </div>
@@ -113,10 +113,10 @@
         </div>
     </div>
 
-    <div class="row oculto" id="user">
+    <div class="row oculto vh-100" id="user">
         <div class="col-md-6 col-sm-12 mx-auto box">
 
-            <div class="py-5 mt-5">
+            <div class="py-5">
 
                 <div class="container-alert alert alert-danger" role="alert"></div>
 
@@ -167,6 +167,123 @@
                 </form>
 
                 <button class="btn btn-light mr-1" onclick="changeScreen('#database', false)"> VOLTAR</button>
+                <button class="btn btn-primary" onclick="changeScreen('#email')"> PRÓXIMO</button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row oculto vh-100" id="email">
+        <div class="col-md-6 col-sm-12 mx-auto box">
+
+            <div class="py-5">
+
+                <div class="container-alert alert alert-danger" role="alert"></div>
+
+                <form>
+                    <h5>Servidor de envio de email</h5>
+
+                    <div class="row">
+                        <div class="form-group col-10">
+                            <label for="st_servidoremail">Servidor de email:</label>
+                            <input id="st_servidoremail"
+                                   name="st_servidoremail"
+                                   type="text"
+                                   placeholder="smtp.gmail.com"
+                                   required
+                                   class="form-control">
+                        </div>
+
+                        <div class="form-group col-2">
+                            <label for="nu_porta">Porta:</label>
+                            <input id="nu_porta"
+                                   name="nu_porta"
+                                   type="number"
+                                   placeholder="495"
+                                   required
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label for="st_protocolo">Protocolo:</label>
+                            <select id="st_protocolo"
+                                    name="st_protocolo"
+                                    class="form-control">
+                                <option value="ssl">SSL</option>
+                                <option value="tls">TLS</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-4">
+                            <label for="bl_smtp">SMTP:</label>
+                            <select id="bl_smtp"
+                                    name="bl_smtp"
+                                    class="form-control">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-4">
+                            <label for="bl_smtpauth">SMTP Auth:</label>
+                            <select id="bl_smtpauth"
+                                    name="bl_smtpauth"
+                                    class="form-control">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="st_usuarioemail">Usuário:</label>
+                            <input id="st_usuarioemail"
+                                   name="st_usuarioemail"
+                                   type="email"
+                                   placeholder="teste@gmail.com"
+                                   required
+                                   class="form-control">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="st_senhaemail">Senha:</label>
+                            <input id="st_senhaemail"
+                                   name="st_senhaemail"
+                                   type="password"
+                                   required
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label for="st_emailfrom">Email de Envio:</label>
+                            <input id="st_emailfrom"
+                                   name="st_emailfrom"
+                                   type="email"
+                                   placeholder="noreplay@gmail.com"
+                                   required
+                                   class="form-control">
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="st_replyemail">Email de Resposta:</label>
+                            <input id="st_replyemail"
+                                   name="st_replyemail"
+                                   type="email"
+                                   placeholder="noreplay@gmail.com"
+                                   required
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                </form>
+
+                <button class="btn btn-light mr-1" onclick="changeScreen('#user', false)"> VOLTAR</button>
                 <button class="btn btn-primary" onclick="changeScreen('#others')"> PRÓXIMO</button>
 
             </div>
@@ -174,10 +291,10 @@
         </div>
     </div>
 
-    <div class="row oculto" id="others">
+    <div class="row oculto vh-100" id="others">
         <div class="col-md-6 col-sm-12 mx-auto box">
 
-            <div class="py-5 mt-5">
+            <div class="py-5">
 
                 <div class="container-alert alert alert-danger" role="alert"></div>
 
@@ -204,9 +321,11 @@
                                placeholder="30"
                                class="form-control">
                     </div>
+
+
                 </form>
 
-                <button class="btn btn-light mr-1" onclick="changeScreen('#user', false)"> VOLTAR</button>
+                <button class="btn btn-light mr-1" onclick="changeScreen('#email', false)"> VOLTAR</button>
                 <button class="btn btn-primary" onclick="verificarInfo()"> VERIFICAR INFORMAÇÕES</button>
 
             </div>
@@ -214,10 +333,10 @@
         </div>
     </div>
 
-    <div class="row oculto" id="verifica">
+    <div class="row oculto vh-100" id="verifica">
         <div class="col-md-6 col-sm-12 mx-auto box">
 
-            <div class="py-5 mt-5">
+            <div class="py-5">
 
                 <div class="container-alert alert alert-danger" role="alert"></div>
 
@@ -226,7 +345,6 @@
 
                     <h5>Banco de dados:</h5>
                     <b>Usuário: </b> <span id="verifica_st_nomebanco"></span> <br>
-                    <b>Senha: </b> <span id="verifica_st_senhabanco"></span> <br>
                     <b>Banco: </b> <span id="verifica_st_banco"></span> <br>
                     <b>Servidor: </b> <span id="verifica_st_servidor"></span> <br>
 
@@ -235,6 +353,17 @@
                     <h5>Usuário administrador:</h5>
                     <b>Usuário: </b> <span id="verifica_st_nomeusuario"></span> <br>
                     <b>Email: </b> <span id="verifica_st_email"></span> <br>
+
+                    <hr class="my-3">
+
+                    <h5>Servidor de email:</h5>
+                    <b>Servidor de email:</b> <span id="verifica_st_servidoremail"></span> <br>
+                    <b>Porta do servidor:</b> <span id="verifica_nu_porta"></span> <br>
+                    <b>Usuário do servidor:</b> <span id="verifica_st_usuarioemail"></span> <br>
+                    <b>Protocolo de segurança:</b> <span id="verifica_st_protocolo"></span> <br>
+                    <b>Segurança:</b> <span id="verifica_bl_smtp"></span> | <span id="verifica_bl_smtpauth"></span> <br>
+                    <b>Email de Envio:</b> <span id="verifica_st_emailfrom"></span> <br>
+                    <b>Email de Resposta:</b> <span id="verifica_st_replyemail"></span> <br>
 
                     <hr class="my-3">
 
@@ -253,10 +382,10 @@
         </div>
     </div>
 
-    <div class="row oculto text-center" id="finish">
+    <div class="row oculto vh-100 text-center" id="finish">
         <div class="col-md-6 col-sm-12 mx-auto">
 
-            <div class="pt-5 mt-5">
+            <div class="pt-5">
                 <img class="logo" src="https://egpmdeveloper.lucasjunior.com.br/upload/Imagens/20190628181453.png"
                      alt="Logo Encontro Gamer">
                 <h5>Assistente de configuração da API-EGPM.</h5>
@@ -293,6 +422,16 @@
     let st_senhausuarioconfirma;
     let st_email;
 
+    let st_servidoremail;
+    let nu_porta;
+    let st_usuarioemail;
+    let st_protocolo;
+    let st_senhaemail;
+    let bl_smtpauth;
+    let bl_smtp;
+    let st_emailfrom;
+    let st_replyemail;
+
     let nu_minutossessao;
     let st_capcha;
 
@@ -309,7 +448,16 @@
             st_senhausuarioconfirma: st_senhausuarioconfirma,
             st_email: st_email,
             nu_minutossessao: nu_minutossessao,
-            st_capcha: st_capcha
+            st_capcha: st_capcha,
+            st_servidoremail: st_servidoremail,
+            nu_porta: nu_porta,
+            st_usuarioemail: st_usuarioemail,
+            st_protocolo: st_protocolo,
+            st_senhaemail: st_senhaemail,
+            bl_smtpauth: bl_smtpauth,
+            bl_smtp: bl_smtp,
+            st_emailfrom: st_emailfrom,
+            st_replyemail: st_replyemail,
         };
 
         salvarConfiguracao(data);
@@ -337,6 +485,8 @@
                 return validaFormDataBase();
             case "#user":
                 return validaFormUser();
+            case "#email":
+                return validaFormEmail();
             case "#others":
                 return validaFormOthers();
         }
@@ -395,6 +545,36 @@
         return true;
     }
 
+    function validaFormEmail() {
+        if (!st_servidoremail) {
+            setErrorCampoObrigatorio("#st_servidoremail", "servidor de email");
+            return false;
+        }
+        if (!nu_porta) {
+            setErrorCampoObrigatorio("#nu_porta", "porta do servidor");
+            return false;
+        }
+        if (!st_usuarioemail) {
+            setErrorCampoObrigatorio("#st_usuarioemail", "usuário do servidor");
+            return false;
+        }
+        if (!st_senhaemail) {
+            setErrorCampoObrigatorio("#st_senhaemail", "senha do usuário");
+            return false;
+        }
+        if (!st_emailfrom) {
+            setErrorCampoObrigatorio("#st_emailfrom", "email de envio");
+            return false;
+        }
+        if (!st_replyemail) {
+            setErrorCampoObrigatorio("#st_replyemail", "email de resposta");
+            return false;
+        }
+
+        return true;
+
+    }
+
     function validaFormDataBase() {
 
         if (!st_nomebanco) {
@@ -429,18 +609,36 @@
         nu_minutossessao = $("#nu_minutossessao").val();
         st_capcha = $("#st_capcha").val();
 
+        st_servidoremail = $("#st_servidoremail").val();
+        nu_porta = $("#nu_porta").val();
+        st_usuarioemail = $("#st_usuarioemail").val();
+        st_protocolo = $("#st_protocolo").val();
+        st_senhaemail = $("#st_senhaemail").val();
+        bl_smtpauth = $("#bl_smtpauth").val();
+        bl_smtp = $("#bl_smtp").val();
+        st_emailfrom = $("#st_emailfrom").val();
+        st_replyemail = $("#st_replyemail").val();
+
     }
 
     function verificarInfo() {
         changeScreen('#verifica');
 
         $("#verifica_st_nomebanco").html(st_nomebanco);
-        $("#verifica_st_senhabanco").html(st_senhabanco);
         $("#verifica_st_banco").html(st_banco);
         $("#verifica_st_servidor").html(st_servidor);
 
         $("#verifica_st_nomeusuario").html(st_nomeusuario);
         $("#verifica_st_email").html(st_email);
+
+        $("#verifica_st_servidoremail").html(st_servidoremail);
+        $("#verifica_nu_porta").html(nu_porta);
+        $("#verifica_st_usuarioemail").html(st_usuarioemail);
+        $("#verifica_st_protocolo").html(st_protocolo);
+        $("#verifica_bl_smtpauth").html(+bl_smtpauth ? "SMTPAuth" : "-");
+        $("#verifica_bl_smtp").html(+bl_smtp ? "SMTP" : "-");
+        $("#verifica_st_emailfrom").html(st_emailfrom);
+        $("#verifica_st_replyemail").html(st_replyemail);
 
         $("#verifica_st_capcha").html(st_capcha);
         $("#verifica_nu_minutossessao").html(nu_minutossessao);
@@ -453,6 +651,7 @@
         $("#user").hide();
         $("#others").hide();
         $("#verifica").hide();
+        $("#email").hide();
     }
 
     function getStatusConfiguracao() {
@@ -500,9 +699,11 @@
 
     .box {
         background: whitesmoke;
+        max-height: 100%;
+        overflow-y: auto;
     }
 
-    body {
+    body, html {
         background: #333;
         height: 100%;
         overflow: hidden;
