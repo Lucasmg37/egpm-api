@@ -8,7 +8,7 @@
 * [Instalando o projeto](https://github.com/Lucasmg37/api-egpm/tree/read.me#instalando-o-projeto)
 * [Configuração](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o)
     * [Configuração por interface](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o-por-interface)
-    * [Configuração por arquivo](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o-por-arquivo)
+    * [Arquivo de Configuração](https://github.com/Lucasmg37/api-egpm/tree/read.me#arquivo-de-configura%C3%A7%C3%A3o)
     * [Migração de ambientes](https://github.com/Lucasmg37/api-egpm/tree/read.me#migra%C3%A7%C3%A3o-de-ambientes)
 * [Desenvolvimento](https://github.com/Lucasmg37/api-egpm/tree/read.me#desenvolvimento)
 * [Deploy](https://github.com/Lucasmg37/api-egpm/tree/read.me#deployo)
