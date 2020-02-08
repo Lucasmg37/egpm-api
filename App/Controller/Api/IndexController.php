@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Constants\System\App;
+use App\Constants\TipoUsuario;
 use App\Controller\Controller;
 use App\Model\Banco;
 use App\Model\Entity\Usuarios;
@@ -46,6 +47,12 @@ Class IndexController extends Controller
             throw new Exception("O arquivo de configuração já existe, ele deve ser removido para realizar esta operação.");
         }
 
+        //Dados do Usuário
+        $st_email = $request->getParameter("st_email", true);
+        $st_key = Helper::criptografaWithDate($st_email);
+        $senha = Helper::criptografaWithKey($st_key, $request->getParameter("st_senhausuario", true));
+
+        // Instanciando banco de dados e testando
         $banco = new Banco();
         $banco->setPassword($request->getParameter("st_senhabanco", false));
         $banco->setHost($request->getParameter("st_servidor", true));
@@ -58,6 +65,10 @@ Class IndexController extends Controller
             throw new Exception("Ocorreu um erro ao realizar a conexão com o banco de dados! " . $e->getMessage());
         }
 
+        //Abrindo transaction
+        $banco->getConexao()->beginTransaction();
+
+        //Criando arquivo de configurações
         $texto[] = "[bd];";
         $texto[] = "st_name: PRIMARIO;";
         $texto[] = "st_user: " . $request->getParameter("st_nomebanco", true) . ";";
@@ -66,12 +77,22 @@ Class IndexController extends Controller
         $texto[] = "st_host: " . $request->getParameter("st_servidor", true) . ";";
 
         $texto[] = "";
+        $texto[] = "[email];";
+        $texto[] = "host: " . $request->getParameter("st_servidoremail", true) . ";";
+        $texto[] = "port: " . $request->getParameter("nu_porta", true) . ";";
+        $texto[] = "username: " . $request->getParameter("st_usuarioemail", true) . ";";
+        $texto[] = "password: " . $request->getParameter("st_senhaemail", true) . ";";
+        $texto[] = "SMTPSecure: " . $request->getParameter("st_protocolo", true) . ";";
+        $texto[] = "SMTPAuth: " . $request->getParameter("bl_smtpauth", true) . ";";
+        $texto[] = "IsSMTP: " . $request->getParameter("bl_smtp", true) . ";";
+        $texto[] = "from: " . $request->getParameter("st_emailfrom", true) . ";";
+        $texto[] = "replyTo: " . $request->getParameter("st_replyemail", true) . ";";
+
+        $texto[] = "";
         $texto[] = "[config];";
         $texto[] = "st_operacao: PRO;";
         $texto[] = "nu_minutossessao: " . $request->getParameter("nu_minutossessao", true) . ";";
         $texto[] = "st_senhacapcha: " . $request->getParameter("st_capcha", true) . ";";
-
-        $st_key = Helper::criptografaWithDate($request->getParameter("st_email", true));
         $texto[] = "st_key: " . $st_key . ";";
 
         $text = implode(App::BREAK_LINE, $texto);
@@ -80,9 +101,11 @@ Class IndexController extends Controller
             mkdir("../config");
         }
 
+        //Criando base de dados
         $sql_execute = file_get_contents("../config/DataBaseStructure.sql");
         $banco->getConexao()->exec($sql_execute);
 
+        //Verifica se existem usuários na base
         $usuario = new Usuarios();
         $usuario->changeConnection($banco->getConexao());
         $usuarios = $usuario->findAll();
@@ -92,13 +115,70 @@ Class IndexController extends Controller
         }
 
         try {
-            $banco->getConexao()->beginTransaction();
-            $insertTipoUsuario = "INSERT INTO tb_tipousuario (id_tipousuario, st_tipousuario) VALUES (1, 'Administrador'), (2, 'Padrão'), (3, 'Participante');";
-            $banco->getConexao()->exec($insertTipoUsuario);
+            // Criando Tipos de Usuários
+            $tipoUsuario = new \App\Model\Entity\Tipousuario();
+            $tipoUsuario->changeConnection($banco->getConexao());
+            $tipoUsuario->setIdTipousuario(1);
+            $tipoUsuario->setStTipousuario("Administrador");
+            $tipoUsuario->insert();
 
-            $senha = Helper::criptografaWithKey($st_key, $request->getParameter("st_senhausuario", true));
-            $insertUsuario = "INSERT INTO tb_usuarios (st_nome, st_login, st_senha, id_tipousuario) VALUES ('admin', 'admin', '" . $senha . "', 1 );";
-            $banco->getConexao()->exec($insertUsuario);
+            $tipoUsuario->setIdTipousuario(2);
+            $tipoUsuario->setStTipousuario("Padrão");
+            $tipoUsuario->insert();
+
+            $tipoUsuario->setIdTipousuario(3);
+            $tipoUsuario->setStTipousuario("Participante");
+            $tipoUsuario->insert();
+
+            //Criando Usuário
+            $usuario->clearObject();
+            $usuario->setStNome("admin");
+            $usuario->setStLogin("admin");
+            $usuario->setStEmail($st_email);
+            $usuario->setStSenha($senha);
+            $usuario->setIdTipousuario(TipoUsuario::ADMINISTRADOR);
+            $usuario->insert();
+
+            if (!$usuario->getIdUsuario()) {
+                throw new Exception("Ocorreu um erro ao criar o usuário.");
+            }
+
+            //Criando Seções base
+            $secao = new \App\Model\Entity\Secao();
+            $secao->changeConnection($banco->getConexao());
+            $secao->setStTitulo("Titulo");
+            $secao->setStTexto("Texto");
+            $secao->setStRota("sobre-o-egpm");
+            $secao->setBlHasicone(1);
+            $secao->insert();
+
+            $secao->setIdSecao(null);
+            $secao->setStRota("campeonatos");
+            $secao->setBlHasicone(0);
+            $secao->setBlHasimagem(1);
+            $secao->setBlHasvideo(0);
+            $secao->insert();
+
+            $secao->setIdSecao(null);
+            $secao->setStRota("quizzes");
+            $secao->setBlHasicone(0);
+            $secao->setBlHasimagem(1);
+            $secao->setBlHasvideo(0);
+            $secao->insert();
+
+            $secao->setIdSecao(null);
+            $secao->setStRota("free-play");
+            $secao->setBlHasicone(0);
+            $secao->setBlHasimagem(1);
+            $secao->setBlHasvideo(0);
+            $secao->insert();
+
+            $secao->setIdSecao(null);
+            $secao->setStRota("na-midia");
+            $secao->setBlHasicone(0);
+            $secao->setBlHasimagem(0);
+            $secao->setBlHasvideo(1);
+            $secao->insert();
 
             $banco->getConexao()->commit();
 
