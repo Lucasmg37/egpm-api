@@ -31,10 +31,37 @@ class Imagem
                 $retorno[$imagen["st_prefixotamanho"]] = $imagen;
             }
 
-            return $retorno;
+            return self::generateLinkAccess($retorno);
         }
 
         return $retorno[$imagens["st_prefixotamanho"]] = $imagens;
+    }
+
+    /**
+     * @param $imagens string|array
+     * @return string|array
+     */
+    public static function generateLinkAccess($imagens)
+    {
+        if (is_array($imagens)) {
+            foreach ($imagens as &$imagem) {
+                $imagem["st_url"] = self::generateLink($imagem["st_url"]);
+            }
+            return $imagens;
+        }
+
+        return self::generateLink($imagens);
+
+    }
+
+    /**
+     * @param $st_url
+     * @return string
+     */
+    private static function generateLink($st_url)
+    {
+        $st_url = str_replace("upload/", "", $st_url);
+        return Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/Api/File/" . $st_url;
     }
 
     /**

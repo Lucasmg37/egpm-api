@@ -27,7 +27,7 @@ class ImagemController extends Controller
         if (!empty($id)) {
             $uploadImagem->findOne($id);
             $imagemObj->findOne($uploadImagem->getIdImagem());
-            $uploadImagem->st_url = $imagemObj->getStUrl();
+            $uploadImagem->st_url = \App\Business\Imagem::generateLinkAccess($imagemObj->getStUrl());
             return $uploadImagem;
         }
 
@@ -38,7 +38,7 @@ class ImagemController extends Controller
             $imagemObj->mount($imagem);
             $imagemObj->findOne();
 
-            $imagem["st_url"] = $imagemObj->getStUrl();
+            $imagem["st_url"] = \App\Business\Imagem::generateLinkAccess($imagemObj->getStUrl());
         }
 
         return $imagens;
@@ -75,7 +75,7 @@ class ImagemController extends Controller
 
             $input = $this->request->getAllParameters();
             $st_file = $this->request->getFile("st_file");
-            $this->getFile()->upload("", $st_file, TipoArquivo::TIPO_IMAGEM_DEFAULT);
+            $this->getFile()->upload("Imagens/Geral", $st_file, TipoArquivo::TIPO_IMAGEM_DEFAULT);
 
             $imagem = new Imagem();
             $uploadImagem = new Uploadimagem();

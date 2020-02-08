@@ -158,6 +158,7 @@ class Usuario
         $vwUsuario = new VwUsuarioimagem();
         $vwUsuario->setIdUsuario($id_usuario);
         $vwUsuario->mount($vwUsuario->getFirst($vwUsuario->find()));
+        $vwUsuario->setStUrl(Imagem::generateLinkAccess($vwUsuario->getStUrl()));
         return $vwUsuario;
     }
 
