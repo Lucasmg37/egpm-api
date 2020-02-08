@@ -112,7 +112,14 @@ class Usuario
         $retorno = $this->usuarioEnt->find();
 
         if (!sizeof($retorno) > 0) {
-            throw new Exception("Usuário não encontrado!");
+            $this->usuarioEnt->clearObject();
+            $this->usuarioEnt->setStEmail($st_email);
+            $retorno = $this->usuarioEnt->find();
+
+            if (!sizeof($retorno) > 0) {
+                throw new Exception("Usuário não encontrado!");
+            }
+
         }
 
         $this->usuarioEnt->mount($this->usuarioEnt->getFirst($retorno));
