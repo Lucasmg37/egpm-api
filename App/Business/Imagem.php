@@ -12,6 +12,7 @@ use App\Model\Entity\Patrocinadorimagem;
 use App\Model\Entity\Secaoimagem;
 use App\Model\File;
 use App\Model\ResizeImage;
+use App\Util\Server;
 use Gumlet\ImageResizeException;
 use Exception;
 
@@ -30,10 +31,37 @@ class Imagem
                 $retorno[$imagen["st_prefixotamanho"]] = $imagen;
             }
 
-            return $retorno;
+            return self::generateLinkAccess($retorno);
         }
 
         return $retorno[$imagens["st_prefixotamanho"]] = $imagens;
+    }
+
+    /**
+     * @param $imagens string|array
+     * @return string|array
+     */
+    public static function generateLinkAccess($imagens)
+    {
+        if (is_array($imagens)) {
+            foreach ($imagens as &$imagem) {
+                $imagem["st_url"] = self::generateLink($imagem["st_url"]);
+            }
+            return $imagens;
+        }
+
+        return self::generateLink($imagens);
+
+    }
+
+    /**
+     * @param $st_url
+     * @return string
+     */
+    private static function generateLink($st_url)
+    {
+        $st_url = str_replace("../Files/", "", $st_url);
+        return Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/Api/File/" . $st_url;
     }
 
     /**
@@ -75,6 +103,7 @@ class Imagem
                     File::getPathLink($arquivo),
                     File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name),
                     $valor,
+                    80,
                     $pathSave));
             $imagem->setStNome(File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name));
             $imagem->setStPrefixotamanho($indice);
@@ -120,17 +149,21 @@ class Imagem
             throw new Exception("O Set informado não existe no objeto enviado!");
         }
 
+        //Salva a imagem original
         $imagemEntiy = new \App\Model\Entity\Imagem();
         $imagemEntiy->setStNome($file->getNome());
         $imagemEntiy->setStPrefixotamanho(\App\Constants\Imagem::PREFIXO_ORIGINAL);
         $imagemEntiy->setStUrl($file->getUrlAcesso());
         $imagemEntiy->insert();
 
+        //Vincular imagem a classe específicada
         $classeImagem->setIdImagem($imagemEntiy->getIdImagem());
         $classeImagem->$setEntity($valueSet);
         $classeImagem->insert();
 
-        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $file->getNome(), \App\Constants\Imagem::RESIZE, $file->getPathSave());
+        $nomeCompletoArquivo = $file->getNomeSave() . "." . $file->getExtensao();
+
+        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $nomeCompletoArquivo, \App\Constants\Imagem::RESIZE, $file->getPathSave());
 
         foreach ($imagens as $image) {
             $classeImagem->clearObject();

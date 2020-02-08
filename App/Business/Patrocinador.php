@@ -4,12 +4,9 @@
 namespace App\Business;
 
 
-use App\Constants\TipoArquivo;
 use App\Model\Entity\Patrocinadorimagem;
-use App\Model\File;
 use App\Model\Validate;
 use Exception;
-use Gumlet\ImageResizeException;
 
 class Patrocinador
 {
@@ -112,61 +109,6 @@ class Patrocinador
         $patrocinadorEntity->mount($parametros);
         $patrocinadorEntity->save();
         return $patrocinadorEntity;
-    }
-
-    /**
-     * @param $arquivo
-     * @param $id_patrocinador
-     * @return bool
-     * @throws ImageResizeException|Exception
-     */
-    public function vinculaImagem($arquivo, $id_patrocinador)
-    {
-        $file = new File();
-        $file->upload("Imagens/Patrocinador", $arquivo, TipoArquivo::TIPO_IMAGEM_DEFAULT);
-
-        $imagemEntiy = new \App\Model\Entity\Imagem();
-        $imagemEntiy->setStNome($file->getNome());
-        $imagemEntiy->setStPrefixotamanho(\App\Constants\Imagem::PREFIXO_ORIGINAL);
-        $imagemEntiy->setStUrl($file->getUrlAcesso());
-        $imagemEntiy->insert();
-
-        $imagemPatrocinador = new Patrocinadorimagem();
-        $imagemPatrocinador->setIdImagem($imagemEntiy->getIdImagem());
-        $imagemPatrocinador->setIdPatrocinador($id_patrocinador);
-        $imagemPatrocinador->insert();
-
-        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $file->getNome(), \App\Constants\Imagem::RESIZE, $file->getPathSave());
-
-        foreach ($imagens as $image) {
-            $imagemPatrocinador->clearObject();
-            $imagemPatrocinador->setIdPatrocinador($id_patrocinador);
-            $imagemPatrocinador->setIdImagem($image->getIdImagem());
-            $imagemPatrocinador->insert();
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $id_patrocinador
-     * @return bool
-     * @throws Exception
-     */
-    public function desvinculaImagens($id_patrocinador)
-    {
-        $patrocinadorImagem = new Patrocinadorimagem();
-        $patrocinadorImagem->setIdPatrocinador($id_patrocinador);
-        $imagens = $patrocinadorImagem->find();
-
-        foreach ($imagens as $imagem) {
-            $patrocinadorImagem->clearObject();
-            $patrocinadorImagem->mount($imagem);
-            $patrocinadorImagem->delete();
-            Imagem::deleteImage($imagem["id_imagem"]);
-        }
-
-        return true;
     }
 
 }

@@ -4,13 +4,10 @@
 namespace App\Business;
 
 
-use App\Constants\TipoArquivo;
 use App\Model\Entity\Datahorariocampeonato;
 use App\Model\Entity\Jogoimagem;
-use App\Model\File;
 use App\Model\Validate;
 use Exception;
-use Gumlet\ImageResizeException;
 
 class Jogo
 {
@@ -118,61 +115,6 @@ class Jogo
         $jogo->mount($parameters);
         $jogo->update();
         return $jogo;
-    }
-
-    /**
-     * @param $arquivo
-     * @param $id_jogo
-     * @return bool
-     * @throws ImageResizeException|Exception
-     */
-    public function vinculaImagem($arquivo, $id_jogo)
-    {
-        $file = new File();
-        $file->upload("Imagens/Campeonato", $arquivo, TipoArquivo::TIPO_IMAGEM_DEFAULT);
-
-        $imagemEntiy = new \App\Model\Entity\Imagem();
-        $imagemEntiy->setStNome($file->getNome());
-        $imagemEntiy->setStPrefixotamanho(\App\Constants\Imagem::PREFIXO_ORIGINAL);
-        $imagemEntiy->setStUrl($file->getUrlAcesso());
-        $imagemEntiy->insert();
-
-        $imagemjogo = new Jogoimagem();
-        $imagemjogo->setIdImagem($imagemEntiy->getIdImagem());
-        $imagemjogo->setIdJogo($id_jogo);
-        $imagemjogo->insert();
-
-        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $file->getNome(), \App\Constants\Imagem::RESIZE, $file->getPathSave());
-
-        foreach ($imagens as $image) {
-            $imagemjogo->clearObject();
-            $imagemjogo->setIdJogo($id_jogo);
-            $imagemjogo->setIdImagem($image->getIdImagem());
-            $imagemjogo->insert();
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $id_jogo
-     * @return bool
-     * @throws Exception
-     */
-    public function desvinculaImagens($id_jogo)
-    {
-        $jogoImagem = new Jogoimagem();
-        $jogoImagem->setIdJogo($id_jogo);
-        $imagens = $jogoImagem->find();
-
-        foreach ($imagens as $imagem) {
-            $jogoImagem->clearObject();
-            $jogoImagem->mount($imagem);
-            $jogoImagem->delete();
-            Imagem::deleteImage($imagem["id_imagem"]);
-        }
-
-        return true;
     }
 
     /**

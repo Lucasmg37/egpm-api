@@ -4,9 +4,11 @@
 namespace App\Controller\Api;
 
 
+use App\Business\Imagem;
 use App\Controller\Controller;
 use App\Model\Entity\Acessojogo;
 use App\Model\Entity\Jogo;
+use App\Model\Entity\Jogoimagem;
 use App\Model\Entity\VwAcessosjogos;
 use App\Model\Model;
 use Exception;
@@ -54,7 +56,12 @@ class JogoController extends Controller
         $jogoEntity = $jogo->insert($this->request->getAllParameters());
 
         if ($arquivo) {
-            $jogo->vinculaImagem($arquivo, $jogoEntity->getIdJogo());
+            Imagem::vinculaImagemWithResize(
+                $arquivo,
+                "Jogos",
+                new Jogoimagem(),
+                "setIdJogo",
+                $jogoEntity->getIdJogo());
         }
 
         return $jogoEntity;
@@ -69,7 +76,12 @@ class JogoController extends Controller
         try {
             $this->getModel()->beginTransaction();
             $jogo = new \App\Business\Jogo();
-            $jogo->desvinculaImagens($id_jogo);
+
+            Imagem::desvinculaImagensWithResize(
+                new Jogoimagem(),
+                "setIdJogo",
+                $id_jogo);
+
             $jogo->deleteAllHorarios($id_jogo);
             $jogoEntity = new Jogo();
             $jogoEntity->delete($id_jogo);
@@ -93,8 +105,19 @@ class JogoController extends Controller
         $jogoEntity = $jogo->update($this->request->getAllParameters());
 
         if ($arquivo) {
-            $jogo->desvinculaImagens($jogoEntity->getIdJogo());
-            $jogo->vinculaImagem($arquivo, $jogoEntity->getIdJogo());
+
+            Imagem::desvinculaImagensWithResize(
+                new Jogoimagem(),
+                "setIdJogo",
+                $jogoEntity->getIdJogo());
+
+            Imagem::vinculaImagemWithResize(
+                $arquivo,
+                "Jogos",
+                new Jogoimagem(),
+                "setIdJogo",
+                $jogoEntity->getIdJogo());
+
         }
 
         return $jogoEntity;

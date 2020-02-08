@@ -4,8 +4,10 @@
 namespace App\Controller\Api;
 
 
+use App\Business\Imagem;
 use App\Business\Patrocinador;
 use App\Controller\Controller;
+use App\Model\Entity\Patrocinadorimagem;
 use Exception;
 
 class PatrocinadorController extends Controller
@@ -36,7 +38,12 @@ class PatrocinadorController extends Controller
             $patrocinadorEntity = $patrocinador->insert($input);
 
             if ($arquivo) {
-                $patrocinador->vinculaImagem($arquivo, $patrocinadorEntity->getIdPatrocinador());
+                Imagem::vinculaImagemWithResize(
+                    $arquivo,
+                    "Patrocinadores",
+                    new Patrocinadorimagem(),
+                    "setIdPatrocinador",
+                    $patrocinadorEntity->getIdPatrocinador());
             }
 
             $this->getModel()->commit();
@@ -110,8 +117,19 @@ class PatrocinadorController extends Controller
             $patrocinadorEntity = $patrocinador->update($input);
 
             if ($arquivo) {
-                $patrocinador->desvinculaImagens($patrocinadorEntity->getIdPatrocinador());
-                $patrocinador->vinculaImagem($arquivo, $patrocinadorEntity->getIdPatrocinador());
+
+                Imagem::desvinculaImagensWithResize(
+                    new Patrocinadorimagem(),
+                    "setIdPatrocinador",
+                    $patrocinadorEntity->getIdPatrocinador());
+
+                Imagem::vinculaImagemWithResize(
+                    $arquivo,
+                    "Patrocinadores",
+                    new Patrocinadorimagem(),
+                    "setIdPatrocinador",
+                    $patrocinadorEntity->getIdPatrocinador());
+
             }
 
             $this->getModel()->commit();
@@ -132,8 +150,10 @@ class PatrocinadorController extends Controller
         try {
             $this->getModel()->beginTransaction();
 
-            $patrocinador = new Patrocinador();
-            $patrocinador->desvinculaImagens($id);
+            Imagem::desvinculaImagensWithResize(
+                new Patrocinadorimagem(),
+                "setIdPatrocinador",
+                $id);
 
             $patrocinadorEntity = new \App\Model\Entity\Patrocinador();
             $patrocinadorEntity->delete($id);

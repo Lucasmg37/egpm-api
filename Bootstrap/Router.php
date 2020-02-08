@@ -309,7 +309,7 @@ Class Router
         /**
          * @var $rota Router
          */
-        if (is_a($rota, "Router")) {
+        if (is_a($rota, "Bootstrap\Router")) {
             $controller = $rota->controller ? $rota->controller : $controller;
             $action = $rota->action ? $rota->action : $action;
             $unique = $rota->unique ? $rota->unique : $unique;
@@ -327,6 +327,7 @@ Class Router
         $router->setUnique($unique);
         $router->setParameters($data);
         $router->setAutenticated($autenticado !== null ? $autenticado : $router->autenticated);
+
 
         return $router;
     }

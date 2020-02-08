@@ -103,7 +103,6 @@ class UsuarioController extends Controller
             unset($input["id_imagem"]);
 
             if (($input["removeimagem"] || $arquivo) && $usuarioImg->getIdImagem()) {
-                \App\Business\Imagem::deleteImage($usuarioImg->getIdImagem());
                 $input["id_imagem"] = NULL;
             }
 
@@ -117,6 +116,10 @@ class UsuarioController extends Controller
             }
 
             $usuario = $this->usuario->update($input);
+
+            if (($input["removeimagem"] || $arquivo) && $usuarioImg->getIdImagem()) {
+                \App\Business\Imagem::deleteImage($usuarioImg->getIdImagem());
+            }
 
             $this->getModel()->commit();
             return $usuario;

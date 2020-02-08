@@ -12,6 +12,7 @@
         "ext-pdo": "*",
         "ext-json": "*",
         "ext-curl": "*",
+        "ext-fileinfo": "*",
         "phpmailer/phpmailer": "^6.1",
         "league/oauth2-client": "^2.4"
     },
