@@ -166,7 +166,7 @@ class File extends Model
 
         move_uploaded_file($arquivo['tmp_name'], $save);
 
-        $caminhobanco = Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/" . $save;
+        $caminhobanco = $save;
 
         $this->nome = $arquivo["name"];
         $this->nomeSave = $nomeSave;
@@ -213,10 +213,11 @@ class File extends Model
     /**
      * @param $path
      * @return string
+     * @deprecated Função não é necessária
      */
     public static function setPathFileLink($path)
     {
-        return Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/" . $path;
+        return $path;
     }
 
     /**
