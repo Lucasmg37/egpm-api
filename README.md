@@ -48,7 +48,7 @@ composer install
 Esse comando baixa e instala as dependências necessárias utilizadas no projeto e configura o autoload.
 
 ## Configuração
-A configuração da aplicação pode ser realizada de duas maneiras distintas.
+A configuração da aplicação pode ser realizada de duas maneiras distintas, abordaremos aqui a configuração por interface, construída para facilitar o processo.
 
 ### Configuração por interface
 A configuração por interface, foi construída para facilitar o processo de instalação e configuração da API, para isto, acesse a seguinte rota com o projeto já instalado.
@@ -59,18 +59,22 @@ A configuração por interface, foi construída para facilitar o processo de ins
 
 Por exemplo http://API.egpm.com.br/**Start**
 
-Será aberto uma página pra realização da configuração. Siga os passos até obter a mensagem de sucesso.
+Será aberto uma página pra realização da configuração. 
+Siga os passos até obter a mensagem de sucesso.
+Preencha todos os dados de acordo com o seu ambiente.
 
 #### ❗ Importante
 Ao realizar a autoconfiguração, é necessário ter o conhecimento que:
-* O arquivo de configuração do sistema pode existir (Arquivo demonstrado no próximo método)
-* Todas as tabelas do banco serão gerados automáticamente, isto se a tabela não existir, se você já tem uma base de dados configurada, não use este método.
+* O arquivo de configuração do não sistema pode existir (Arquivo demonstrado a seguir)
+* Todas as tabelas do banco serão gerados automáticamente, isto se a tabela não existir, se você já tem uma base de dados configurada, confira as observações no tópico **Migração**.
 * O script se encarregará de gerar todos os dados iniciais do sistema
-* O usuário administrador (admin) será criado automaticamente com a senha informada
+* O usuário administrador (admin) será criado automaticamente com a senha informada.
 * O arquivo de configuração desmonstrado no método abaixo, será gerado automáticamente
 
-### Configuração por arquivo
-Você deverá adicionar as informações do seu banco no arquivo de configurações do projeto
+### Arquivo de configuração
+O método de auto instalação, irá gerar o arquivo básico de configuração do sistema.
+
+É por meio deste arquivo que o sistema instancia a conexão com o banco de dados, e realiza os envios de emails.
 
 ```
 ├── api-egpm
@@ -80,8 +84,8 @@ Você deverá adicionar as informações do seu banco no arquivo de configuraç�
 │       └── config.example
 ```
 
-Você deverá gerar em seu projeto, um arquivo com um nome **config**, sem extensão de arquivo, utilize o **config.example**
-para isso.
+O arquivo de configuração terá o nome **config**, sem extensão de arquivo, o **config.example**, é usado para exemplos caso 
+seja necessário realizar a configuração manualmente.
 
 ```
 [bd];
@@ -91,12 +95,26 @@ st_password: nome_senha;
 st_dbname: nome_banco;
 st_host: nome_host;
 
+[email];
+host: endereço_smtp;
+port: 857;
+username: usuario_servidor_email;
+password: senha_servidor_email;
+SMTPSecure: tls;
+SMTPAuth: 1;
+IsSMTP: 1;
+from: email_de_envio;
+replyTo: email_de_resposta;
+
 [config];
 st_operacao: DEV;
 nu_minutossessao: 30;
 st_senhacapcha: chaveReCAPTCHA;
 st_key: JDIVGKOWDGVDGJDPSIFJ;
 ```
+**[bd]**
+
+Configurações do banco de dados utilizado para o gerenciamento dos dados.
 
 * **st_name**: Nome de identificação do Banco de Dados (Mantenha o Padrão PRIMARIO)
 * **st_user**: Nome do usuário do banco
@@ -104,6 +122,23 @@ st_key: JDIVGKOWDGVDGJDPSIFJ;
 * **st_dbname**: Nome da base de dados
 * **st_host**: Host servidor da base de dados
 
+**[email]**
+
+Configurações do servidor de eamil utilizado para enviar emails do sistema, como recuperação de senha.
+
+* **host**: Endereço do host do servidor smtp
+* **port**: Porta responsável pelo serviço;
+* **username**: Email de acesso ao servidor de email;
+* **password**: Senha do email informado para acesso ao servidor de email;
+* **SMTPSecure**: Tipo de protocolo tls|ssl;
+* **SMTPAuth**: Utiliza SMTPAuth 1|0;
+* **IsSMTP**: Utiliza SMTP 1|0;
+* **from**: Email que será utilizado para enviar os emails;
+* **replyTo**: Email por onde serão encaminhadas as respostas;
+
+**[config]**
+
+Configurações de funcionamento do sistema.
 
 * **st_operacao**: Indica se a aplicação está em desenvolimento ou produção: 
 Use DEV para desenvolvimento e PRO para produção
@@ -111,28 +146,41 @@ Use DEV para desenvolvimento e PRO para produção
 * **st_senhacapcha**: Chave secreta do reCAPTCHA
 * **st_key**: Chave utilizada para geração de senhas pelo sistema (Não deve ser alterada após sua primeira definição)
 
-#### ❗ Importante
- * Para este modo de configuração você irá precisar criar as tabelas do banco de dados da aplicação manualmente.
-
- * O script para crição se encontra na mesma pasta do arquivo de configuração **DataBaseStructure.sql**
-
- * Também será necessário criar na base de dados alguns itens necessários para o funcionamento da aplicação, para isto execute o arquivo
-**DataBaseStartData.sql**.
-
- * Após será necessário a criação do usuário administrador.
-
-      * Realize o INSERT manual do usuário no banco
-      * Utilize um email válido ao realizar a inserção, ele será necessário para recuperação da senha.
-      * Não se importe com a definição da senha, como o sistema utiliza criptografia, será necessário sua alteração por meio deste.
-      * Feito isso, será necessário recuperar a senha para que ela seja gerada utilizando a cheve de criptogarafia.
-      * Processo de recuperação em Desenvolvimento
+#### ❗ Atenção
+Não é recomendado a configuração manual deste sistema, visto que:
+* Será necessário a criação de itens iniciais no banco de dados, que são específicos para o seu funcionamento.
+    * Criação de Tipos de Usuário (tb_tipousuario) (Consulte: App/Constantes/TipoUsuario.php);
+    * Criação de Usuário inicial (tb_usuarios);
+    * Criação de Seções bases (tb_secao);
+   
+* Necessário a criação da base de dados. O script para crição se encontra na mesma pasta do arquivo de configuração **DataBaseStructure.sql**
+* As senhas do banco de dados utilizam criptografia, portanto somente o sistema consegue validá-las.
+    * Uma maneira de alterar a senha de um usuário deixando a válida, é recuperando a senha do usuário pelo sistema.
 
 ### Migração de ambientes
-Caso exista a necessidade de migração, atente-se ao seguintes detalhes
-* A st_key do arquivo de configuração deve ser a mesma em ambos os ambientes.
-* Altere os dados do banco de dados
-* As imagens serão buscadas no antigo domínio de aplicação. (Issue já criada para correção)
-* Realize somente o procedimento de instalação.
+Em caso de migração, realize a instalação conforme o tópico  [Instalando o projeto](https://github.com/Lucasmg37/api-egpm/tree/read.me#instalando-o-projeto)
+
+*Migração com clone da base dados
+    * Altere as informações do arquivo de configuração conforme o seu novo ambiente
+    * Altere a st_key do arquivo de configuração, para a mesma do projeto a ser migrado.
+     * A pasta **Files** que está na raiz do projeto, deverá ser copiada ou movida para o novo servidor.
+
+* Migração com base de dados limpa
+    * Configure o projeto conforme o tópico   [Configuração por interface](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o-por-interface)
+    * Altere a st_key do arquivo de configuração, para a mesma do projeto a ser migrado.
+    * Limpe as tabelas (tb_usuarios, tb_tipousuarios, tb_secao) no banco recem criado.
+    * Importe as informações do banco anterior para o novo banco
+    * A pasta **Files** que está na raiz do projeto, deverá ser copiada ou movida para o novo servidor.
+
+#### ❗ Considerções
+
+```
+├── api-egpm
+│   └── Files
+```
+A pasta **Files** é responsável por salvar todas as imagens upadas no sistema, e não é versionada.
+Em caso de migrações, ela deve ser levada para o novo servidor do projeto manualmente. Vale ressaltar que a mesma está
+atrelada a base de dados.
 
 ## Desenvolvimento
 Para criar novas funcionalidades no projeto, é importante se atentar a alguns detalhes.
