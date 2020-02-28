@@ -89,6 +89,7 @@ Class Autentication extends Model
         $now = strtotime(self::nowTime());
 
         if ($now > $fimsessao) {
+            Response::failResponse("Sessão expirada!", null, \App\Constants\Response::SESSSAO_EXPIRADA);
             throw new Exception("Sessão expirada!");
         }
 
