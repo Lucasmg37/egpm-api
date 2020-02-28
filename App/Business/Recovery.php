@@ -90,4 +90,26 @@ class Recovery
         return $recovery;
     }
 
+    /**
+     * @param $recovery
+     * @param bool $lancaErro
+     * @return bool
+     * @throws Exception
+     */
+    public function verificaRegraRecovery($recovery, $lancaErro = true)
+    {
+        $tempoDuracao = 60 * 60; //1 Hora
+        $fimsessao = strtotime($recovery->dt_geracao) + (int)$tempoDuracao;
+
+        $now = strtotime(Model::nowTime());
+
+        if ($now > $fimsessao) {
+            if ($lancaErro) {
+                throw new Exception("Códido de recuperação expirado!");
+            }
+            return false;
+        }
+
+        return true;
+    }
 }

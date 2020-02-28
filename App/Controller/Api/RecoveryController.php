@@ -67,6 +67,7 @@ class RecoveryController extends Controller
 
         $recovery = new Recovery();
         $recoveryEntity = $recovery->verificaCodigo($st_codigo);
+        $recovery->verificaRegraRecovery($recoveryEntity);
 
         if (!$recoveryEntity->getIdUsuario()) {
             throw new Exception("Código informado inválido!");
