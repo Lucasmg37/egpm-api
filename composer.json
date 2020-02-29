@@ -14,7 +14,8 @@
         "ext-curl": "*",
         "ext-fileinfo": "*",
         "phpmailer/phpmailer": "^6.1",
-        "league/oauth2-client": "^2.4"
+        "league/oauth2-client": "^2.4",
+        "firebase/php-jwt": "^5.0"
     },
     "autoload": {
         "psr-4": {

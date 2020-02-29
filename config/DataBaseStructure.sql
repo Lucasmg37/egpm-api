@@ -425,20 +425,6 @@ CREATE TABLE IF NOT EXISTS `tb_secaoimagem` (
   KEY `id_imagem` (`id_imagem`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `tb_sessao`
---
-
-CREATE TABLE IF NOT EXISTS `tb_sessao` (
-  `id_sessao` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,
-  `st_token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `dt_sessao` datetime NOT NULL DEFAULT current_timestamp(),
-  `id_tipousuario` int(11) NOT NULL,
-  PRIMARY KEY (`id_sessao`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
