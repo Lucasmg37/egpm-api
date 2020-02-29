@@ -1,0 +1,11 @@
+[bd];
+st_name: PRIMARIO;
+st_user: dvcsadvas;
+st_password: ;
+st_dbname: vsva;
+st_host: localhostsvadv;
+
+[config];
+st_operacao: PRO;
+nu_minutossessao: 10;
+st_senhacapcha: vdsvadvva;
