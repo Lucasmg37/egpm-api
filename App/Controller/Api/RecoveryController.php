@@ -8,6 +8,7 @@ use App\Business\Usuario;
 use App\Controller\Controller;
 use App\Model\Entity\Usuarios;
 use App\Model\Entity\VwUsuarioimagem;
+use App\Model\Model;
 use App\Model\Render;
 use App\Model\SendMail;
 use Exception;
@@ -41,6 +42,23 @@ class RecoveryController extends Controller
         }
 
         $recovery = new Recovery();
+
+        //Verificar se usuário já solicitou um código
+        $recoveryEntity = new \App\Model\Entity\Recovery();
+        $recoveryEntity->setIdUsuario($usuario->getIdUsuario());
+        $recoveryEntity->findAndMount();
+
+        if ($recoveryEntity->getIdUsuario()) {
+            $tempoDuracao = 60 * 30; //30 Minutos
+            $fimsessao = strtotime($recoveryEntity->getDtGeracao()) + (int)$tempoDuracao;
+
+            $now = strtotime(Model::nowTime());
+
+            if ($now < $fimsessao) {
+                throw new Exception("Códido de recuperação já solicitado!");
+            }
+        }
+
         $recoveryEntity = $recovery->salvarSolicitacaoRecovery($usuario->getIdUsuario());
 
         $parametrosRender = [
