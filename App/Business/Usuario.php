@@ -8,6 +8,7 @@ use App\Model\Request;
 use App\Model\Response;
 use App\Model\Validate;
 use App\Util\Helper;
+use App\Util\JWT;
 use App\Util\Token;
 use App\Constants\TipoUsuario;
 use Bootstrap\Config;
@@ -145,8 +146,8 @@ class Usuario
      */
     public function logout()
     {
-        $sessao = new Sessao();
-        return $sessao->delete(Token::getTokenByAuthorizationHeader());
+        //Todo VERIFICAR COMO DESATIVAR UM TOKEN JWT
+        return true;
     }
 
     /**
@@ -155,11 +156,10 @@ class Usuario
      */
     public static function getLoggedUser()
     {
-        $sessao = new Sessao();
-        $sessao = $sessao->getSessaoByToken();
-
-        $usuario = new Usuario();
-        $usuario = $usuario->getUser($sessao->getIdUsuario());
+        $jwt = new JWT();
+        $data = $jwt->getDataToken(Token::getTokenByAuthorizationHeader());
+        $usuario = new Usuarios();
+        $usuario->findOne($data["userid"]);
         return $usuario;
     }
 

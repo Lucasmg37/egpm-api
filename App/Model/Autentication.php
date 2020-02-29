@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use App\Business\Sessao;
+use App\Util\JWT;
 use App\Util\Token;
 use Bootstrap\Config;
 use Bootstrap\Router;
@@ -10,10 +10,6 @@ use Exception;
 
 Class Autentication extends Model
 {
-    /**
-     * @var Sessao
-     */
-    private $sessao;
     private $autenticado = false;
     private $config;
 
@@ -42,7 +38,6 @@ Class Autentication extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->sessao = new Sessao();
         $this->setAutenticado($this->verificarAutenticacao());
         $this->config = new Config();
     }
@@ -61,9 +56,7 @@ Class Autentication extends Model
                 throw new Exception("Token não foi encontrado!");
             }
 
-            $this->sessao = $this->sessao->getSessaoByToken($st_token);
-
-            self::aplicaRegraSessao($this->sessao);
+            self::aplicaRegraSessao();
             return true;
 
         } catch (Exception $e) {
@@ -76,21 +69,19 @@ Class Autentication extends Model
     }
 
     /**
-     * @param $sessao
      * @return bool
      * @throws Exception
      */
-    public static function aplicaRegraSessao($sessao)
+    public static function aplicaRegraSessao()
     {
-        $config = new Config();
-
-        $tempoSessao = $config->getConfig("nu_minutossessao");
-        $fimsessao = strtotime($sessao->dt_sessao) + ((int)$tempoSessao * 60);
-        $now = strtotime(self::nowTime());
-
-        if ($now > $fimsessao) {
-            Response::failResponse("Sessão expirada!", null, \App\Constants\Response::SESSSAO_EXPIRADA);
-            throw new Exception("Sessão expirada!");
+        $jwt = new JWT();
+        try {
+            $jwt->getDataToken(Token::getTokenByAuthorizationHeader());
+        } catch (Exception $exception) {
+            if ($exception->getCode() === \App\Constants\Response::SESSSAO_EXPIRADA) {
+                Response::failResponse("Sessão expirada!", null, 1001);
+            }
+            throw $exception;
         }
 
         return true;

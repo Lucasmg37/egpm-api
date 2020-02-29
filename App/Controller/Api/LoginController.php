@@ -3,12 +3,11 @@
 
 namespace App\Controller\Api;
 
-use App\Business\Sessao;
 use App\Business\Usuario;
 use App\Controller\Controller;
 use App\Integrations\ReCAPTCHA;
-use App\Model\Autentication;
 use App\Model\Response;
+use App\Util\JWT;
 use App\Util\Token;
 use Exception;
 
@@ -16,12 +15,10 @@ class LoginController extends Controller
 {
 
     private $usuario;
-    private $sessao;
 
     public function __construct()
     {
         $this->usuario = new Usuario();
-        $this->sessao = new Sessao();
         parent::__construct();
     }
 
@@ -47,8 +44,17 @@ class LoginController extends Controller
             //Verifica dados do usuário
             $this->usuario = $this->usuario->login($st_email, $st_senha);
 
-            //Cria sessao para o usuário
-            return $this->sessao->insert($this->usuario->id_usuario);
+            $jwt = new JWT();
+            $jwt->addInfoPayload("userid", $this->usuario->getIdUsuario());
+            $retorno["st_token"] = $jwt->generateCode([
+                "id_usuario" => $this->usuario->getIdUsuario(),
+                "st_nome" => $this->usuario->getStNome(),
+                "st_login" => $this->usuario->getStLogin(),
+                "st_email" => $this->usuario->getStEmail()
+            ]);
+
+            $retorno["id_usuario"] = $this->usuario->getIdUsuario();
+            return $retorno;
 
         } catch (Exception $e) {
             Response::exceptionResponse($e);
@@ -57,14 +63,12 @@ class LoginController extends Controller
     }
 
     /**
-     * @return \App\Model\Entity\Sessao
-     * @throws Exception
+     * @return array
+     * @throws Exception]
      */
     public function getStatusSessaoAction()
     {
-        $sessao = new Sessao();
-        $sessaoAtual = $sessao->getSessaoByToken(Token::getTokenByAuthorizationHeader());
-        Autentication::aplicaRegraSessao($sessaoAtual);
-        return $sessaoAtual;
+        $jwt = new JWT();
+        return $jwt->getDataToken(Token::getTokenByAuthorizationHeader());
     }
 }
