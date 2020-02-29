@@ -2,16 +2,16 @@
 
 ## **Índice**
 
-*   [Do que se trata?](https://github.com/Lucasmg37/api-egpm/tree/read.me#do-que-se-trata)
-*   [Requisitos do servidor](https://github.com/Lucasmg37/api-egpm/tree/read.me#requisitos-do-servidor)
-*   [Requisitos para instalação](https://github.com/Lucasmg37/api-egpm/tree/read.me#requisitos-para-instala%C3%A7%C3%A3o)
-*   [Instalando o projeto](https://github.com/Lucasmg37/api-egpm/tree/read.me#instalando-o-projeto)
+*   [Do que se trata?](https://github.com/Lucasmg37/api-egpm#do-que-se-trata)
+*   [Requisitos do servidor](https://github.com/Lucasmg37/api-egpm#requisitos-do-servidor)
+*   [Requisitos para instalação](https://github.com/Lucasmg37/api-egpm#requisitos-para-instala%C3%A7%C3%A3o)
+*   [Instalando o projeto](https://github.com/Lucasmg37/api-egpm#instalando-o-projeto)
 *   [Configuração](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o)
-    *   [Configuração por interface](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o-por-interface)
-    *   [Arquivo de Configuração](https://github.com/Lucasmg37/api-egpm/tree/read.me#arquivo-de-configura%C3%A7%C3%A3o)
-    *   [Migração de ambientes](https://github.com/Lucasmg37/api-egpm/tree/read.me#migra%C3%A7%C3%A3o-de-ambientes)
-*   [Desenvolvimento](https://github.com/Lucasmg37/api-egpm/tree/read.me#desenvolvimento)
-*   [Deploy](https://github.com/Lucasmg37/api-egpm/tree/read.me#deployo)
+    *   [Configuração por interface](https://github.com/Lucasmg37/api-egpm#configura%C3%A7%C3%A3o-por-interface)
+    *   [Arquivo de Configuração](https://github.com/Lucasmg37/api-egpm#arquivo-de-configura%C3%A7%C3%A3o)
+    *   [Migração de ambientes](https://github.com/Lucasmg37/api-egpm#migra%C3%A7%C3%A3o-de-ambientes)
+*   [Desenvolvimento](https://github.com/Lucasmg37/api-egpm#desenvolvimento)
+*   [Deploy](https://github.com/Lucasmg37/api-egpm#deploy)
 
 ## **Do que se trata?**
 
@@ -60,8 +60,7 @@ composer install
 Esse comando baixa e instala as dependências necessárias utilizadas no projeto e configura o autoload.
 
 
-## 
-**Configuração**
+## **Configuração**
 
 A configuração da aplicação pode ser realizada de duas maneiras distintas, abordaremos aqui a configuração por interface, construída para facilitar o processo.
 
@@ -199,7 +198,10 @@ Não é recomendado a configuração manual deste sistema, visto que:
 
 Em caso de migração, realize a instalação conforme o tópico [Instalando o projeto](https://github.com/Lucasmg37/api-egpm/tree/read.me#instalando-o-projeto)
 
-*Migração com clone da base dados * Altere as informações do arquivo de configuração conforme o seu novo ambiente * Altere a st_key do arquivo de configuração, para a mesma do projeto a ser migrado. * A pasta Files que está na raiz do projeto, deverá ser copiada ou movida para o novo servidor.
+*  Migração com clone da base dados
+    *  Altere as informações do arquivo de configuração conforme o seu novo ambiente
+    *  Altere a st_key do arquivo de configuração, para a mesma do projeto a ser migrado.
+    *  A pasta Files que está na raiz do projeto, deverá ser copiada ou movida para o novo servidor.
 
 
 
