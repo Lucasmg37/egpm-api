@@ -6,7 +6,7 @@
 *   [Requisitos do servidor](https://github.com/Lucasmg37/api-egpm#requisitos-do-servidor)
 *   [Requisitos para instalação](https://github.com/Lucasmg37/api-egpm#requisitos-para-instala%C3%A7%C3%A3o)
 *   [Instalando o projeto](https://github.com/Lucasmg37/api-egpm#instalando-o-projeto)
-*   [Configuração](https://github.com/Lucasmg37/api-egpm/tree/read.me#configura%C3%A7%C3%A3o)
+*   [Configuração](https://github.com/Lucasmg37/api-egpm#configura%C3%A7%C3%A3o)
     *   [Configuração por interface](https://github.com/Lucasmg37/api-egpm#configura%C3%A7%C3%A3o-por-interface)
     *   [Arquivo de Configuração](https://github.com/Lucasmg37/api-egpm#arquivo-de-configura%C3%A7%C3%A3o)
     *   [Migração de ambientes](https://github.com/Lucasmg37/api-egpm#migra%C3%A7%C3%A3o-de-ambientes)
