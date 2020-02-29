@@ -49,6 +49,10 @@ class Usuario
         $usuario->validate(Validate::USUARIO, ["INSERT"], $parameters, false);
         $usuario->mount($parameters);
 
+        if (!$this->verificaEmail($usuario->st_email)) {
+            throw new Exception("E-mail já está em uso!");
+        }
+
         $usuarioCheckLogin = new Usuarios();
         $usuarioCheckLogin->setStLogin($usuario->getStLogin());
         $usuarioCheckLogin->mount($usuarioCheckLogin->getFirst($usuarioCheckLogin->find()));
@@ -91,6 +95,10 @@ class Usuario
 
         if (!empty($parameters["st_senha"])) {
             $usuario->setStSenha($this->geraSenhaCriptografada($parameters["st_senha"]));
+        }
+
+        if (!$this->verificaEmail($usuario->st_email, $usuario->getIdUsuario())) {
+            throw new Exception("E-mail já está em uso!");
         }
 
         $usuario->update();
@@ -302,6 +310,32 @@ class Usuario
         $usuario->setStSenha($this->geraSenhaCriptografada($st_senha));
         $usuario->save();
         return $usuario;
+
+    }
+
+    /**
+     * @param $st_email
+     * @param null $id_usuario
+     * @return bool
+     * @throws Exception
+     */
+    public function verificaEmail($st_email, $id_usuario = null)
+    {
+        $usuario = new Usuarios();
+        $usuario->setStEmail($st_email);
+        $usuario->findAndMount();
+
+        if (!$usuario->getIdUsuario()) {
+            return true;
+        }
+
+        if ($id_usuario && (int)$usuario->getIdUsuario() !== (int)$id_usuario) {
+            return false;
+        } else if ($id_usuario) {
+            return true;
+        }
+
+        return false;
 
     }
 

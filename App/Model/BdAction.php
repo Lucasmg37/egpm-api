@@ -206,7 +206,7 @@ class BdAction
 
     /**
      * @param string $select
-     * @param array $where [nome atributo => Constante Where]
+     * @param array|string $where [nome atributo => Constante Where]
      * @param bool $distinct
      * @param array $order [nome atributo => ASC | DESC]
      * @param null $limit
@@ -214,7 +214,7 @@ class BdAction
      * @return mixed
      * @throws Exception
      */
-    public function findCustom($select = "*", $where = array(), $distinct = false, $order = array(), $limit = null, $parameters = null)
+    public function findCustom($select = "*", $where = "", $distinct = false, $order = array(), $limit = null, $parameters = null)
     {
         if ($parameters) {
             $this->mount($parameters);
@@ -235,12 +235,16 @@ class BdAction
             $order = "";
         }
 
-        $where = $this->generateWhereCustom($where);
-        $parameters = $where["parameters"];
-
         $whereString = "";
-        if (!empty($where["where"])) {
-            $whereString = "WHERE " . $where["where"];
+
+        if (is_array($where)) {
+            $where = $this->generateWhereCustom($where);
+            $parameters = $where["parameters"];
+            if (!empty($where["where"])) {
+                $whereString = "WHERE " . $where["where"];
+            }
+        } else if (!empty($where)) {
+            $whereString = "WHERE " . $where;
         }
 
         $sql[] = "SELECT $distinct  $select";
@@ -303,6 +307,11 @@ class BdAction
         return $this->getReferencesArray($data);
     }
 
+    public function toArray()
+    {
+        return $this->getAllAtributes();
+    }
+
     /**
      * @param $validate
      * @param array $seletors
@@ -356,7 +365,7 @@ class BdAction
             //Realizar validação
             foreach ($requireds as $required) {
                 if ((!isset($params[$required]) || $params[$required] === null || $params[$required] === "") && !in_array($required, $ignore)) {
-                    if (isset($atributosaValidar[$required])){
+                    if (isset($atributosaValidar[$required])) {
                         $message = $atributosaValidar[$required];
                     }
 
@@ -637,6 +646,29 @@ class BdAction
     private function getFilho()
     {
         return $this->dataBdAction["objFilho"];
+    }
+
+    /**
+     * @return BdAction
+     * @throws Exception
+     */
+    public function findAndMount()
+    {
+        return $this->mount($this->getFirst($this->find()));
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    public function isExists()
+    {
+        $object = $this->findAndMount();
+        if ($object->getValuePrimayKey()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
