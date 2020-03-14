@@ -66,6 +66,10 @@ class AgendaController extends Controller
         $agenda->delete($id_agenda);
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function getAtivosAction()
     {
         $agenda = new \App\Business\Agenda();
