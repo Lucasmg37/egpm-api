@@ -3,8 +3,9 @@
 
 namespace App\Business;
 
-
+use App\Constants\System\App;
 use App\Constants\TipoArquivo;
+use App\Integrations\Imgur;
 use App\Model\Entity\Comentarioimagem;
 use App\Model\Entity\Fotogaleriaimagem;
 use App\Model\Entity\Jogoimagem;
@@ -51,7 +52,6 @@ class Imagem
         }
 
         return self::generateLink($imagens);
-
     }
 
     /**
@@ -60,6 +60,11 @@ class Imagem
      */
     private static function generateLink($st_url)
     {
+
+        if (App::USE_IMGUR) {
+            return $st_url;
+        }
+
         $st_url = str_replace("../Files/", "", $st_url);
         return Server::getProtocol() . "://" . $_SERVER["SERVER_NAME"] . "/Api/File/" . $st_url;
     }
@@ -98,13 +103,21 @@ class Imagem
         foreach ($prefixos as $indice => $valor) {
             $imagem = new \App\Model\Entity\Imagem();
             $imagem->clearObject();
-            $imagem->setStUrl(
-                ResizeImage::imageResize(
-                    File::getPathLink($arquivo),
-                    File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name),
-                    $valor,
-                    80,
-                    $pathSave));
+
+            $imageResized = ResizeImage::imageResize(
+                File::getPathLink($arquivo),
+                File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name),
+                $valor,
+                80,
+                $pathSave
+            );
+
+            if (App::USE_IMGUR) {
+                $imgur = new Imgur();
+                $imageResized = $imgur->uploadImage($imageResized);
+            }
+
+            $imagem->setStUrl($imageResized);
             $imagem->setStNome(File::getNameWithOutExtensaoArquivo($name) . "-" . $indice . "." . File::getExtensaoArquivo($name));
             $imagem->setStPrefixotamanho($indice);
             $imagem->setStAlt($st_alt);
@@ -163,7 +176,13 @@ class Imagem
 
         $nomeCompletoArquivo = $file->getNomeSave() . "." . $file->getExtensao();
 
-        $imagens = Imagem::resizeAndSave($imagemEntiy->getStUrl(), $nomeCompletoArquivo, \App\Constants\Imagem::RESIZE, $file->getPathSave());
+        $localFile = $imagemEntiy->getStUrl();
+
+        if (App::USE_IMGUR) {
+            $localFile = $file->getPathWithFile();
+        }
+
+        $imagens = Imagem::resizeAndSave($localFile, $nomeCompletoArquivo, \App\Constants\Imagem::RESIZE, $file->getPathSave());
 
         foreach ($imagens as $image) {
             $classeImagem->clearObject();
@@ -201,5 +220,4 @@ class Imagem
 
         return true;
     }
-
 }

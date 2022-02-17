@@ -56,7 +56,7 @@ class Log extends BdAction
     /**
      * @var $dt_log
      * @required
-     * @default current_timestamp()
+     * @default CURRENT_TIMESTAMP
      */
     public $dt_log;
 

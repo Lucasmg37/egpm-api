@@ -4,6 +4,6 @@
 
 config/config
 
-public/.htaccess
-
 public/upload/
+
+Files/

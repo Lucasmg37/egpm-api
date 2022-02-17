@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
+use App\Constants\System\App;
 use App\Constants\TipoArquivo;
+use App\Integrations\Imgur;
 use App\Util\Helper;
 use App\Util\Server;
 use Exception;
@@ -176,6 +178,11 @@ class File extends Model
         $this->pathWithFile = $save;
         $this->urlAcesso = $caminhobanco;
 
+        if (App::USE_IMGUR) {
+            $imgur = new Imgur();
+            $this->urlAcesso = $imgur->uploadImage($save);
+        }
+
         return $this;
     }
 
@@ -243,10 +250,8 @@ class File extends Model
             //Criar caminho absoluto
             $absolutePath = $st_file;
             return unlink($absolutePath);
-
         } catch (Exception $e) {
             throw $e;
         }
     }
-
 }

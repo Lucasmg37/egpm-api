@@ -50,7 +50,7 @@ class Uploadimagem extends BdAction
     /**
      * @var $dt_criacao
      * @required
-     * @default current_timestamp()
+     * @default CURRENT_TIMESTAMP
      */
     public $dt_criacao;
 
